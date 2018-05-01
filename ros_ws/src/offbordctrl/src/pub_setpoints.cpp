@@ -1,8 +1,8 @@
 #include <ros/ros.h>
 #include <std_msgs/String.h> 
 #include <stdio.h>
-#include "geometry_msgs/PoseStamped.h"
-#include "geometry_msgs/Vector3Stamped.h"
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/Vector3Stamped.h>
  
 int main(int argc, char **argv)
 {
@@ -41,7 +41,5 @@ int main(int argc, char **argv)
        count++;
        loop_rate.sleep();
    }
-    
-       
    return 0;
 }

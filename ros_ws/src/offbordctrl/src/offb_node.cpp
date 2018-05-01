@@ -6,6 +6,7 @@
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/State.h>
 #include <mavros_msgs/CommandTOL.h>
+#include <mavros_msgs/ActuatorControl.h>
 
 mavros_msgs::State current_state;
 void state_cb(const mavros_msgs::State::ConstPtr& msg){
@@ -18,7 +19,7 @@ int main(int argc, char **argv)
 	ros::NodeHandle n;
 
     ////////////////////////////////////////////
-    /////////////////GUIDED/////////////////////
+    /////////////////OFFBOARD/////////////////////
     ////////////////////////////////////////////
     ros::ServiceClient cl = n.serviceClient<mavros_msgs::SetMode>("/mavros/set_mode");
     mavros_msgs::SetMode srv_setMode;
@@ -43,6 +44,7 @@ int main(int argc, char **argv)
         ROS_ERROR("Failed arming or disarming");
     }
 
+/*
     ////////////////////////////////////////////
     /////////////////TAKEOFF////////////////////
     ////////////////////////////////////////////
@@ -58,7 +60,7 @@ int main(int argc, char **argv)
     }else{
         ROS_ERROR("Failed Takeoff");
     }
-
+*/
 
 
     ////////////////////////////////////////////
@@ -82,8 +84,57 @@ int main(int argc, char **argv)
         ROS_ERROR("Failed Land");
     }
 
+    sleep(10);
+    ////////////////////////////////////////////
+    ///////////////////DISARM//////////////////////
+    ////////////////////////////////////////////
+    //ros::ServiceClient arming_cl = n.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
+    //mavros_msgs::CommandBool srv;
+    srv.request.value = false;
+    if(arming_cl.call(srv)){
+        ROS_INFO("DISARM send ok");// %d", srv.response.success);
+    }else{
+        ROS_ERROR("Failed arming or disarming");
+    }
+    sleep(10);
 
-/*
+
+    /*
+    ros::Publisher chatter_pub = n.advertise<mavros_msgs::ActuatorControl>("/mavros/actuator_control",100);
+
+    mavros_msgs::ActuatorControl msgActrl;
+
+
+    int count = 1;
+    ros::Rate loop_rate(20);
+
+    while(ros::ok()){
+        msgActrl.header.stamp = ros::Time::now();
+        msgActrl.header.seq=count;
+        msgActrl.header.frame_id = 1;
+        msgActrl.group_mix = msgActrl.PX4_MIX_FLIGHT_CONTROL;
+
+        msgActrl.controls[0] = 0;//roll (-1..1)
+        msgActrl.controls[1] = 0;//pitch (-1..1)
+        msgActrl.controls[2] = 0.1;//yaw (-1..1)
+        msgActrl.controls[3] = 0.7;//throttle (0..1 normal range, -1..1 for variable pitch / thrust reversers)
+        msgActrl.controls[4] = 0;//flaps (-1..1)
+        msgActrl.controls[5] = 0;//spoilers (-1..1)
+        msgActrl.controls[6] = 0;//airbrakes (-1..1)
+        msgActrl.controls[7] = 0;//landing gear (-1..1)
+        chatter_pub.publish(msgActrl);
+        ros::spinOnce();
+        count++;
+        loop_rate.sleep();
+    }
+
+
+
+
+
+*/
+
+    /*
     ros::init(argc, argv, "offb_node");
     ros::NodeHandle nh;
 
