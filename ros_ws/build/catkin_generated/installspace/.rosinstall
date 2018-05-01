@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/intel1/ros_repo/ros_ws/install/setup.sh

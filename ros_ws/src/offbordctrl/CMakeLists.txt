@@ -136,8 +136,10 @@ include_directories(
 #add_executable(${PROJECT_NAME}_node src/beginner_tutorials_node.cpp)
 
 add_executable(offbord_node src/offb_node.cpp)
-target_link_libraries(offbord_node ${catkin_LIBRARIES})
+add_executable(setpoint_pub src/pub_setpoints.cpp)
 
+target_link_libraries(offbord_node ${catkin_LIBRARIES})
+target_link_libraries(setpoint_pub ${catkin_LIBRARIES})
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
