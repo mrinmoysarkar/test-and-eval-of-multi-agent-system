@@ -1,8 +1,8 @@
-# Install script for directory: /home/intel1/ros_repo/ros_ws/src/offbordctrl
+# Install script for directory: /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/offbordctrl
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/intel1/ros_repo/ros_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,17 +33,17 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/intel1/ros_repo/ros_ws/build/offbordctrl/catkin_generated/installspace/offbordctrl.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/offbordctrl/catkin_generated/installspace/offbordctrl.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/offbordctrl/cmake" TYPE FILE FILES
-    "/home/intel1/ros_repo/ros_ws/build/offbordctrl/catkin_generated/installspace/offbordctrlConfig.cmake"
-    "/home/intel1/ros_repo/ros_ws/build/offbordctrl/catkin_generated/installspace/offbordctrlConfig-version.cmake"
+    "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/offbordctrl/catkin_generated/installspace/offbordctrlConfig.cmake"
+    "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/offbordctrl/catkin_generated/installspace/offbordctrlConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/offbordctrl" TYPE FILE FILES "/home/intel1/ros_repo/ros_ws/src/offbordctrl/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/offbordctrl" TYPE FILE FILES "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/package.xml")
 endif()
 

@@ -2,7 +2,7 @@
 
 message(STATUS "vicon_bridge: 3 messages, 2 services")
 
-set(MSG_I_FLAGS "-Ivicon_bridge:/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg;-Igeometry_msgs:/opt/ros/kinetic/share/geometry_msgs/cmake/../msg;-Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg")
+set(MSG_I_FLAGS "-Ivicon_bridge:/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg;-Igeometry_msgs:/opt/ros/kinetic/share/geometry_msgs/cmake/../msg;-Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg")
 
 # Find all generators
 find_package(gencpp REQUIRED)
@@ -17,29 +17,29 @@ add_custom_target(vicon_bridge_generate_messages ALL)
 
 
 
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg" NAME_WE)
 add_custom_target(_vicon_bridge_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "vicon_bridge" "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" "geometry_msgs/Quaternion:geometry_msgs/PoseStamped:geometry_msgs/Pose:std_msgs/Header:geometry_msgs/Point"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "vicon_bridge" "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg" "vicon_bridge/Marker:std_msgs/Header:geometry_msgs/Point"
 )
 
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg" NAME_WE)
 add_custom_target(_vicon_bridge_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "vicon_bridge" "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" "geometry_msgs/Quaternion:geometry_msgs/PoseStamped:geometry_msgs/Pose:std_msgs/Header:geometry_msgs/Point"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "vicon_bridge" "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg" "geometry_msgs/Point"
 )
 
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" NAME_WE)
 add_custom_target(_vicon_bridge_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "vicon_bridge" "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg" "geometry_msgs/Point"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "vicon_bridge" "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" ""
 )
 
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" NAME_WE)
 add_custom_target(_vicon_bridge_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "vicon_bridge" "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg" "vicon_bridge/Marker:std_msgs/Header:geometry_msgs/Point"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "vicon_bridge" "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" "geometry_msgs/Quaternion:geometry_msgs/PoseStamped:geometry_msgs/Pose:std_msgs/Header:geometry_msgs/Point"
 )
 
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" NAME_WE)
 add_custom_target(_vicon_bridge_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "vicon_bridge" "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "vicon_bridge" "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" "geometry_msgs/Quaternion:geometry_msgs/PoseStamped:geometry_msgs/Pose:std_msgs/Header:geometry_msgs/Point"
 )
 
 #
@@ -49,19 +49,19 @@ add_custom_target(_vicon_bridge_generate_messages_check_deps_${_filename}
 ### Section generating for lang: gencpp
 ### Generating Messages
 _generate_msg_cpp(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg"
+  "${MSG_I_FLAGS}"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/vicon_bridge
+)
+_generate_msg_cpp(vicon_bridge
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/vicon_bridge
 )
 _generate_msg_cpp(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg"
-  "${MSG_I_FLAGS}"
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
-  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/vicon_bridge
-)
-_generate_msg_cpp(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/vicon_bridge
@@ -69,13 +69,13 @@ _generate_msg_cpp(vicon_bridge
 
 ### Generating Services
 _generate_srv_cpp(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/PoseStamped.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/vicon_bridge
 )
 _generate_srv_cpp(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/PoseStamped.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/vicon_bridge
@@ -93,15 +93,15 @@ add_custom_target(vicon_bridge_generate_messages_cpp
 add_dependencies(vicon_bridge_generate_messages vicon_bridge_generate_messages_cpp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_cpp _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_cpp _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_cpp _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_cpp _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_cpp _vicon_bridge_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -114,19 +114,19 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS vicon_bridge_generate_messages_cpp)
 ### Section generating for lang: geneus
 ### Generating Messages
 _generate_msg_eus(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg"
+  "${MSG_I_FLAGS}"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/vicon_bridge
+)
+_generate_msg_eus(vicon_bridge
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/vicon_bridge
 )
 _generate_msg_eus(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg"
-  "${MSG_I_FLAGS}"
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
-  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/vicon_bridge
-)
-_generate_msg_eus(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/vicon_bridge
@@ -134,13 +134,13 @@ _generate_msg_eus(vicon_bridge
 
 ### Generating Services
 _generate_srv_eus(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/PoseStamped.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/vicon_bridge
 )
 _generate_srv_eus(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/PoseStamped.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/vicon_bridge
@@ -158,15 +158,15 @@ add_custom_target(vicon_bridge_generate_messages_eus
 add_dependencies(vicon_bridge_generate_messages vicon_bridge_generate_messages_eus)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_eus _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_eus _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_eus _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_eus _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_eus _vicon_bridge_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -179,19 +179,19 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS vicon_bridge_generate_messages_eus)
 ### Section generating for lang: genlisp
 ### Generating Messages
 _generate_msg_lisp(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg"
+  "${MSG_I_FLAGS}"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/vicon_bridge
+)
+_generate_msg_lisp(vicon_bridge
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/vicon_bridge
 )
 _generate_msg_lisp(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg"
-  "${MSG_I_FLAGS}"
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
-  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/vicon_bridge
-)
-_generate_msg_lisp(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/vicon_bridge
@@ -199,13 +199,13 @@ _generate_msg_lisp(vicon_bridge
 
 ### Generating Services
 _generate_srv_lisp(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/PoseStamped.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/vicon_bridge
 )
 _generate_srv_lisp(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/PoseStamped.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/vicon_bridge
@@ -223,15 +223,15 @@ add_custom_target(vicon_bridge_generate_messages_lisp
 add_dependencies(vicon_bridge_generate_messages vicon_bridge_generate_messages_lisp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_lisp _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_lisp _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_lisp _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_lisp _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_lisp _vicon_bridge_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -244,19 +244,19 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS vicon_bridge_generate_messages_lisp
 ### Section generating for lang: gennodejs
 ### Generating Messages
 _generate_msg_nodejs(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg"
+  "${MSG_I_FLAGS}"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/vicon_bridge
+)
+_generate_msg_nodejs(vicon_bridge
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/vicon_bridge
 )
 _generate_msg_nodejs(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg"
-  "${MSG_I_FLAGS}"
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
-  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/vicon_bridge
-)
-_generate_msg_nodejs(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/vicon_bridge
@@ -264,13 +264,13 @@ _generate_msg_nodejs(vicon_bridge
 
 ### Generating Services
 _generate_srv_nodejs(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/PoseStamped.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/vicon_bridge
 )
 _generate_srv_nodejs(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/PoseStamped.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/vicon_bridge
@@ -288,15 +288,15 @@ add_custom_target(vicon_bridge_generate_messages_nodejs
 add_dependencies(vicon_bridge_generate_messages vicon_bridge_generate_messages_nodejs)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_nodejs _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_nodejs _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_nodejs _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_nodejs _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_nodejs _vicon_bridge_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -309,19 +309,19 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS vicon_bridge_generate_messages_node
 ### Section generating for lang: genpy
 ### Generating Messages
 _generate_msg_py(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg"
+  "${MSG_I_FLAGS}"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/vicon_bridge
+)
+_generate_msg_py(vicon_bridge
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/vicon_bridge
 )
 _generate_msg_py(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg"
-  "${MSG_I_FLAGS}"
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
-  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/vicon_bridge
-)
-_generate_msg_py(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/vicon_bridge
@@ -329,13 +329,13 @@ _generate_msg_py(vicon_bridge
 
 ### Generating Services
 _generate_srv_py(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/PoseStamped.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/vicon_bridge
 )
 _generate_srv_py(vicon_bridge
-  "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/PoseStamped.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/vicon_bridge
@@ -353,15 +353,15 @@ add_custom_target(vicon_bridge_generate_messages_py
 add_dependencies(vicon_bridge_generate_messages vicon_bridge_generate_messages_py)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_py _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_py _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_py _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_py _vicon_bridge_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv" NAME_WE)
 add_dependencies(vicon_bridge_generate_messages_py _vicon_bridge_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility

@@ -1,2 +1,2 @@
-set(vicon_bridge_MESSAGE_FILES "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Marker.msg;/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/Markers.msg;/home/intel1/ros_repo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg")
-set(vicon_bridge_SERVICE_FILES "/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv;/home/intel1/ros_repo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv")
+set(vicon_bridge_MESSAGE_FILES "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Marker.msg;/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/Markers.msg;/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/msg/TfDistortInfo.msg")
+set(vicon_bridge_SERVICE_FILES "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv;/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/src/vicon_bridge/srv/viconGrabPose.srv")

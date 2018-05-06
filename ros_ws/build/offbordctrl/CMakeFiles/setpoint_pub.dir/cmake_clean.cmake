@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/setpoint_pub.dir/src/pub_setpoints.cpp.o"
-  "/home/intel1/ros_repo/ros_ws/devel/lib/offbordctrl/setpoint_pub.pdb"
-  "/home/intel1/ros_repo/ros_ws/devel/lib/offbordctrl/setpoint_pub"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/lib/offbordctrl/setpoint_pub.pdb"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/lib/offbordctrl/setpoint_pub"
 )
 
 # Per-language clean rules from dependency scanning.

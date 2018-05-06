@@ -2,7 +2,7 @@
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/intel1/ros_repo/ros_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

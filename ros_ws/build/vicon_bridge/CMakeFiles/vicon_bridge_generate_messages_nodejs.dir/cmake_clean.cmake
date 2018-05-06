@@ -1,10 +1,10 @@
 file(REMOVE_RECURSE
   "CMakeFiles/vicon_bridge_generate_messages_nodejs"
-  "/home/intel1/ros_repo/ros_ws/devel/share/gennodejs/ros/vicon_bridge/msg/Marker.js"
-  "/home/intel1/ros_repo/ros_ws/devel/share/gennodejs/ros/vicon_bridge/msg/Markers.js"
-  "/home/intel1/ros_repo/ros_ws/devel/share/gennodejs/ros/vicon_bridge/msg/TfDistortInfo.js"
-  "/home/intel1/ros_repo/ros_ws/devel/share/gennodejs/ros/vicon_bridge/srv/viconCalibrateSegment.js"
-  "/home/intel1/ros_repo/ros_ws/devel/share/gennodejs/ros/vicon_bridge/srv/viconGrabPose.js"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/share/gennodejs/ros/vicon_bridge/msg/Markers.js"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/share/gennodejs/ros/vicon_bridge/msg/Marker.js"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/share/gennodejs/ros/vicon_bridge/msg/TfDistortInfo.js"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/share/gennodejs/ros/vicon_bridge/srv/viconCalibrateSegment.js"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/share/gennodejs/ros/vicon_bridge/srv/viconGrabPose.js"
 )
 
 # Per-language clean rules from dependency scanning.

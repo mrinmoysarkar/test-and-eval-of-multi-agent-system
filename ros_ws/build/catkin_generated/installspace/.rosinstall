@@ -1,2 +1,2 @@
 - setup-file:
-    local-name: /home/intel1/ros_repo/ros_ws/install/setup.sh
+    local-name: /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/install/setup.sh

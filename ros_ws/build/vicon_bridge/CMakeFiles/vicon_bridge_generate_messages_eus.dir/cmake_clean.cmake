@@ -1,11 +1,11 @@
 file(REMOVE_RECURSE
   "CMakeFiles/vicon_bridge_generate_messages_eus"
-  "/home/intel1/ros_repo/ros_ws/devel/share/roseus/ros/vicon_bridge/msg/Marker.l"
-  "/home/intel1/ros_repo/ros_ws/devel/share/roseus/ros/vicon_bridge/msg/Markers.l"
-  "/home/intel1/ros_repo/ros_ws/devel/share/roseus/ros/vicon_bridge/msg/TfDistortInfo.l"
-  "/home/intel1/ros_repo/ros_ws/devel/share/roseus/ros/vicon_bridge/srv/viconCalibrateSegment.l"
-  "/home/intel1/ros_repo/ros_ws/devel/share/roseus/ros/vicon_bridge/srv/viconGrabPose.l"
-  "/home/intel1/ros_repo/ros_ws/devel/share/roseus/ros/vicon_bridge/manifest.l"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/share/roseus/ros/vicon_bridge/msg/Markers.l"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/share/roseus/ros/vicon_bridge/msg/Marker.l"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/share/roseus/ros/vicon_bridge/msg/TfDistortInfo.l"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/share/roseus/ros/vicon_bridge/srv/viconCalibrateSegment.l"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/share/roseus/ros/vicon_bridge/srv/viconGrabPose.l"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/share/roseus/ros/vicon_bridge/manifest.l"
 )
 
 # Per-language clean rules from dependency scanning.

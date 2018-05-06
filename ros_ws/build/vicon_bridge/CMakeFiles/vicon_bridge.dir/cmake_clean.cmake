@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/vicon_bridge.dir/src/vicon_bridge.cpp.o"
-  "/home/intel1/ros_repo/ros_ws/devel/lib/vicon_bridge/vicon_bridge.pdb"
-  "/home/intel1/ros_repo/ros_ws/devel/lib/vicon_bridge/vicon_bridge"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/lib/vicon_bridge/vicon_bridge.pdb"
+  "/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/lib/vicon_bridge/vicon_bridge"
 )
 
 # Per-language clean rules from dependency scanning.
