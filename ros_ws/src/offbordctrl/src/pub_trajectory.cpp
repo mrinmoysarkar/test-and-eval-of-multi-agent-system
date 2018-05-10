@@ -46,11 +46,11 @@ void init_trajectory()
     int m=int(length/dx);
     int n=int(width/dy);
     int indx=0;
-    for(int i=0;i<m;i++)
+    for(int i=0;i<n;i++)
     {
         if(i%2==0)
         {
-            for(int j=0;j<n;j++)
+            for(int j=0;j<m;j++)
             {
                 trajectory[indx].x=j*dx;
                 trajectory[indx].y=i*dy;
@@ -59,7 +59,7 @@ void init_trajectory()
         }
         else
         {
-            for(int j=n-1;j>=0;j--)
+            for(int j=m-1;j>=0;j--)
             {
                 trajectory[indx].x=j*dx;
                 trajectory[indx].y=i*dy;
