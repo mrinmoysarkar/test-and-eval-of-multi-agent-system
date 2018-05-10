@@ -392,6 +392,7 @@ clean: gtest/gtest/CMakeFiles/gtest_main.dir/clean
 # Convenience name for "all" pass in the directory.
 offbordctrl/all: offbordctrl/CMakeFiles/offbord_node.dir/all
 offbordctrl/all: offbordctrl/CMakeFiles/setpoint_pub.dir/all
+offbordctrl/all: offbordctrl/CMakeFiles/pub_trajectory.dir/all
 
 .PHONY : offbordctrl/all
 
@@ -410,9 +411,10 @@ offbordctrl/clean: offbordctrl/CMakeFiles/roscpp_generate_messages_nodejs.dir/cl
 offbordctrl/clean: offbordctrl/CMakeFiles/std_msgs_generate_messages_nodejs.dir/clean
 offbordctrl/clean: offbordctrl/CMakeFiles/roscpp_generate_messages_lisp.dir/clean
 offbordctrl/clean: offbordctrl/CMakeFiles/std_msgs_generate_messages_eus.dir/clean
-offbordctrl/clean: offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
 offbordctrl/clean: offbordctrl/CMakeFiles/offbord_node.dir/clean
 offbordctrl/clean: offbordctrl/CMakeFiles/setpoint_pub.dir/clean
+offbordctrl/clean: offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
+offbordctrl/clean: offbordctrl/CMakeFiles/pub_trajectory.dir/clean
 
 .PHONY : offbordctrl/clean
 
@@ -870,38 +872,6 @@ clean: offbordctrl/CMakeFiles/std_msgs_generate_messages_eus.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir
-
-# All Build rule for target.
-offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/all:
-	$(MAKE) -f offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/depend
-	$(MAKE) -f offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num= "Built target std_msgs_generate_messages_lisp"
-.PHONY : offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
-
-# Build rule for subdir invocation for target.
-offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles 0
-	$(MAKE) -f CMakeFiles/Makefile2 offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles 0
-.PHONY : offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_lisp: offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : std_msgs_generate_messages_lisp
-
-# clean rule for target.
-offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean:
-	$(MAKE) -f offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
-.PHONY : offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
-
-# clean rule for target.
-clean: offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
-
-.PHONY : clean
-
-#=============================================================================
 # Target rules for target offbordctrl/CMakeFiles/offbord_node.dir
 
 # All Build rule for target.
@@ -945,7 +915,7 @@ clean: offbordctrl/CMakeFiles/offbord_node.dir/clean
 offbordctrl/CMakeFiles/setpoint_pub.dir/all:
 	$(MAKE) -f offbordctrl/CMakeFiles/setpoint_pub.dir/build.make offbordctrl/CMakeFiles/setpoint_pub.dir/depend
 	$(MAKE) -f offbordctrl/CMakeFiles/setpoint_pub.dir/build.make offbordctrl/CMakeFiles/setpoint_pub.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=18,19 "Built target setpoint_pub"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=20,21 "Built target setpoint_pub"
 .PHONY : offbordctrl/CMakeFiles/setpoint_pub.dir/all
 
 # Include target in all.
@@ -972,6 +942,75 @@ offbordctrl/CMakeFiles/setpoint_pub.dir/clean:
 
 # clean rule for target.
 clean: offbordctrl/CMakeFiles/setpoint_pub.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir
+
+# All Build rule for target.
+offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/all:
+	$(MAKE) -f offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/depend
+	$(MAKE) -f offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num= "Built target std_msgs_generate_messages_lisp"
+.PHONY : offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
+
+# Build rule for subdir invocation for target.
+offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles 0
+.PHONY : offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+std_msgs_generate_messages_lisp: offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
+
+.PHONY : std_msgs_generate_messages_lisp
+
+# clean rule for target.
+offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean:
+	$(MAKE) -f offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
+.PHONY : offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
+
+# clean rule for target.
+clean: offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target offbordctrl/CMakeFiles/pub_trajectory.dir
+
+# All Build rule for target.
+offbordctrl/CMakeFiles/pub_trajectory.dir/all:
+	$(MAKE) -f offbordctrl/CMakeFiles/pub_trajectory.dir/build.make offbordctrl/CMakeFiles/pub_trajectory.dir/depend
+	$(MAKE) -f offbordctrl/CMakeFiles/pub_trajectory.dir/build.make offbordctrl/CMakeFiles/pub_trajectory.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=18,19 "Built target pub_trajectory"
+.PHONY : offbordctrl/CMakeFiles/pub_trajectory.dir/all
+
+# Include target in all.
+all: offbordctrl/CMakeFiles/pub_trajectory.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+offbordctrl/CMakeFiles/pub_trajectory.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 offbordctrl/CMakeFiles/pub_trajectory.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles 0
+.PHONY : offbordctrl/CMakeFiles/pub_trajectory.dir/rule
+
+# Convenience name for target.
+pub_trajectory: offbordctrl/CMakeFiles/pub_trajectory.dir/rule
+
+.PHONY : pub_trajectory
+
+# clean rule for target.
+offbordctrl/CMakeFiles/pub_trajectory.dir/clean:
+	$(MAKE) -f offbordctrl/CMakeFiles/pub_trajectory.dir/build.make offbordctrl/CMakeFiles/pub_trajectory.dir/clean
+.PHONY : offbordctrl/CMakeFiles/pub_trajectory.dir/clean
+
+# clean rule for target.
+clean: offbordctrl/CMakeFiles/pub_trajectory.dir/clean
 
 .PHONY : clean
 
@@ -1069,7 +1108,7 @@ vicon_bridge/preinstall:
 vicon_bridge/CMakeFiles/testclient.dir/all:
 	$(MAKE) -f vicon_bridge/CMakeFiles/testclient.dir/build.make vicon_bridge/CMakeFiles/testclient.dir/depend
 	$(MAKE) -f vicon_bridge/CMakeFiles/testclient.dir/build.make vicon_bridge/CMakeFiles/testclient.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=20,21 "Built target testclient"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=22,23 "Built target testclient"
 .PHONY : vicon_bridge/CMakeFiles/testclient.dir/all
 
 # Include target in all.
@@ -1107,7 +1146,7 @@ vicon_bridge/CMakeFiles/tf_distort.dir/all: vicon_bridge/CMakeFiles/vicon_bridge
 vicon_bridge/CMakeFiles/tf_distort.dir/all: vicon_bridge/CMakeFiles/vicon_bridge_gencpp.dir/all
 	$(MAKE) -f vicon_bridge/CMakeFiles/tf_distort.dir/build.make vicon_bridge/CMakeFiles/tf_distort.dir/depend
 	$(MAKE) -f vicon_bridge/CMakeFiles/tf_distort.dir/build.make vicon_bridge/CMakeFiles/tf_distort.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=22,23 "Built target tf_distort"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=24,25 "Built target tf_distort"
 .PHONY : vicon_bridge/CMakeFiles/tf_distort.dir/all
 
 # Include target in all.
@@ -1145,7 +1184,7 @@ vicon_bridge/CMakeFiles/vicon_bridge.dir/all: vicon_bridge/CMakeFiles/msvc_bridg
 vicon_bridge/CMakeFiles/vicon_bridge.dir/all: vicon_bridge/CMakeFiles/vicon_bridge_gencpp.dir/all
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge.dir/depend
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=24,25 "Built target vicon_bridge"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=26,27 "Built target vicon_bridge"
 .PHONY : vicon_bridge/CMakeFiles/vicon_bridge.dir/all
 
 # Include target in all.
@@ -1182,7 +1221,7 @@ clean: vicon_bridge/CMakeFiles/vicon_bridge.dir/clean
 vicon_bridge/CMakeFiles/vicon_bridge_gencfg.dir/all:
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge_gencfg.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge_gencfg.dir/depend
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge_gencfg.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge_gencfg.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=26 "Built target vicon_bridge_gencfg"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=28 "Built target vicon_bridge_gencfg"
 .PHONY : vicon_bridge/CMakeFiles/vicon_bridge_gencfg.dir/all
 
 # Include target in all.
@@ -1224,7 +1263,7 @@ vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_py.dir/all: vicon_bridge/
 vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_py.dir/all: vicon_bridge/CMakeFiles/_vicon_bridge_generate_messages_check_deps_Markers.dir/all
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_py.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_py.dir/depend
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_py.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_py.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=48,49,50,51,52,53,54 "Built target vicon_bridge_generate_messages_py"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=50,51,52,53,54,55,56 "Built target vicon_bridge_generate_messages_py"
 .PHONY : vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_py.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1293,7 +1332,7 @@ vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_nodejs.dir/all: vicon_bri
 vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_nodejs.dir/all: vicon_bridge/CMakeFiles/_vicon_bridge_generate_messages_check_deps_Markers.dir/all
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_nodejs.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_nodejs.dir/depend
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_nodejs.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_nodejs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=43,44,45,46,47 "Built target vicon_bridge_generate_messages_nodejs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=45,46,47,48,49 "Built target vicon_bridge_generate_messages_nodejs"
 .PHONY : vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_nodejs.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1367,7 +1406,7 @@ vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_eus.dir/all: vicon_bridge
 vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_eus.dir/all: vicon_bridge/CMakeFiles/_vicon_bridge_generate_messages_check_deps_Markers.dir/all
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_eus.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_eus.dir/depend
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_eus.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_eus.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=32,33,34,35,36,37 "Built target vicon_bridge_generate_messages_eus"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=34,35,36,37,38,39 "Built target vicon_bridge_generate_messages_eus"
 .PHONY : vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_eus.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1468,7 +1507,7 @@ vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_cpp.dir/all: vicon_bridge
 vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_cpp.dir/all: vicon_bridge/CMakeFiles/_vicon_bridge_generate_messages_check_deps_Markers.dir/all
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_cpp.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_cpp.dir/depend
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_cpp.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_cpp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=27,28,29,30,31 "Built target vicon_bridge_generate_messages_cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=29,30,31,32,33 "Built target vicon_bridge_generate_messages_cpp"
 .PHONY : vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_cpp.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1857,7 +1896,7 @@ vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_lisp.dir/all: vicon_bridg
 vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_lisp.dir/all: vicon_bridge/CMakeFiles/_vicon_bridge_generate_messages_check_deps_Markers.dir/all
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_lisp.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_lisp.dir/depend
 	$(MAKE) -f vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_lisp.dir/build.make vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_lisp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=38,39,40,41,42 "Built target vicon_bridge_generate_messages_lisp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build/CMakeFiles --progress-num=40,41,42,43,44 "Built target vicon_bridge_generate_messages_lisp"
 .PHONY : vicon_bridge/CMakeFiles/vicon_bridge_generate_messages_lisp.dir/all
 
 # Build rule for subdir invocation for target.

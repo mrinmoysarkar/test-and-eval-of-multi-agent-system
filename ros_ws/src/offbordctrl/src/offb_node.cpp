@@ -14,8 +14,33 @@
 #include <tf/transform_listener.h>
 #include <geometry_msgs/Pose.h>
 #include <tf/transform_datatypes.h>
+#include <vector>
+#include "matplotlibcpp.h"
 
 using namespace std;
+namespace plt = matplotlibcpp;
+
+int no_of_point = 1000;
+std::vector<double> zpoint(no_of_point);
+std::vector<double> rollpoint(no_of_point);
+std::vector<double> pitchpoint(no_of_point);
+std::vector<double> yawpoint(no_of_point);
+int indexpoint = 0;
+
+void plot() {
+    plt::figure();
+    plt::plot(zpoint);
+    plt::figure();
+    plt::plot(rollpoint);
+    plt::figure();
+    plt::plot(pitchpoint);
+    plt::figure();
+    plt::plot(yawpoint);
+    plt::show();
+}
+
+
+
 
 mavros_msgs::State current_state;
 void state_cb(const mavros_msgs::State::ConstPtr& msg){
@@ -26,47 +51,53 @@ double z = 0;
 double roll_angle = 0;
 double pitch_angle = 0;
 double yaw_angle = 0;
-void localPoscallback(const nav_msgs::Odometry::ConstPtr& msg)
+void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 {
-    z = (msg->pose).pose.position.z;
-    double quatx= msg->pose.pose.orientation.x;
-    double quaty= msg->pose.pose.orientation.y;
-    double quatz= msg->pose.pose.orientation.z;
-    double quatw= msg->pose.pose.orientation.w;
+    z = (msg->pose).position.z;
+    zpoint[indexpoint]=z;
+
+    double quatx= msg->pose.orientation.x;
+    double quaty= msg->pose.orientation.y;
+    double quatz= msg->pose.orientation.z;
+    double quatw= msg->pose.orientation.w;
 
     tf::Quaternion q(quatx, quaty, quatz, quatw);
     tf::Matrix3x3 m(q);
     m.getRPY(roll_angle, pitch_angle, yaw_angle);
-
-    cout << "Z:" << z << " roll:" << roll_angle << " pitch:" << pitch_angle << " yaw:" << yaw_angle << endl;
+    rollpoint[indexpoint] = roll_angle;
+    pitchpoint[indexpoint] = pitch_angle;
+    yawpoint[indexpoint] = yaw_angle;
+    indexpoint++;
+    //cout << "Z:" << z << " roll:" << roll_angle << " pitch:" << pitch_angle << " yaw:" << yaw_angle << endl;
 }
 
 
 
 int main(int argc, char **argv)
 {
-	ros::init(argc, argv, "mavros_takeoff");
+        //plot();
+        ros::init(argc, argv, "mavros_takeoff");
 	ros::NodeHandle n;
 
 
         ros::Rate rate(20.0);
 
 
-        ros::Subscriber local_pos_sub = n.subscribe("/mavros/global_position/local",1000,localPoscallback);
-        //ros::Publisher local_pos_pub = n.advertise<geometry_msgs::PoseStamped>("mavros/setpoint_position/local", 10);
-        //geometry_msgs::PoseStamped pose;
-        //pose.pose.position.x = 0;
-        //pose.pose.position.y = 0;
-        //pose.pose.position.z = 0;
+        ros::Subscriber local_pos_sub = n.subscribe("/mavros/local_position/pose",1000,localPoscallback);
+        ros::Publisher local_pos_pub = n.advertise<geometry_msgs::PoseStamped>("mavros/setpoint_position/local", 10);
+        geometry_msgs::PoseStamped pose;
+        pose.pose.position.x = 0;
+        pose.pose.position.y = 0;
+        pose.pose.position.z = 0;
 
         //send a few setpoints before starting
-        /*
+
         for(int i = 100; ros::ok() && i > 0; --i){
             local_pos_pub.publish(pose);
             ros::spinOnce();
             rate.sleep();
         }
-        */
+
 
 
     ////////////////////////////////////////////
@@ -113,7 +144,7 @@ int main(int argc, char **argv)
     }
 */
 
-
+/*
     ////////////////////////////////////////////
     /////////////////DO STUFF///////////////////
     ////////////////////////////////////////////
@@ -130,7 +161,7 @@ int main(int argc, char **argv)
         ros::spinOnce();
         loop_ratepub.sleep();
     }
-
+*/
 /*
     ////////////////////////////////////////////
     ///////////////////LAND/////////////////////
@@ -164,29 +195,42 @@ int main(int argc, char **argv)
     sleep(10);
 */
 
-/*
+
     ros::Publisher chatter_pub = n.advertise<mavros_msgs::ActuatorControl>("/mavros/actuator_control",1000);
 
     mavros_msgs::ActuatorControl msgActrl;
 
 
     int count = 1;
-    ros::Rate loop_rate(20);
-    double kp = 0.8;
-    double error;
+    ros::Rate loop_rate(200);
+    double kp = 0.3,kpr = 0.2,kpp = 0.2,kpy = 0.1;
+    double errorz,errorx,errory,errorroll,errorpitch,erroryaw;
     double throttle;
-    while(ros::ok()){
-        error = 2-z;
-        throttle = error*kp;
-        throttle = (throttle+4)*0.1;
+    while(ros::ok() && indexpoint<no_of_point){
+        errorz = 2-z;
+        throttle = errorz*kp;
+
         throttle = throttle < 0?0:throttle>.8?.8:throttle;
+
+        errorroll = 0-pitch_angle;
+        errorpitch = 0-roll_angle;
+        erroryaw = 0-yaw_angle;
+
+        double roll=kpr*errorroll;
+        double pitch=kpp*errorpitch;
+        double yaw=kpy*erroryaw;
+
+        roll = roll < -0.6?-0.6:roll>0.6?0.6:roll;
+        pitch = pitch < -0.6?-0.6:pitch>0.6?0.6:pitch;
+        yaw = yaw < -0.6?-0.6:yaw>0.6?0.6:yaw;
+
         msgActrl.header.stamp = ros::Time::now();
         msgActrl.header.seq=count;
         msgActrl.header.frame_id = 1;
         msgActrl.group_mix = msgActrl.PX4_MIX_FLIGHT_CONTROL;
-        msgActrl.controls[0] = 0;//roll_angle<-.5?.5:roll_angle>.5?-0.5:-roll_angle;//roll (-1..1)
-        msgActrl.controls[1] = 0;//pitch_angle<-.5?.5:pitch_angle>.5?-0.5:-pitch_angle;//pitch (-1..1)
-        msgActrl.controls[2] = 0;//yaw_angle<-.5?-.5:yaw_angle>.5?0.5:yaw_angle;//yaw (-1..1)
+        msgActrl.controls[0] = roll;//roll_angle<-.5?.5:roll_angle>.5?-0.5:-roll_angle;//roll (-1..1)
+        msgActrl.controls[1] = pitch;//pitch_angle<-.5?.5:pitch_angle>.5?-0.5:-pitch_angle;//pitch (-1..1)
+        msgActrl.controls[2] = yaw;//yaw_angle<-.5?-.5:yaw_angle>.5?0.5:yaw_angle;//yaw (-1..1)
         msgActrl.controls[3] = throttle;//throttle (0..1 normal range, -1..1 for variable pitch / thrust reversers)
         msgActrl.controls[4] = 0;//flaps (-1..1)
         msgActrl.controls[5] = 0;//spoilers (-1..1)
@@ -197,9 +241,9 @@ int main(int argc, char **argv)
         count++;
         loop_rate.sleep();
     }
+    indexpoint=0;
+    plot();
 
-
-*
 
 
 

@@ -78,17 +78,6 @@ install/fast: preinstall/fast
 	/usr/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -99,6 +88,17 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # Special rule for the target test
 test:
@@ -376,21 +376,6 @@ std_msgs_generate_messages_eus/fast:
 .PHONY : std_msgs_generate_messages_eus/fast
 
 # Convenience name for target.
-offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule:
-	cd /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build && $(MAKE) -f CMakeFiles/Makefile2 offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-.PHONY : offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_lisp: offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : std_msgs_generate_messages_lisp
-
-# fast build rule for target.
-std_msgs_generate_messages_lisp/fast:
-	cd /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build && $(MAKE) -f offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
-.PHONY : std_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
 offbordctrl/CMakeFiles/offbord_node.dir/rule:
 	cd /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build && $(MAKE) -f CMakeFiles/Makefile2 offbordctrl/CMakeFiles/offbord_node.dir/rule
 .PHONY : offbordctrl/CMakeFiles/offbord_node.dir/rule
@@ -419,6 +404,36 @@ setpoint_pub: offbordctrl/CMakeFiles/setpoint_pub.dir/rule
 setpoint_pub/fast:
 	cd /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build && $(MAKE) -f offbordctrl/CMakeFiles/setpoint_pub.dir/build.make offbordctrl/CMakeFiles/setpoint_pub.dir/build
 .PHONY : setpoint_pub/fast
+
+# Convenience name for target.
+offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule:
+	cd /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build && $(MAKE) -f CMakeFiles/Makefile2 offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
+.PHONY : offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+std_msgs_generate_messages_lisp: offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
+
+.PHONY : std_msgs_generate_messages_lisp
+
+# fast build rule for target.
+std_msgs_generate_messages_lisp/fast:
+	cd /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build && $(MAKE) -f offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
+.PHONY : std_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+offbordctrl/CMakeFiles/pub_trajectory.dir/rule:
+	cd /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build && $(MAKE) -f CMakeFiles/Makefile2 offbordctrl/CMakeFiles/pub_trajectory.dir/rule
+.PHONY : offbordctrl/CMakeFiles/pub_trajectory.dir/rule
+
+# Convenience name for target.
+pub_trajectory: offbordctrl/CMakeFiles/pub_trajectory.dir/rule
+
+.PHONY : pub_trajectory
+
+# fast build rule for target.
+pub_trajectory/fast:
+	cd /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build && $(MAKE) -f offbordctrl/CMakeFiles/pub_trajectory.dir/build.make offbordctrl/CMakeFiles/pub_trajectory.dir/build
+.PHONY : pub_trajectory/fast
 
 src/offb_node.o: src/offb_node.cpp.o
 
@@ -474,6 +489,33 @@ src/pub_setpoints.cpp.s:
 	cd /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build && $(MAKE) -f offbordctrl/CMakeFiles/setpoint_pub.dir/build.make offbordctrl/CMakeFiles/setpoint_pub.dir/src/pub_setpoints.cpp.s
 .PHONY : src/pub_setpoints.cpp.s
 
+src/pub_trajectory.o: src/pub_trajectory.cpp.o
+
+.PHONY : src/pub_trajectory.o
+
+# target to build an object file
+src/pub_trajectory.cpp.o:
+	cd /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build && $(MAKE) -f offbordctrl/CMakeFiles/pub_trajectory.dir/build.make offbordctrl/CMakeFiles/pub_trajectory.dir/src/pub_trajectory.cpp.o
+.PHONY : src/pub_trajectory.cpp.o
+
+src/pub_trajectory.i: src/pub_trajectory.cpp.i
+
+.PHONY : src/pub_trajectory.i
+
+# target to preprocess a source file
+src/pub_trajectory.cpp.i:
+	cd /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build && $(MAKE) -f offbordctrl/CMakeFiles/pub_trajectory.dir/build.make offbordctrl/CMakeFiles/pub_trajectory.dir/src/pub_trajectory.cpp.i
+.PHONY : src/pub_trajectory.cpp.i
+
+src/pub_trajectory.s: src/pub_trajectory.cpp.s
+
+.PHONY : src/pub_trajectory.s
+
+# target to generate assembly for a file
+src/pub_trajectory.cpp.s:
+	cd /home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/build && $(MAKE) -f offbordctrl/CMakeFiles/pub_trajectory.dir/build.make offbordctrl/CMakeFiles/pub_trajectory.dir/src/pub_trajectory.cpp.s
+.PHONY : src/pub_trajectory.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -482,12 +524,12 @@ help:
 	@echo "... depend"
 	@echo "... list_install_components"
 	@echo "... install"
+	@echo "... rebuild_cache"
 	@echo "... std_msgs_generate_messages_py"
 	@echo "... roscpp_generate_messages_py"
 	@echo "... rosgraph_msgs_generate_messages_eus"
 	@echo "... edit_cache"
 	@echo "... rosgraph_msgs_generate_messages_nodejs"
-	@echo "... rebuild_cache"
 	@echo "... roscpp_generate_messages_cpp"
 	@echo "... rosgraph_msgs_generate_messages_cpp"
 	@echo "... std_msgs_generate_messages_cpp"
@@ -498,11 +540,12 @@ help:
 	@echo "... std_msgs_generate_messages_nodejs"
 	@echo "... roscpp_generate_messages_lisp"
 	@echo "... std_msgs_generate_messages_eus"
-	@echo "... std_msgs_generate_messages_lisp"
 	@echo "... offbord_node"
 	@echo "... test"
 	@echo "... setpoint_pub"
 	@echo "... install/local"
+	@echo "... std_msgs_generate_messages_lisp"
+	@echo "... pub_trajectory"
 	@echo "... install/strip"
 	@echo "... src/offb_node.o"
 	@echo "... src/offb_node.i"
@@ -510,6 +553,9 @@ help:
 	@echo "... src/pub_setpoints.o"
 	@echo "... src/pub_setpoints.i"
 	@echo "... src/pub_setpoints.s"
+	@echo "... src/pub_trajectory.o"
+	@echo "... src/pub_trajectory.i"
+	@echo "... src/pub_trajectory.s"
 .PHONY : help
 
 

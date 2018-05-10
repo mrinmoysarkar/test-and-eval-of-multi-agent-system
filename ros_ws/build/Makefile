@@ -465,19 +465,6 @@ std_msgs_generate_messages_eus/fast:
 .PHONY : std_msgs_generate_messages_eus/fast
 
 #=============================================================================
-# Target rules for targets named std_msgs_generate_messages_lisp
-
-# Build rule for target.
-std_msgs_generate_messages_lisp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_lisp
-.PHONY : std_msgs_generate_messages_lisp
-
-# fast build rule for target.
-std_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
-.PHONY : std_msgs_generate_messages_lisp/fast
-
-#=============================================================================
 # Target rules for targets named offbord_node
 
 # Build rule for target.
@@ -502,6 +489,32 @@ setpoint_pub: cmake_check_build_system
 setpoint_pub/fast:
 	$(MAKE) -f offbordctrl/CMakeFiles/setpoint_pub.dir/build.make offbordctrl/CMakeFiles/setpoint_pub.dir/build
 .PHONY : setpoint_pub/fast
+
+#=============================================================================
+# Target rules for targets named std_msgs_generate_messages_lisp
+
+# Build rule for target.
+std_msgs_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_lisp
+.PHONY : std_msgs_generate_messages_lisp
+
+# fast build rule for target.
+std_msgs_generate_messages_lisp/fast:
+	$(MAKE) -f offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make offbordctrl/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
+.PHONY : std_msgs_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named pub_trajectory
+
+# Build rule for target.
+pub_trajectory: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pub_trajectory
+.PHONY : pub_trajectory
+
+# fast build rule for target.
+pub_trajectory/fast:
+	$(MAKE) -f offbordctrl/CMakeFiles/pub_trajectory.dir/build.make offbordctrl/CMakeFiles/pub_trajectory.dir/build
+.PHONY : pub_trajectory/fast
 
 #=============================================================================
 # Target rules for targets named testclient
@@ -1371,9 +1384,10 @@ help:
 	@echo "... std_msgs_generate_messages_nodejs"
 	@echo "... roscpp_generate_messages_lisp"
 	@echo "... std_msgs_generate_messages_eus"
-	@echo "... std_msgs_generate_messages_lisp"
 	@echo "... offbord_node"
 	@echo "... setpoint_pub"
+	@echo "... std_msgs_generate_messages_lisp"
+	@echo "... pub_trajectory"
 	@echo "... testclient"
 	@echo "... tf_distort"
 	@echo "... vicon_bridge"
