@@ -25,17 +25,17 @@ class point
 
 point trajectory[5000];
 
-double h=1.5;
+double h=1;
 double dx=0.25;
 double dy=0.5;
-double length=20;
-double width=10;
+double length=1;
+double width=4;
 
 double curr_x=0;
 double curr_y=0;
 
-double del_x = 0.1;
-double del_y = 0.1;
+double del_x = 0.15;
+double del_y = 0.15;
 
 int indx_trajectory=0;
 

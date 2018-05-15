@@ -8,8 +8,6 @@
 #include <mavros_msgs/CommandTOL.h>
 #include <mavros_msgs/ActuatorControl.h>
 #include <std_msgs/Float64.h>
-<<<<<<< HEAD
-=======
 #include <nav_msgs/Odometry.h>
 #include <iostream>
 #include <tf/tf.h>
@@ -43,7 +41,6 @@ void plot() {
 
 
 
->>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
 
 mavros_msgs::State current_state;
 void state_cb(const mavros_msgs::State::ConstPtr& msg){
@@ -151,7 +148,7 @@ int main(int argc, char **argv)
     ////////////////////////////////////////////
     /////////////////DO STUFF///////////////////
     ////////////////////////////////////////////
-<<<<<<< HEAD
+
    
 	//sleep(5);
 	//ros::Publisher chetter_pub = n.advertise<std_msgs::Float64>("chattersarkar", 1000);
@@ -165,24 +162,8 @@ int main(int argc, char **argv)
 		ros::spinOnce();
 		loop_rate.sleep();	
 	}
-
-
-=======
-    //sleep(10);
-    ros::Publisher chetter_pub0 = n.advertise<std_msgs::Float64>("chattersarkar",1000);
-
-    std_msgs::Float64 alti;
-    alti.data = 0.7;
-    ros::Rate loop_ratepub(2);
-    for(int i=0;i<2;i++)
-    while(ros::ok())
-    {
-        //chetter_pub0.publish(alti);
-        ros::spinOnce();
-        loop_ratepub.sleep();
-    }
 */
->>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
+
 /*
     ////////////////////////////////////////////
     ///////////////////LAND/////////////////////
@@ -200,18 +181,16 @@ int main(int argc, char **argv)
         ROS_ERROR("Failed Land");
     }
 */
-<<<<<<< HEAD
-    //sleep(5);
-=======
+
     /*
     sleep(10);
->>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
+
     ////////////////////////////////////////////
     ///////////////////DISARM//////////////////////
     ////////////////////////////////////////////
     //ros::ServiceClient arming_cl = n.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
     //mavros_msgs::CommandBool srv;
-/*
+
     srv.request.value = false;
     if(arming_cl.call(srv)){
         ROS_INFO("DISARM send ok");// %d", srv.response.success);
@@ -219,16 +198,12 @@ int main(int argc, char **argv)
         ROS_ERROR("Failed arming or disarming");
     }
     sleep(10);
-*/
 
-<<<<<<< HEAD
 */
     /*
-    ros::Publisher chatter_pub = n.advertise<mavros_msgs::ActuatorControl>("/mavros/actuator_control",100);
-=======
+   
 
     ros::Publisher chatter_pub = n.advertise<mavros_msgs::ActuatorControl>("/mavros/actuator_control",1000);
->>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
 
     mavros_msgs::ActuatorControl msgActrl;
 
@@ -356,7 +331,8 @@ int main(int argc, char **argv)
       //  arm_cmd.response.success){
         //ROS_INFO("Vehicle disarmed");
     //}
-    return 0;*/
+*/
+    return 0;
 }
 
 

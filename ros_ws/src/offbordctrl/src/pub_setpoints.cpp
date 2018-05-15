@@ -161,14 +161,8 @@ int main(int argc, char **argv)
 }
 */
 
-<<<<<<< HEAD
-=======
-/**
- * @file offb_node.cpp
- * @brief offboard example node, written with mavros version 0.14.2, px4 flight
- * stack and tested in Gazebo SITL
- */
->>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
+
+
 
 #include <ros/ros.h>
 #include <geometry_msgs/PoseStamped.h>
@@ -177,11 +171,9 @@ int main(int argc, char **argv)
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/State.h>
 
-<<<<<<< HEAD
+
 #define FLIGHT_ALTITUDE 1.0f
-=======
-#define FLIGHT_ALTITUDE 1.5f
->>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
+
 
 mavros_msgs::State current_state;
 void state_cb(const mavros_msgs::State::ConstPtr& msg){
@@ -204,14 +196,10 @@ int main(int argc, char **argv)
     ros::ServiceClient set_mode_client = nh.serviceClient<mavros_msgs::SetMode>
             ("mavros/set_mode");
 
-<<<<<<< HEAD
-	sleep(10);
+
     //the setpoint publishing rate MUST be faster than 2Hz
     ros::Rate rate(200.0);
-=======
-    //the setpoint publishing rate MUST be faster than 2Hz
-    ros::Rate rate(20.0);
->>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
+
 
     // wait for FCU connection
     while(ros::ok() && current_state.connected){
@@ -277,22 +265,16 @@ int main(int argc, char **argv)
     pose.pose.position.z = FLIGHT_ALTITUDE;
 
     ROS_INFO("going to the first way point");
-<<<<<<< HEAD
     for(int i = 0; ros::ok() && i < 10*500; ++i){
-=======
-    for(int i = 0; ros::ok() && i < 10*20; ++i){
->>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
+
       local_pos_pub.publish(pose);
       ros::spinOnce();
       rate.sleep();
     }
     ROS_INFO("first way point finished!");
 
-<<<<<<< HEAD
-/*
-=======
 
->>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
+/*
     // go to the second waypoint
     pose.pose.position.x = 0;
     pose.pose.position.y = 1;
@@ -309,13 +291,10 @@ int main(int argc, char **argv)
     ROS_INFO("second way point finished!");
 
     // go to the third waypoint
-<<<<<<< HEAD
-    pose.pose.position.x = 0;//1;
-    pose.pose.position.y = 0;//1;
-=======
+
     pose.pose.position.x = 1;
     pose.pose.position.y = 1;
->>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
+
     pose.pose.position.z = FLIGHT_ALTITUDE;
     //send setpoints for 10 seconds
     ROS_INFO("going to third way point");
@@ -352,11 +331,9 @@ int main(int argc, char **argv)
       ros::spinOnce();
       rate.sleep();
     }
-<<<<<<< HEAD
-*/
-=======
 
->>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
+*/
+
     ROS_INFO("tring to land");
     while (!(land_client.call(land_cmd) &&
             land_cmd.response.success)){
@@ -367,7 +344,4 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
