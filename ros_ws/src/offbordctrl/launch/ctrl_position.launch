@@ -27,13 +27,14 @@
 <node name="setpoint_pub" pkg="offbordctrl" type="setpoint_pub" output="screen">
  
 </node>
- 
+
 <node pkg="vicon_bridge" type="vicon_bridge" name="vicon" output="screen">
     <param name="stream_mode" value="ServerPush" type="str" />
     <!--param name="datastream_hostport" value="147.47.175.54:801" type="str" /-->
-    <param name="datastream_hostport" value="192.168.1.32:801" type="str" />
+    <param name="datastream_hostport" value="192.168.1.2:801" type="str" />
     <param name="tf_ref_frame_id" value="/world" type="str" />
-    <remap from="/vicon/Parrot1/Parrot1" to="/mavros/mocap/tf"/>           
+    <remap from="/vicon/quad/quad" to="/mavros/mocap/tf"/>
+	<!--remap from="/vicon/quad/quad" to="/mavros/mocap/pose"/-->          
 </node>
  
  

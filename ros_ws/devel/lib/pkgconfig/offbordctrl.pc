@@ -1,8 +1,0 @@
-prefix=/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel
-
-Name: offbordctrl
-Description: Description of offbordctrl
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/mrinmoy/px4_dev/ros-intel-uav-rpeo/ros_ws/devel/lib 
-Requires: 

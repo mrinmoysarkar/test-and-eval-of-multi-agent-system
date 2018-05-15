@@ -5,6 +5,44 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Vector3Stamped.h>
 #include <std_msgs/Float64.h>
+<<<<<<< HEAD
+#include <iostream>
+
+using namespace std;
+
+
+float altitude = 0.5;
+
+void chatterCallback(const std_msgs::Float64::ConstPtr& msg)
+{
+  //ROS_INFO("I heard: [%s]", msg->data.c_str());
+  altitude = msg->data;
+}
+double x,y,z;
+double ox,oy,oz,ow;
+long counter = 0;
+void pos_callback(const geometry_msgs::PoseStamped::ConstPtr& msg)
+{
+	x = 0;//msg->pose.position.x;
+	y = 0;////msg->pose.position.y;
+	double currentz = msg->pose.orientation.z;
+    if(counter > 1000 && abs(currentz-1.3) < 0.1)
+	{
+		z = 0.3;
+	}
+	else
+	{
+		z = 1.3;//msg->pose.position.z;
+	}
+	ox = 0;//msg->pose.orientation.x;
+	oy = 0;//msg->pose.orientation.y;
+	oz = 0;//msg->pose.orientation.z;
+	ow = 1;//msg->pose.orientation.w;
+	//cout << x << endl;
+	counter++;
+}
+
+=======
 #include <nav_msgs/Odometry.h>
 #include <iostream>
 #include <tf/tf.h>
@@ -55,15 +93,21 @@ void localPoscallback(const nav_msgs::Odometry::ConstPtr& msg)
 }
 
 
+>>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
 int main(int argc, char **argv)
 {
    ros::init(argc, argv, "pub_setpoints");
    ros::NodeHandle n;
  
 
+<<<<<<< HEAD
+	ros::Subscriber sub = n.subscribe("chattersarkar", 1000, chatterCallback);
+	ros::Subscriber sub_pos = n.subscribe("mavros/local_position/pose", 1000, pos_callback);
+=======
    ros::Subscriber sub = n.subscribe("chattersarkar",1000,callback);
    ros::Subscriber local_pos_sub = n.subscribe("/mavros/global_position/local",1000,localPoscallback);
 
+>>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
 
    ros::Publisher chatter_pub = n.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local",100);
    ros::Rate loop_rate(100);
@@ -76,7 +120,8 @@ int main(int argc, char **argv)
         //Body some_object;
         //qp.connect_to_server();
  
-     
+     x=y=z=ox=oy=oz=0;
+		ow=1;
    while(ros::ok()){
        //some_object = qp.getStatus();
         // some_object.print();
@@ -88,6 +133,15 @@ int main(int argc, char **argv)
        msg.header.stamp = ros::Time::now();
        msg.header.seq=count;
        msg.header.frame_id = 1;
+<<<<<<< HEAD
+       msg.pose.position.x = x;//0.001*some_object.position_x;
+       msg.pose.position.y = y;//0.001*some_object.position_y;
+       msg.pose.position.z = z;//0.001*some_object.position_z;
+       msg.pose.orientation.x = ox;
+       msg.pose.orientation.y = oy;
+       msg.pose.orientation.z = oz;
+       msg.pose.orientation.w = ow;
+=======
        msg.pose.position.x = 0.0;//0.001*some_object.position_x;
        msg.pose.position.y = 0.0;//0.001*some_object.position_y;
        msg.pose.position.z = alti;//0.001*some_object.position_z;
@@ -95,6 +149,7 @@ int main(int argc, char **argv)
        msg.pose.orientation.y = 0;
        msg.pose.orientation.z = 0;
        msg.pose.orientation.w = 1;
+>>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
  
        chatter_pub.publish(msg);
        ros::spinOnce();
@@ -106,11 +161,14 @@ int main(int argc, char **argv)
 }
 */
 
+<<<<<<< HEAD
+=======
 /**
  * @file offb_node.cpp
  * @brief offboard example node, written with mavros version 0.14.2, px4 flight
  * stack and tested in Gazebo SITL
  */
+>>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
 
 #include <ros/ros.h>
 #include <geometry_msgs/PoseStamped.h>
@@ -119,7 +177,11 @@ int main(int argc, char **argv)
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/State.h>
 
+<<<<<<< HEAD
+#define FLIGHT_ALTITUDE 1.0f
+=======
 #define FLIGHT_ALTITUDE 1.5f
+>>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
 
 mavros_msgs::State current_state;
 void state_cb(const mavros_msgs::State::ConstPtr& msg){
@@ -142,8 +204,14 @@ int main(int argc, char **argv)
     ros::ServiceClient set_mode_client = nh.serviceClient<mavros_msgs::SetMode>
             ("mavros/set_mode");
 
+<<<<<<< HEAD
+	sleep(10);
+    //the setpoint publishing rate MUST be faster than 2Hz
+    ros::Rate rate(200.0);
+=======
     //the setpoint publishing rate MUST be faster than 2Hz
     ros::Rate rate(20.0);
+>>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
 
     // wait for FCU connection
     while(ros::ok() && current_state.connected){
@@ -209,14 +277,22 @@ int main(int argc, char **argv)
     pose.pose.position.z = FLIGHT_ALTITUDE;
 
     ROS_INFO("going to the first way point");
+<<<<<<< HEAD
+    for(int i = 0; ros::ok() && i < 10*500; ++i){
+=======
     for(int i = 0; ros::ok() && i < 10*20; ++i){
+>>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
       local_pos_pub.publish(pose);
       ros::spinOnce();
       rate.sleep();
     }
     ROS_INFO("first way point finished!");
 
+<<<<<<< HEAD
+/*
+=======
 
+>>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
     // go to the second waypoint
     pose.pose.position.x = 0;
     pose.pose.position.y = 1;
@@ -233,8 +309,13 @@ int main(int argc, char **argv)
     ROS_INFO("second way point finished!");
 
     // go to the third waypoint
+<<<<<<< HEAD
+    pose.pose.position.x = 0;//1;
+    pose.pose.position.y = 0;//1;
+=======
     pose.pose.position.x = 1;
     pose.pose.position.y = 1;
+>>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
     pose.pose.position.z = FLIGHT_ALTITUDE;
     //send setpoints for 10 seconds
     ROS_INFO("going to third way point");
@@ -271,7 +352,11 @@ int main(int argc, char **argv)
       ros::spinOnce();
       rate.sleep();
     }
+<<<<<<< HEAD
+*/
+=======
 
+>>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
     ROS_INFO("tring to land");
     while (!(land_client.call(land_cmd) &&
             land_cmd.response.success)){
@@ -282,3 +367,7 @@ int main(int argc, char **argv)
     }
     return 0;
 }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 579c6cc6084ea5fe6de8ef3f89a84113ec58fe1f
