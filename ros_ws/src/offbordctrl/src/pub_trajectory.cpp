@@ -25,21 +25,23 @@ class point
 
 point trajectory[5000];
 
-double h=1;
-double dx=0.25;
-double dy=0.5;
-double length=1;
-double width=4;
+double h=1.5;
+double dx=1.5;
+double dy=1.0;
+double length=3.0;
+double width=4.0;
 
 double curr_x=0;
 double curr_y=0;
 
-double del_x = 0.15;
-double del_y = 0.15;
+double del_x = 0.1;
+double del_y = 0.1;
 
 int indx_trajectory=0;
 
 int indx_max;
+
+int counter = 0;
 
 void init_trajectory()
 {
@@ -90,7 +92,12 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
     
     if(h!=0 && abs(trajectory[indx_trajectory].x - cx)<del_x && abs(trajectory[indx_trajectory].y - cy)<del_y)
     {
-        indx_trajectory++;
+		counter++;
+		if(counter > 250)
+		{
+        	indx_trajectory++;
+			counter = 0;
+		}
     }
     if(indx_trajectory == indx_max)
     {
