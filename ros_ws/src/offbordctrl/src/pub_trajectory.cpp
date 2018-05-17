@@ -9,11 +9,10 @@
 #include <tf/transform_listener.h>
 #include <geometry_msgs/Pose.h>
 #include <tf/transform_datatypes.h>
-
-
-
-
-#define FLIGHT_ALTITUDE 1.5f
+#include <std_msgs/String.h>
+#include <iostream>
+#include <string>
+using namespace std;
 
 
 class point
@@ -43,6 +42,10 @@ int indx_max;
 
 int counter = 0;
 
+string tgstatus="hold";
+
+int setPointReached = 0;
+
 void init_trajectory()
 {
     int m=int(length/dx);
@@ -69,9 +72,17 @@ void init_trajectory()
             }
         }
     }
+	trajectory[indx].x=0;
+    trajectory[indx].y=0;
+	indx++;
     indx_max = indx;
 }
 
+void targetStatuscallback(const std_msgs::String::ConstPtr& status)
+{
+	ROS_INFO("Target Status: [%s]", status->data.c_str());
+    tgstatus = status->data;
+}
 
 
 void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
@@ -92,13 +103,19 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
     
     if(h!=0 && abs(trajectory[indx_trajectory].x - cx)<del_x && abs(trajectory[indx_trajectory].y - cy)<del_y)
     {
+		setPointReached = 1;
+    }
+	if(setPointReached == 1)
+	{
 		counter++;
-		if(counter > 250)
+		if(counter > 250 && tgstatus == "done")
 		{
         	indx_trajectory++;
 			counter = 0;
+			tgstatus="hold";
+			setPointReached = 0;
 		}
-    }
+	}
     if(indx_trajectory == indx_max)
     {
         h=0;
@@ -125,7 +142,7 @@ int main(int argc, char **argv)
     ros::NodeHandle nh;
 
     ros::Subscriber local_pos_sub = nh.subscribe("/mavros/local_position/pose",1000,localPoscallback);
-
+	ros::Subscriber target_status_sub = nh.subscribe("/target/search/status",1000,targetStatuscallback);
 
     ros::Subscriber state_sub = nh.subscribe<mavros_msgs::State>
             ("mavros/state", 10, state_cb);
@@ -139,7 +156,7 @@ int main(int argc, char **argv)
             ("mavros/set_mode");
 
     //the setpoint publishing rate MUST be faster than 2Hz
-    ros::Rate rate(250.0);
+    ros::Rate rate(300.0);
 
     // wait for FCU connection
     while(ros::ok() && current_state.connected){
@@ -222,5 +239,6 @@ int main(int argc, char **argv)
       ros::spinOnce();
       rate.sleep();
     }
+
     return 0;
 }
