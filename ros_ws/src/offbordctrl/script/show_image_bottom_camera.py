@@ -86,15 +86,20 @@ if __name__ == "__main__":
             image = frame
             #cv2.imshow("frame", frame)
                 
-            resized = imutils.resize(image, width=300)
+            resized = image#imutils.resize(image, width=300)
             ratio = image.shape[0] / float(resized.shape[0])
     
             # convert the resized image to grayscale, blur it slightly,
             # and threshold it
             gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
             blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-            thresh = cv2.threshold(blurred, 160, 255, cv2.THRESH_BINARY)[1]
-            cv2.imshow("frame", thresh)
+            thresh = cv2.threshold(blurred, 217, 255, cv2.THRESH_BINARY)[1]
+            kernel = np.ones((20,20), np.uint8)
+#            thresh = cv2.dilate(thresh,kernel,iterations=1)
+	    thresh = thresh[20:460,20:620]
+	    cv2.imshow("frame", image)
+	    cv2.imshow("thresh",thresh)
+	    cv2.imwrite("image.png",image)
             # find contours in the thresholded image and initialize the
             # shape detector
             cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -103,9 +108,12 @@ if __name__ == "__main__":
     
             # loop over the contours
             for c in cnts:
-                shape = sd.detect(c)
-                if shape == 'square' or shape == 'rectangle':
-                    print(shape)
+		arclen = cv2.arcLength(c,True)
+		if arclen >=100:
+		    print('target found')
+                #shape = sd.detect(c)
+                #if shape == 'square' or shape == 'rectangle':
+                #    print(shape)
                 	                	
                  
                  
@@ -125,7 +133,7 @@ if __name__ == "__main__":
                 
                 	# show the output image
                 	#cv2.imshow("Image", image)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            if cv2.waitKey(5) & 0xFF == ord('q'):
 			break
 
 

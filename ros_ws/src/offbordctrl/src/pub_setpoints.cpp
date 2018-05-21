@@ -198,7 +198,7 @@ int main(int argc, char **argv)
 
 
     //the setpoint publishing rate MUST be faster than 2Hz
-    ros::Rate rate(200.0);
+    ros::Rate rate(20.0);
 
 
     // wait for FCU connection
@@ -219,7 +219,7 @@ int main(int argc, char **argv)
         ros::spinOnce();
         rate.sleep();
     }
-
+/*
     mavros_msgs::SetMode offb_set_mode;
     offb_set_mode.request.custom_mode = "OFFBOARD";
 
@@ -257,7 +257,7 @@ int main(int argc, char **argv)
         local_pos_pub.publish(pose);
         ros::spinOnce();
         rate.sleep();
-    }
+    }*/
 
     // go to the first waypoint
     pose.pose.position.x = 0;
@@ -265,8 +265,8 @@ int main(int argc, char **argv)
     pose.pose.position.z = FLIGHT_ALTITUDE;
 
     ROS_INFO("going to the first way point");
-    for(int i = 0; ros::ok() && i < 10*500; ++i){
-
+    //for(int i = 0; ros::ok() && i < 10*500; ++i){
+while(ros::ok()){
       local_pos_pub.publish(pose);
       ros::spinOnce();
       rate.sleep();
@@ -333,7 +333,7 @@ int main(int argc, char **argv)
     }
 
 */
-
+/*
     ROS_INFO("tring to land");
     while (!(land_client.call(land_cmd) &&
             land_cmd.response.success)){
@@ -341,7 +341,7 @@ int main(int argc, char **argv)
       ROS_INFO("tring to land");
       ros::spinOnce();
       rate.sleep();
-    }
+    }*/
     return 0;
 }
 

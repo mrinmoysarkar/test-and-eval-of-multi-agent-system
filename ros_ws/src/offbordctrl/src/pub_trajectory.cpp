@@ -12,6 +12,8 @@
 #include <std_msgs/String.h>
 #include <iostream>
 #include <string>
+#include <fstream>
+
 using namespace std;
 
 
@@ -24,41 +26,72 @@ class point
 
 point trajectory[5000];
 
-double h=1.5;
+double h=1;
 double dx=1.5;
 double dy=1.0;
 double length=3.0;
-double width=4.0;
+double width=2.0;
 
 double curr_x=0;
 double curr_y=0;
 
 double del_x = 0.1;
 double del_y = 0.1;
+double del_z = 0.1;
 
 int indx_trajectory=0;
 
 int indx_max;
 
 int counter = 0;
+int counter1 = 0;
 
 string tgstatus="hold";
 
 int setPointReached = 0;
+int config = -1;
+int homeLocation = -1;
+double homeX = 0;
+double homeY = 0;
+
+bool homeLocationSet = false;
+ros::Publisher current_status_pub;
+
 
 void init_trajectory()
 {
     int m=int(length/dx);
     int n=int(width/dy);
     int indx=0;
+	int xmul=1,ymul=1;
+	if((config==0&&homeLocation==2) || (config==1&&homeLocation==1) || (config==2&&homeLocation==0) || (config==3&&homeLocation==3))
+	{
+		xmul = -1;
+		ymul = -1;
+	}
+	else if((config==0&&homeLocation==3) || (config==1&&homeLocation==2) || (config==2&&homeLocation==1) || (config==3&&homeLocation==0))
+	{
+		xmul = 1;
+		ymul = -1;
+	}
+	else if((config==0&&homeLocation==0) || (config==1&&homeLocation==3) || (config==2&&homeLocation==2) || (config==3&&homeLocation==1))
+	{
+		xmul = 1;
+		ymul = 1;
+	}
+	if((config==0&&homeLocation==1) || (config==1&&homeLocation==0) || (config==2&&homeLocation==3) || (config==3&&homeLocation==2))
+	{
+		xmul = -1;
+		ymul = 1;
+	}
     for(int i=0;i<n;i++)
     {
         if(i%2==0)
         {
             for(int j=0;j<m;j++)
             {
-                trajectory[indx].x=j*dx;
-                trajectory[indx].y=i*dy;
+                trajectory[indx].x=homeX+xmul*j*dx;
+                trajectory[indx].y=homeY+ymul*i*dy;
                 indx++;
             }
         }
@@ -66,16 +99,21 @@ void init_trajectory()
         {
             for(int j=m-1;j>=0;j--)
             {
-                trajectory[indx].x=j*dx;
-                trajectory[indx].y=i*dy;
+                trajectory[indx].x=homeX+xmul*j*dx;
+                trajectory[indx].y=homeY+ymul*i*dy;
                 indx++;
             }
         }
     }
-	trajectory[indx].x=0;
-    trajectory[indx].y=0;
+	trajectory[indx].x=homeX;
+    trajectory[indx].y=homeY;
 	indx++;
     indx_max = indx;
+	
+	for(int i=0;i<indx_max;i++)
+	{
+		cout << trajectory[i].x << " " << trajectory[i].y << endl;
+	}
 }
 
 void targetStatuscallback(const std_msgs::String::ConstPtr& status)
@@ -100,20 +138,78 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
     tf::Quaternion q(quatx, quaty, quatz, quatw);
     tf::Matrix3x3 m(q);
     //m.getRPY(roll_angle, pitch_angle, yaw_angle);
-    
-    if(h!=0 && abs(trajectory[indx_trajectory].x - cx)<del_x && abs(trajectory[indx_trajectory].y - cy)<del_y)
-    {
-		setPointReached = 1;
-    }
-	if(setPointReached == 1)
+
+    if(!homeLocationSet && counter < 100)
 	{
+		homeX += cx;
+		homeY += cy;
 		counter++;
-		if(counter > 250 && tgstatus == "done")
+		if(counter == 100)
 		{
-        	indx_trajectory++;
+			homeLocationSet = true;
+			homeX /= counter;
+			homeY /= counter;
+			homeX = 0;
+			homeY = 0;
 			counter = 0;
-			tgstatus="hold";
-			setPointReached = 0;
+		}
+		return;
+	}
+	
+    if(h!=0 && abs(h-cz)<del_z && abs(curr_x - cx)<del_x && abs(curr_y - cy)<del_y)
+    {
+		counter++;
+		if(counter > 0 && counter1 == 0)
+		{
+			if(setPointReached == 0)
+			{
+				std_msgs::String stat;
+				stat.data = "hold";
+				current_status_pub.publish(stat);
+				cout <<  "punlishing hold" << endl;
+			}
+			counter = 0;
+			setPointReached = 1;
+		}
+		if(tgstatus == "found")
+		{
+			counter1++;
+		}
+		else if(tgstatus == "home")
+		{
+			indx_trajectory++;
+		}
+    }
+
+	if(setPointReached == 1 && tgstatus == "done")
+	{
+        	indx_trajectory++;
+		counter = 0;
+		tgstatus="hold";
+		setPointReached = 0;
+		std_msgs::String stat;
+		stat.data = "moving";
+		current_status_pub.publish(stat);
+		cout <<  "punlishing moving" << endl;
+	}
+	if(tgstatus == "found")
+	{
+		if(counter1 == 0)
+		{
+			counter1++;
+			cout << "found" << endl;
+			curr_x = cx;
+			curr_y = cy;
+			return;
+		}
+		else if(counter1>2)
+		{
+			indx_trajectory = indx_max - 1;
+			tgstatus="home";
+		}
+		else
+		{
+			return;
 		}
 	}
     if(indx_trajectory == indx_max)
@@ -135,19 +231,117 @@ void state_cb(const mavros_msgs::State::ConstPtr& msg){
     current_state = *msg;
 }
 
+void get_config()
+{
+	ifstream inf("/home/intel1/ros_repo/ros_ws/src/offbordctrl/src/config.txt");
+	if (!inf)
+    {
+        // Print an error and exit
+        cerr << "Uh oh, config.txt could not be opened for reading!" << endl;
+        exit(1);
+    }
+	int x1,y1,x2,y2,x3,y3,x4,y4;
+	inf >> x1 >> y1 >> x2 >> y2 >>x3 >> y3 >>x4 >> y4;
+	inf >> x1 >> y1;
+	if(x2==1&&y2==0&&x3==1&&y3==1&&x4==0&&y4==1)
+	{
+		config = 0;
+		if(x1==0&&y1==0)
+		{
+			homeLocation = 0;
+		}
+		else if(x1==1&&y1==0)
+		{
+			homeLocation = 1;
+		}
+		else if(x1==1&&y1==1)
+		{
+			homeLocation = 2;
+		}
+		else if(x1==0&&y1==1)
+		{
+			homeLocation = 3;
+		}
+	}
+	else if(x2==0&&y2==1&&x3==-1&&y3==1&&x4==-1&&y4==0)
+	{
+		config = 1;
+		if(x1==0&&y1==0)
+		{
+			homeLocation = 0;
+		}
+		else if(x1==0&&y1==1)
+		{
+			homeLocation = 1;
+		}
+		else if(x1==-1&&y1==1)
+		{
+			homeLocation = 2;
+		}
+		else if(x1==-1&&y1==0)
+		{
+			homeLocation = 3;
+		}
+	}
+	else if(x2==-1&&y2==0&&x3==-1&&y3==-1&&x4==0&&y4==-1)
+	{
+		config = 2;
+		if(x1==0&&y1==0)
+		{
+			homeLocation = 0;
+		}
+		else if(x1==-1&&y1==0)
+		{
+			homeLocation = 1;
+		}
+		else if(x1==-1&&y1==-1)
+		{
+			homeLocation = 2;
+		}
+		else if(x1==0&&y1==-1)
+		{
+			homeLocation = 3;
+		}
+	}
+	else if(x2==0&&y2==-1&&x3==1&&y3==-1&&x4==1&&y4==0)
+	{
+		config = 3;
+		if(x1==0&&y1==0)
+		{
+			homeLocation = 0;
+		}
+		else if(x1==0&&y1==-1)
+		{
+			homeLocation = 1;
+		}
+		else if(x1==1&&y1==-1)
+		{
+			homeLocation = 2;
+		}
+		else if(x1==1&&y1==0)
+		{
+			homeLocation = 3;
+		}
+	}
+	cout << config << "  " << homeLocation << endl;
+}
+
+
 int main(int argc, char **argv)
 {
-    init_trajectory();
+	//init_trajectory();
+
     ros::init(argc, argv, "pub_trajectory_node");
     ros::NodeHandle nh;
-
+	
+	current_status_pub = nh.advertise<std_msgs::String>("pubTrajectory/currentStatus", 100);
     ros::Subscriber local_pos_sub = nh.subscribe("/mavros/local_position/pose",1000,localPoscallback);
 	ros::Subscriber target_status_sub = nh.subscribe("/target/search/status",1000,targetStatuscallback);
 
     ros::Subscriber state_sub = nh.subscribe<mavros_msgs::State>
             ("mavros/state", 10, state_cb);
     ros::Publisher local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>
-            ("mavros/setpoint_position/local", 10);
+            ("mavros/setpoint_position/local", 1000);
     ros::ServiceClient arming_client = nh.serviceClient<mavros_msgs::CommandBool>
             ("mavros/cmd/arming");
     ros::ServiceClient land_client = nh.serviceClient<mavros_msgs::CommandTOL>
@@ -156,14 +350,22 @@ int main(int argc, char **argv)
             ("mavros/set_mode");
 
     //the setpoint publishing rate MUST be faster than 2Hz
-    ros::Rate rate(300.0);
-
+    ros::Rate rate(150.0);
+	//ros::Rate initrate(20.0);
     // wait for FCU connection
     while(ros::ok() && current_state.connected){
         ros::spinOnce();
         rate.sleep();
         ROS_INFO("connecting to FCT...");
     }
+	while(ros::ok()&&!homeLocationSet)
+	{
+		ros::spinOnce();
+        rate.sleep();
+	}
+	cout << "homex: " << homeX << " homey: " << homeY << endl;
+	get_config();
+    init_trajectory();
 
     geometry_msgs::PoseStamped pose;
     pose.pose.position.x = 0;
@@ -202,6 +404,7 @@ int main(int argc, char **argv)
             }
             last_request = ros::Time::now();
         } else {
+			
             if( !current_state.armed &&
                 (ros::Time::now() - last_request > ros::Duration(5.0))){
                 if( arming_client.call(arm_cmd) &&
@@ -216,7 +419,7 @@ int main(int argc, char **argv)
         rate.sleep();
     }
 
-    ROS_INFO("going to the first way point");
+    //ROS_INFO("going to the first way point");
     while(true){
       pose.pose.position.x = curr_x;
       pose.pose.position.y = curr_y;
@@ -225,6 +428,7 @@ int main(int argc, char **argv)
       local_pos_pub.publish(pose);
       ros::spinOnce();
       rate.sleep();
+	
       if(h==0)
       {
          break;
