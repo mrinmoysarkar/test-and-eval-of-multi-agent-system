@@ -57,6 +57,8 @@ double homeY = 0;
 bool homeLocationSet = false;
 ros::Publisher current_status_pub;
 
+double previous_time = 0;
+double hold_time = 2.0;
 
 void init_trajectory()
 {
@@ -155,9 +157,11 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 		}
 		return;
 	}
+	double current_time = ros::Time::now().toSec();
 	
-    if(h!=0 && abs(h-cz)<del_z && abs(curr_x - cx)<del_x && abs(curr_y - cy)<del_y)
-    {
+    //if(h!=0 && abs(h-cz)<del_z && abs(curr_x - cx)<del_x && abs(curr_y - cy)<del_y)
+	if(abs(current_time-previous_time)>hold_time)    
+	{
 		counter++;
 		if(counter > 0 && counter1 == 0)
 		{
@@ -178,12 +182,13 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 		else if(tgstatus == "home")
 		{
 			indx_trajectory++;
+			previous_time = ros::Time::now().toSec();
 		}
     }
 
 	if(setPointReached == 1 && tgstatus == "done")
 	{
-        	indx_trajectory++;
+        indx_trajectory++;
 		counter = 0;
 		tgstatus="hold";
 		setPointReached = 0;
@@ -191,6 +196,7 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 		stat.data = "moving";
 		current_status_pub.publish(stat);
 		cout <<  "punlishing moving" << endl;
+		previous_time = ros::Time::now().toSec();
 	}
 	if(tgstatus == "found")
 	{
@@ -200,18 +206,22 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 			cout << "found" << endl;
 			curr_x = cx;
 			curr_y = cy;
+			previous_time = ros::Time::now().toSec()+1.5;
 			return;
 		}
 		else if(counter1>2)
 		{
 			indx_trajectory = indx_max - 1;
 			tgstatus="home";
+			previous_time = ros::Time::now().toSec();
 		}
 		else
 		{
 			return;
 		}
 	}
+
+
     if(indx_trajectory == indx_max)
     {
         h=0;
@@ -418,7 +428,7 @@ int main(int argc, char **argv)
         ros::spinOnce();
         rate.sleep();
     }
-
+	previous_time = ros::Time::now().toSec();
     //ROS_INFO("going to the first way point");
     while(true){
       pose.pose.position.x = curr_x;
