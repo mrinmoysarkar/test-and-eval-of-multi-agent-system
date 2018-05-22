@@ -1,1 +1,1 @@
-roslaunch /home/intel2/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/launch/ctrl_position.launch
+roslaunch /home/intel1/ros_repo/ros_ws/src/offbordctrl/launch/ctrl_position.launch
