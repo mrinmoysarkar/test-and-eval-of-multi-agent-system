@@ -49,8 +49,8 @@ def decode(im) :
 	return "nothing" #decodedObjects
 
 def search():
-    os.system("sh /home/intel1/ros_repo/ros_ws/src/offbordctrl/script/cap_image.sh")
-    filename = "/home/intel1/ros_repo/ros_ws/src/offbordctrl/script/Image-video2-640x480-0.yuv420"
+    os.system("sh /home/intel2/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/script/cap_image.sh")
+    filename = "/home/intel2/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/script/Image-video2-640x480-0.yuv420"
     size = (480, 640)
     cap = VideoCaptureYUV(filename, size)
     ret, frame = cap.read()

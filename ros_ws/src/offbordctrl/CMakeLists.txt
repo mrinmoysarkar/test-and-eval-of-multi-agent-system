@@ -140,10 +140,12 @@ include_directories(
 add_executable(offbord_node src/offb_node.cpp)
 add_executable(setpoint_pub src/pub_setpoints.cpp)
 add_executable(pub_trajectory src/pub_trajectory.cpp)
+add_executable(hover src/hover.cpp)
 
 target_link_libraries(offbord_node ${catkin_LIBRARIES} -lpython2.7)
 target_link_libraries(setpoint_pub ${catkin_LIBRARIES})
 target_link_libraries(pub_trajectory ${catkin_LIBRARIES})
+target_link_libraries(hover ${catkin_LIBRARIES})
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
