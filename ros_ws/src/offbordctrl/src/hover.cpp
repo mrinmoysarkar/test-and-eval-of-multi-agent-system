@@ -22,7 +22,7 @@ using namespace std;
 double h=1;
 double curr_x=0;
 double curr_y=0;
-double hold_time = 10.0;
+double hold_time = 5.0;
 
 mavros_msgs::State current_state;
 void state_cb(const mavros_msgs::State::ConstPtr& msg){

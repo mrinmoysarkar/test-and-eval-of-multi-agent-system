@@ -35,7 +35,7 @@
     <!--param name="datastream_hostport" value="147.47.175.54:801" type="str" /-->
     <param name="datastream_hostport" value="192.168.1.2:801" type="str" />
     <param name="tf_ref_frame_id" value="/world" type="str" />
-    <remap from="/vicon/quad/quad2" to="/mavros/mocap/tf"/>
+    <remap from="/vicon/quad2/quad2" to="/mavros/mocap/tf"/>
 	<!--remap from="/vicon/quad/quad" to="/mavros/mocap/pose"/-->          
 </node>
  

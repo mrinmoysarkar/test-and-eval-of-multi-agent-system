@@ -28,16 +28,16 @@ point trajectory[5000];
 
 double h=1;
 double dx=1.5;
-double dy=1.0;
+double dy=1.5;
 double length=3.0;
-double width=2.0;
+double width=3.0;
 
 double curr_x=0;
 double curr_y=0;
 
-double del_x = 0.1;
-double del_y = 0.1;
-double del_z = 0.1;
+double del_x = 0.15;
+double del_y = 0.15;
+double del_z = 0.15;
 
 int indx_trajectory=0;
 
@@ -58,7 +58,7 @@ bool homeLocationSet = false;
 ros::Publisher current_status_pub;
 
 double previous_time = 0;
-double hold_time = 2.0;
+double hold_time = 3.0;
 
 void init_trajectory()
 {
@@ -160,7 +160,7 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 	double current_time = ros::Time::now().toSec();
 	
     //if(h!=0 && abs(h-cz)<del_z && abs(curr_x - cx)<del_x && abs(curr_y - cy)<del_y)
-	if(abs(current_time-previous_time)>hold_time)    
+	if(h!=0 && abs(h-cz)<del_z && abs(current_time-previous_time)>hold_time)    
 	{
 		counter++;
 		if(counter > 0 && counter1 == 0)
@@ -179,7 +179,7 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 		{
 			counter1++;
 		}
-		else if(tgstatus == "home")
+		else if(tgstatus == "home" && indx_trajectory != indx_max)
 		{
 			indx_trajectory++;
 			previous_time = ros::Time::now().toSec();
@@ -206,10 +206,10 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 			cout << "found" << endl;
 			curr_x = cx;
 			curr_y = cy;
-			previous_time = ros::Time::now().toSec()+1.5;
+			previous_time = ros::Time::now().toSec();
 			return;
 		}
-		else if(counter1>2)
+		else if(counter1>50)
 		{
 			indx_trajectory = indx_max - 1;
 			tgstatus="home";
@@ -222,7 +222,7 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 	}
 
 
-    if(indx_trajectory == indx_max)
+    if(indx_trajectory == indx_max && abs(current_time-previous_time)>hold_time)
     {
         h=0;
     }
@@ -243,7 +243,7 @@ void state_cb(const mavros_msgs::State::ConstPtr& msg){
 
 void get_config()
 {
-	ifstream inf("/home/intel1/ros_repo/ros_ws/src/offbordctrl/src/config.txt");
+	ifstream inf("/home/intel2/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/src/config.txt");
 	if (!inf)
     {
         // Print an error and exit
@@ -360,7 +360,7 @@ int main(int argc, char **argv)
             ("mavros/set_mode");
 
     //the setpoint publishing rate MUST be faster than 2Hz
-    ros::Rate rate(150.0);
+    ros::Rate rate(100.0);
 	//ros::Rate initrate(20.0);
     // wait for FCU connection
     while(ros::ok() && current_state.connected){
