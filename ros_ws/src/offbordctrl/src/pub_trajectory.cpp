@@ -26,8 +26,8 @@ class point
 
 point trajectory[5000];
 
-double h=1;
-double dx=1.5;
+double h=1.0;
+double dx=1.0;
 double dy=1.5;
 double length=3.0;
 double width=3.0;
@@ -140,7 +140,7 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
     tf::Quaternion q(quatx, quaty, quatz, quatw);
     tf::Matrix3x3 m(q);
     //m.getRPY(roll_angle, pitch_angle, yaw_angle);
-
+/*
     if(!homeLocationSet && counter < 100)
 	{
 		homeX += cx;
@@ -156,7 +156,7 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 			counter = 0;
 		}
 		return;
-	}
+	}*/
 	double current_time = ros::Time::now().toSec();
 	
     //if(h!=0 && abs(h-cz)<del_z && abs(curr_x - cx)<del_x && abs(curr_y - cy)<del_y)
@@ -170,7 +170,7 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 				std_msgs::String stat;
 				stat.data = "hold";
 				current_status_pub.publish(stat);
-				cout <<  "punlishing hold" << endl;
+				cout <<  "publishing hold" << endl;
 			}
 			counter = 0;
 			setPointReached = 1;
@@ -195,7 +195,7 @@ void localPoscallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 		std_msgs::String stat;
 		stat.data = "moving";
 		current_status_pub.publish(stat);
-		cout <<  "punlishing moving" << endl;
+		cout <<  "publishing moving" << endl;
 		previous_time = ros::Time::now().toSec();
 	}
 	if(tgstatus == "found")
@@ -341,6 +341,14 @@ int main(int argc, char **argv)
 {
 	//init_trajectory();
 
+    cout << "length: ";
+    cin >> length;
+    cout << "width: ";
+    cin >> width;
+    cout << "HomeX: ";
+    cin >> homeX;
+    cout << "HomeY: ";
+    cin >> homeY;
     ros::init(argc, argv, "pub_trajectory_node");
     ros::NodeHandle nh;
 	
@@ -367,12 +375,12 @@ int main(int argc, char **argv)
         ros::spinOnce();
         rate.sleep();
         ROS_INFO("connecting to FCT...");
-    }
+    }/*
 	while(ros::ok()&&!homeLocationSet)
 	{
 		ros::spinOnce();
         rate.sleep();
-	}
+	}*/
 	cout << "homex: " << homeX << " homey: " << homeY << endl;
 	get_config();
     init_trajectory();
@@ -395,11 +403,11 @@ int main(int argc, char **argv)
     mavros_msgs::CommandBool arm_cmd;
     arm_cmd.request.value = true;
 
-    mavros_msgs::CommandTOL land_cmd;
-    land_cmd.request.yaw = 0;
-    land_cmd.request.latitude = 0;
-    land_cmd.request.longitude = 0;
-    land_cmd.request.altitude = 0;
+    mavros_msgs::CommandTOL land_cmd{};
+    //land_cmd.request.yaw = 0;
+    //land_cmd.request.latitude = 0;
+    //land_cmd.request.longitude = 0;
+    //land_cmd.request.altitude = 0;
 
     ros::Time last_request = ros::Time::now();
 
@@ -444,7 +452,16 @@ int main(int argc, char **argv)
          break;
       }
     }
+    for(int i=0;i<100;i++)
+    {   
+      pose.pose.position.x = curr_x-0.1;
+      pose.pose.position.y = curr_y;
+      pose.pose.position.z = h+0.2;
 
+      local_pos_pub.publish(pose);
+      ros::spinOnce();
+      rate.sleep();
+    }
     ROS_INFO("tring to land");
     while (!(land_client.call(land_cmd) &&
             land_cmd.response.success)){

@@ -16,6 +16,7 @@ import imutils
 
 cameraStatus = "notdone"
 pub = []
+cam = []
 class VideoCaptureYUV:
     def __init__(self, filename, size):
         self.height, self.width = size
@@ -49,17 +50,21 @@ def decode(im) :
 	return "nothing" #decodedObjects
 
 def search():
-    os.system("sh /home/intel2/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/script/cap_image.sh")
-    filename = "/home/intel2/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/script/Image-video2-640x480-0.yuv420"
+    global cam
+    #os.system("sh /home/intel2/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/script/cap_image.sh")
+    #filename = "/home/intel2/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/script/Image-video2-640x480-0.yuv420"
     size = (480, 640)
-    cap = VideoCaptureYUV(filename, size)
-    ret, frame = cap.read()
-    if ret:
-        image = frame
-	decodedObjects = decode(image)
-	if decodedObjects == "Target1":
-	    print("Target1 found")			
-	    return "found"
+    #cap = VideoCaptureYUV(filename, size)
+    #ret, frame = cap.read()
+    #if ret:
+    #    image = frame
+    img = cam.get_image()
+    pygame.image.save(img,"filename.png")
+    image =cv2.imread("filename.png")
+    decodedObjects = decode(image)
+    if decodedObjects == "Target1":
+        print("Target1 found")			
+        return "found"
         #gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         #blurred = cv2.GaussianBlur(gray, (5, 5), 0)
         #thresh = cv2.threshold(blurred, 195, 255, cv2.THRESH_BINARY)[1]
@@ -99,6 +104,7 @@ def statuscallback(data):
 def targetSearch():
     global cameraStatus
     global pub
+    global cam
     rospy.init_node('target', anonymous=True)
     rospy.Subscriber("pubTrajectory/currentStatus", String, statuscallback)
     pub = rospy.Publisher('target/search/status', String, queue_size=100)
@@ -113,7 +119,12 @@ def targetSearch():
         #rate.sleep()
 
 if __name__ == '__main__':
+    print("targetsearch node\n")
+    pygame.camera.init()
+    cam = pygame.camera.Camera("/dev/video14",(480,640))
+    cam.start()
     try:
         targetSearch()
     except rospy.ROSInterruptException:
         pass
+    cam.stop()

@@ -22,7 +22,7 @@ using namespace std;
 double h=1;
 double curr_x=0;
 double curr_y=0;
-double hold_time = 5.0;
+double hold_time = 15.0;
 
 mavros_msgs::State current_state;
 void state_cb(const mavros_msgs::State::ConstPtr& msg){
@@ -31,12 +31,21 @@ void state_cb(const mavros_msgs::State::ConstPtr& msg){
 
 int main(int argc, char **argv)
 {
-	
+	cout << "input hold_time: ";
+    cin >> hold_time;
+    cout << hold_time << " seconds" << endl;
+
+    cout << "input curr_x: ";
+    cin >> curr_x;
+    cout << curr_x << " curr_x" << endl;
+
+    cout << "input curr_y: ";
+    cin >> curr_y;
+    cout << curr_y << " curr_y" << endl;
+    
 
     ros::init(argc, argv, "hover_node");
     ros::NodeHandle nh;
-	
-    
 
     ros::Subscriber state_sub = nh.subscribe<mavros_msgs::State>
             ("mavros/state", 10, state_cb);
@@ -134,5 +143,5 @@ int main(int argc, char **argv)
       ros::spinOnce();
       rate.sleep();
     }
-    return 0;
+    //return 0;
 }

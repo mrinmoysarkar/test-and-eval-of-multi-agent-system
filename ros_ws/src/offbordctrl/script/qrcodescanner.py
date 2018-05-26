@@ -4,7 +4,8 @@ import numpy as np
 import cv2
 import os
 import sys 
-
+import pygame
+import pygame.camera
 
 
 
@@ -75,12 +76,17 @@ def display(im, decodedObjects):
 	cv2.waitKey(0)
  
 if __name__ == '__main__':
-	os.system("sh /home/intel1/ros_repo/ros_ws/src/offbordctrl/script/cap_image.sh")
-	filename = "/home/intel1/ros_repo/ros_ws/src/offbordctrl/script/Image-video2-640x480-0.yuv420"
-	size = (480, 640)
-	cap = VideoCaptureYUV(filename, size)
-	ret, im = cap.read()
-	 
-	decodedObjects = decode(im)
+	#os.system("sh /home/intel2/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/script/cap_image.sh")
+	#filename = "/home/intel2/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/script/Image-video2-640x480-0.yuv420"
+    size = (640,480)
+	#cap = VideoCaptureYUV(filename, size)
+	#ret, im = cap.read()
+    pygame.camera.init()
+    cam = pygame.camera.Camera("/dev/video14",(640,480))
+    cam.start()
+    img = cam.get_image()
+    pygame.image.save(img,"filename.png")
+    im =cv2.imread("filename.png")
+    decodedObjects = decode(im)
 	#print(decodedObjects)
-	display(im, decodedObjects)
+    display(im, decodedObjects)
