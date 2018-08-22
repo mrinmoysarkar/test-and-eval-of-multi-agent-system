@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+#  nav_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -107,7 +108,11 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES beginner_tutorials
-#  CATKIN_DEPENDS roscpp rospy std_msgs
+  CATKIN_DEPENDS
+  roscpp 
+  rospy 
+  std_msgs
+#  nav_msgs
 #  DEPENDS system_lib
 )
 
@@ -141,11 +146,21 @@ add_executable(offbord_node src/offb_node.cpp)
 add_executable(setpoint_pub src/pub_setpoints.cpp)
 add_executable(pub_trajectory src/pub_trajectory.cpp)
 add_executable(hover src/hover.cpp)
+add_executable(param_update src/param_update.cpp)
+add_executable(flight_path src/flight_path.cpp)
+add_executable(Test src/Test.cpp)
+add_executable(test2 src/test2.cpp)
+add_executable(test3 src/test3.cpp)
 
 target_link_libraries(offbord_node ${catkin_LIBRARIES} -lpython2.7)
 target_link_libraries(setpoint_pub ${catkin_LIBRARIES})
 target_link_libraries(pub_trajectory ${catkin_LIBRARIES})
 target_link_libraries(hover ${catkin_LIBRARIES})
+target_link_libraries(param_update ${catkin_LIBRARIES})
+target_link_libraries(flight_path ${catkin_LIBRARIES})
+target_link_libraries(Test ${catkin_LIBRARIES})
+target_link_libraries(test2 ${catkin_LIBRARIES})
+target_link_libraries(test3 ${catkin_LIBRARIES})
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -195,6 +210,9 @@ target_link_libraries(hover ${catkin_LIBRARIES})
 #   # myfile2
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
+
+
+
 
 #############
 ## Testing ##
