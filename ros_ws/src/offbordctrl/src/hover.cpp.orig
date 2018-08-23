@@ -22,8 +22,11 @@ using namespace std;
 double h=1;
 double curr_x=0;
 double curr_y=0;
-double hold_time = 10.0;
+<<<<<<< fb4d5f67ad7bc724535242f705f1e7bee6c1fcf2
 double hold_time = 15.0;
+=======
+double hold_time = 10.0;
+>>>>>>> code from intel 1
 
 mavros_msgs::State current_state;
 void state_cb(const mavros_msgs::State::ConstPtr& msg){
@@ -32,10 +35,21 @@ void state_cb(const mavros_msgs::State::ConstPtr& msg){
 
 int main(int argc, char **argv)
 {
+<<<<<<< fb4d5f67ad7bc724535242f705f1e7bee6c1fcf2
 	cout << "input hold_time: ";
     cin >> hold_time;
     cout << hold_time << " seconds" << endl;
 
+    cout << "input curr_x: ";
+    cin >> curr_x;
+    cout << curr_x << " curr_x" << endl;
+
+    cout << "input curr_y: ";
+    cin >> curr_y;
+    cout << curr_y << " curr_y" << endl;
+    
+=======
+	
     cout << "input hold time: ";
     cin >> hold_time;
     cout << hold_time << " seconds" << endl;
@@ -45,11 +59,7 @@ int main(int argc, char **argv)
 	cout << "input cur y: ";
     cin >> curr_y;
     cout << curr_y << " curr_y" << endl;
-
-    cout << "input curr_y: ";
-    cin >> curr_y;
-    cout << curr_y << " curr_y" << endl;
-    
+>>>>>>> code from intel 1
 
     ros::init(argc, argv, "hover_node");
     ros::NodeHandle nh;
