@@ -23,7 +23,7 @@ double h=1;
 double curr_x=0;
 double curr_y=0;
 double hold_time = 10.0;
-double hold_time = 15.0;
+
 
 mavros_msgs::State current_state;
 void state_cb(const mavros_msgs::State::ConstPtr& msg){
@@ -32,21 +32,15 @@ void state_cb(const mavros_msgs::State::ConstPtr& msg){
 
 int main(int argc, char **argv)
 {
-	cout << "input hold_time: ";
+    cout << "input hold_time: ";
     cin >> hold_time;
     cout << hold_time << " seconds" << endl;
 
-    cout << "input hold time: ";
-    cin >> hold_time;
-    cout << hold_time << " seconds" << endl;
-	cout << "input cur x: ";
+    cout << "input cur x: ";
     cin >> curr_x;
     cout << curr_x << " curr_x" << endl;
-	cout << "input cur y: ";
-    cin >> curr_y;
-    cout << curr_y << " curr_y" << endl;
 
-    cout << "input curr_y: ";
+    cout << "input cur y: ";
     cin >> curr_y;
     cout << curr_y << " curr_y" << endl;
     
@@ -150,5 +144,5 @@ int main(int argc, char **argv)
       ros::spinOnce();
       rate.sleep();
     }
-    //return 0;
+    return 0;
 }
