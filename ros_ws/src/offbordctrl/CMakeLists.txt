@@ -151,6 +151,8 @@ add_executable(flight_path src/flight_path.cpp)
 add_executable(Test src/Test.cpp)
 add_executable(test2 src/test2.cpp)
 add_executable(test3 src/test3.cpp)
+add_executable(dataLogger src/dataLogger.cpp)
+add_executable(executeScenario src/executeScenario.cpp)
 
 target_link_libraries(offbord_node ${catkin_LIBRARIES} -lpython2.7)
 target_link_libraries(setpoint_pub ${catkin_LIBRARIES})
@@ -161,6 +163,8 @@ target_link_libraries(flight_path ${catkin_LIBRARIES})
 target_link_libraries(Test ${catkin_LIBRARIES})
 target_link_libraries(test2 ${catkin_LIBRARIES})
 target_link_libraries(test3 ${catkin_LIBRARIES})
+target_link_libraries(dataLogger ${catkin_LIBRARIES})
+target_link_libraries(executeScenario ${catkin_LIBRARIES})
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use

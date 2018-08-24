@@ -1,7 +1,7 @@
 <launch>
  
 <!--arg name="fcu_url" default="serial:///dev/ttyUSB0:921600" -->
-<arg name="fcu_url" default="tcp://127.0.0.1:5760" />
+<arg name="fcu_url" default="udp://:14540@127.0.0.1:14557" />
 <arg name="gcs_url" default="" />
 <arg name="tgt_system" default="1" />
 <arg name="tgt_component" default="1" />
@@ -23,6 +23,10 @@
     <param name="mocap/use_tf" value="true"/>
     <param name="mocap/use_pose" value="false"/>
 </node>
+
+<node pkg="offbordctrl" name="dataLogger" type="dataLogger" output="screen"> 
+</node>
+
 <!--
 <node pkg="offbordctrl" name="targetSearch" type="targetSearch.py" output="screen"> 
 </node>
@@ -31,17 +35,6 @@
 <node name="setpoint_pub" pkg="offbordctrl" type="setpoint_pub" output="screen">
  
 </node>
-
-
-<node pkg="vicon_bridge" type="vicon_bridge" name="vicon" output="screen">
-    <param name="stream_mode" value="ServerPush" type="str" />
-    <!--param name="datastream_hostport" value="147.47.175.54:801" type="str" /-->
-    <param name="datastream_hostport" value="192.168.1.2:801" type="str" />
-	<!--param name="datastream_hostport" value="192.168.1.112:801" type="str" /-->
-    <param name="tf_ref_frame_id" value="/world" type="str" />
-    <remap from="/vicon/quad1/quad1" to="/mavros/mocap/tf"/>
-	<!--remap from="/vicon/quad/quad" to="/mavros/mocap/pose"/-->          
-</node>
- -->
+-->
  
 </launch>

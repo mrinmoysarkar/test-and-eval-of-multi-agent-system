@@ -149,6 +149,9 @@ int main(int argc, char **argv)
 
     geometry_msgs::PoseStamped pose;
 
+    pose.pose.position.x = 0;
+    pose.pose.position.y = 0;
+    pose.pose.position.z = 0;
 
     //send a few setpoints before starting
     for(int i = 100; ros::ok() && i > 0; --i){
@@ -357,5 +360,5 @@ int main(int argc, char **argv)
     }
 */
     file.close();
-
+    return 0;
 }
