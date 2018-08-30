@@ -34,7 +34,7 @@ double pitch_angle;
 double yaw_angle;
 
 double del = 0.1;
-double del_time = 15.0;
+double del_time = 5.0;
 
 
 mavros_msgs::State current_state;
@@ -86,8 +86,36 @@ int main(int argc, char **argv)
 
 
 
+  ifstream inf("/home/intel1/ros_repo/ros_ws/src/offbordctrl/src/scenario1.txt");
+	if (!inf)
+    {
+        // Print an error and exit
+        cerr << "Uh oh, scenario1.txt could not be opened for reading!" << endl;
+        exit(1);
+    }
+    int totalPoint = 100;
+    double x[totalPoint], y[totalPoint], z[totalPoint];
+    double roll[totalPoint], pitch[totalPoint], yaw[totalPoint];
+    int i = 0;
+    while(true)
+    {
+	    inf >> x[i] >> y[i] >> z[i] >> roll[i] >> pitch[i] >> yaw[i];
+        if(x[i] == -1)
+        {
+            break;
+        }
+        i++;
+    }
+    /*
+    tf::Quaternion q_orig, q_rot, q_new;
+    q_rot = tf::createQuaternionFromRPY(0, 0, 0);
+    quaternionMsgToTF(pose.pose.orientation , q_orig);  // Get the original orientation of 'commanded_pose'
+    q_new = q_rot*q_orig;  // Calculate the new orientation
+    q_new.normalize();
+    quaternionTFToMsg(q_new, pose.pose.orientation);  // Stuff the new rotation back into the pose. This requires conversion into a msg type
+    */
     //the setpoint publishing rate MUST be faster than 2Hz
-    ros::Rate rate(20.0);
+    ros::Rate rate(60.0);
     while(ros::ok() && current_state.connected){
         ros::spinOnce();
         rate.sleep();
@@ -99,10 +127,10 @@ int main(int argc, char **argv)
     pose.pose.position.x = 0;
     pose.pose.position.y = 0;
     pose.pose.position.z = 0;
-    pose.pose.orientation.x = 0;
-    pose.pose.orientation.y = 0;
-    pose.pose.orientation.z = 0;
-    pose.pose.orientation.w = 1;
+    //pose.pose.orientation.x = 0;
+    //pose.pose.orientation.y = 0;
+   // pose.pose.orientation.z = 0;
+    //pose.pose.orientation.w = 1;
 
     //send a few setpoints before starting
     for(int i = 100; ros::ok() && i > 0; --i){
@@ -151,35 +179,10 @@ int main(int argc, char **argv)
         rate.sleep();
     }
     
-	ifstream inf("/home/mrinmoy/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/src/scenario1.txt");
-	if (!inf)
-    {
-        // Print an error and exit
-        cerr << "Uh oh, scenario1.txt could not be opened for reading!" << endl;
-        exit(1);
-    }
-    int totalPoint = 100;
-    double x[totalPoint], y[totalPoint], z[totalPoint];
-    double roll[totalPoint], pitch[totalPoint], yaw[totalPoint];
-    int i = 0;
-    while(true)
-    {
-	    inf >> x[i] >> y[i] >> z[i] >> roll[i] >> pitch[i] >> yaw[i];
-        if(x[i] == -1)
-        {
-            break;
-        }
-        i++;
-    }
-    tf::Quaternion q_orig, q_rot, q_new;
-    q_rot = tf::createQuaternionFromRPY(0, 0, 0);
-    quaternionMsgToTF(pose.pose.orientation , q_orig);  // Get the original orientation of 'commanded_pose'
-    q_new = q_rot*q_orig;  // Calculate the new orientation
-    q_new.normalize();
-    quaternionTFToMsg(q_new, pose.pose.orientation);  // Stuff the new rotation back into the pose. This requires conversion into a msg type
-    int j = 1;
+	
+    int j = 0;
     double previous_time = ros::Time::now().toSec();
-    while(true)
+    while(ros::ok())
     {
         /*
         char cur = getchar();
@@ -193,21 +196,26 @@ int main(int argc, char **argv)
         
         if((/*(abs(x[j]-xPose) <= del && abs(y[j]-yPose) <= del && abs(z[j]-zPose) <= del)||*/(current_time-previous_time) > del_time))
         {
+            j++;
             pose.pose.position.x = x[j];
             pose.pose.position.y = y[j];
             pose.pose.position.z = z[j];
+            /*
             q_rot = tf::createQuaternionFromRPY(roll[j], pitch[j], yaw[j]);
             quaternionMsgToTF(pose.pose.orientation , q_orig);
             q_new = q_rot*q_orig;  
             q_new.normalize();
             quaternionTFToMsg(q_new, pose.pose.orientation);
-
-            j++;
-           //cout << x[j] << "  " << y[j] << "  " << z[j] << endl;
+            */
+            
+            cout << x[j] << "  " << y[j] << "  " << z[j] << endl;
             previous_time = current_time;
         }
         if(j == i)      
         {
+            pose.pose.position.x = 0;
+            pose.pose.position.y = 0;
+            pose.pose.position.z = 0;
             break;
         }
         //Publishing position

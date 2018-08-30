@@ -125,7 +125,7 @@ int main(int argc, char **argv)
     long sec = long(secs);
 
     std::string time = std::to_string(sec);
-    std::string fileName = "/home/mrinmoy/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/flightData/flight_path_data" + time + ".csv";
+    std::string fileName = "/home/intel1/ros_repo/ros_ws/src/offbordctrl/flightData/flight_path_data" + time + ".csv";
 
     cout<<fileName<<endl;
     ros::Rate rate(120.0);
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
     //Creating text file onto the Home Page
     ofstream file;
     file.open(fileName);
-    while(true)
+    while(ros::ok())
     {
 
         uint64_t seconds =ros::Time::now().toNSec();
