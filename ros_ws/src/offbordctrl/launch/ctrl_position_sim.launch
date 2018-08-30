@@ -24,9 +24,10 @@
     <param name="mocap/use_pose" value="false"/>
 </node>
 
+<!--
 <node pkg="offbordctrl" name="dataLogger" type="dataLogger" output="screen"> 
 </node>
-
+-->
 <!--
 <node pkg="offbordctrl" name="targetSearch" type="targetSearch.py" output="screen"> 
 </node>

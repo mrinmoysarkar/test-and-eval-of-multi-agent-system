@@ -43,6 +43,10 @@ int main(int argc, char **argv)
     cout << "input cur y: ";
     cin >> curr_y;
     cout << curr_y << " curr_y" << endl;
+
+    cout << "input altitude: ";
+    cin >> h;
+    cout << h << " height in meter" << endl;
     
 
     ros::init(argc, argv, "hover_node");
