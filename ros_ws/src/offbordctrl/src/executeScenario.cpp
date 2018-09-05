@@ -34,7 +34,7 @@ double pitch_angle;
 double yaw_angle;
 
 double del = 0.1;
-double del_time = 5.0;
+double del_time = 8.0;
 
 
 mavros_msgs::State current_state;
@@ -115,7 +115,7 @@ int main(int argc, char **argv)
     quaternionTFToMsg(q_new, pose.pose.orientation);  // Stuff the new rotation back into the pose. This requires conversion into a msg type
     */
     //the setpoint publishing rate MUST be faster than 2Hz
-    ros::Rate rate(60.0);
+    ros::Rate rate(20.0);
     while(ros::ok() && current_state.connected){
         ros::spinOnce();
         rate.sleep();

@@ -128,7 +128,7 @@ int main(int argc, char **argv)
     std::string fileName = "/home/intel1/ros_repo/ros_ws/src/offbordctrl/flightData/flight_path_data" + time + ".csv";
 
     cout<<fileName<<endl;
-    ros::Rate rate(120.0);
+    ros::Rate rate(60.0);
 
 
     //Creating text file onto the Home Page
