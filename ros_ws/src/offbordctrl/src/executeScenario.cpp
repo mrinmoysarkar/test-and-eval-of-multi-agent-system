@@ -34,7 +34,7 @@ double pitch_angle;
 double yaw_angle;
 
 double del = 0.1;
-double del_time = 8.0;
+double del_time = 10.0;
 
 
 mavros_msgs::State current_state;
@@ -86,7 +86,7 @@ int main(int argc, char **argv)
 
 
 
-  ifstream inf("/home/intel1/ros_repo/ros_ws/src/offbordctrl/src/scenario1.txt");
+  ifstream inf("/home/mrinmoy/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/src/scenario1.txt");
 	if (!inf)
     {
         // Print an error and exit
