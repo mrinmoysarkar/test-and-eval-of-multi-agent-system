@@ -18,6 +18,8 @@ alt = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],dtype = np.float32)
 xVel = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],dtype = np.float32)
 yVel = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],dtype = np.float32)
 zVel = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],dtype = np.float32)
+currentState = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],dtype = np.float32)
+Statedic={'Hold':1.0,'Takeoff':2.0,'Hover':3.0,'Search':4.0,'Land':5.0}
 
 # def animate(i):
 #     global x,y
@@ -104,27 +106,46 @@ def pie():
         fig.clear()
         plt.subplot(321)
         plt.ylim([-2,2])
-        plt.plot(alt)
+        plt.plot(alt, linewidth=5)
         plt.grid(True)
-        plt.ylabel('altitude')
+        plt.xlabel('Time Sequence', fontsize=20)
+        plt.ylabel('altitude', fontsize=20)
 
         plt.subplot(322)
         plt.ylim([-2,2])
-        plt.plot(xVel)
+        plt.plot(xVel, linewidth=5)
         plt.grid(True)
-        plt.ylabel('xVel')
+        plt.xlabel('Time Sequence', fontsize=20)
+        plt.ylabel('xVel', fontsize=20)
 
         plt.subplot(323)
         plt.ylim([-2,2])
-        plt.plot(yVel)
+        plt.plot(yVel, linewidth=5)
         plt.grid(True)
-        plt.ylabel('yVel')
+        plt.xlabel('Time Sequence', fontsize=20)
+        plt.ylabel('yVel', fontsize=20)
 
         plt.subplot(324)
         plt.ylim([-2,2])
-        plt.plot(zVel)
+        plt.plot(zVel, linewidth=5)
         plt.grid(True)
-        plt.ylabel('zVel')
+        plt.xlabel('Time Sequence', fontsize=20)
+        plt.ylabel('zVel', fontsize=20)
+
+        input_data = [[alt[-1],xVel[-1],yVel[-1],zVel[-1]]]
+        output_state = clf.predict(input_data)
+        print(output_state)
+        
+        currentState[:-1] = currentState[1:]
+        currentState[-1] = Statedic[output_state[0]]
+        plt.subplot(325)
+        plt.ylim([0,7])
+        plt.plot(currentState,label=output_state[0], linewidth=5)
+        plt.grid(True)
+        plt.xlabel('Time Sequence', fontsize=20)
+        plt.ylabel('Current State', fontsize=20)
+        plt.legend(loc=9, fontsize=24)
+
 
         plt.pause(0.0001)
         fig.canvas.draw()
