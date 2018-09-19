@@ -108,29 +108,29 @@ def pie():
         plt.ylim([-2,2])
         plt.plot(alt, linewidth=5)
         plt.grid(True)
-        plt.xlabel('Time Sequence', fontsize=20)
-        plt.ylabel('altitude', fontsize=20)
+        plt.xlabel('Time sequence', fontsize=24)
+        plt.ylabel('$altitude$', fontsize=24)
 
         plt.subplot(322)
         plt.ylim([-2,2])
         plt.plot(xVel, linewidth=5)
         plt.grid(True)
-        plt.xlabel('Time Sequence', fontsize=20)
-        plt.ylabel('xVel', fontsize=20)
+        plt.xlabel('Time sequence', fontsize=24)
+        plt.ylabel('$v_x$', fontsize=24)
 
         plt.subplot(323)
         plt.ylim([-2,2])
         plt.plot(yVel, linewidth=5)
         plt.grid(True)
-        plt.xlabel('Time Sequence', fontsize=20)
-        plt.ylabel('yVel', fontsize=20)
+        plt.xlabel('Time sequence', fontsize=24)
+        plt.ylabel('$v_y$', fontsize=24)
 
         plt.subplot(324)
         plt.ylim([-2,2])
         plt.plot(zVel, linewidth=5)
         plt.grid(True)
-        plt.xlabel('Time Sequence', fontsize=20)
-        plt.ylabel('zVel', fontsize=20)
+        plt.xlabel('Time sequence', fontsize=24)
+        plt.ylabel('$v_z$', fontsize=24)
 
         input_data = [[alt[-1],xVel[-1],yVel[-1],zVel[-1]]]
         output_state = clf.predict(input_data)
@@ -139,13 +139,13 @@ def pie():
         currentState[:-1] = currentState[1:]
         currentState[-1] = Statedic[output_state[0]]
         plt.subplot(325)
-        plt.ylim([0,7])
-        plt.plot(currentState,label=output_state[0], linewidth=5)
+        plt.ylim([0,9])
+        plt.plot(currentState,label=str("Current state:" + output_state[0]), linewidth=5)
         plt.grid(True)
-        plt.xlabel('Time Sequence', fontsize=20)
-        plt.ylabel('Current State', fontsize=20)
+        plt.xlabel('Time sequence', fontsize=24)
+        plt.ylabel('Current state', fontsize=24)
         plt.legend(loc=9, fontsize=24)
-
+        plt.text(0.5,6,"Hold = 1, Takeoff = 2, Hover = 3, Search = 4, Land = 5", fontsize=20)
 
         plt.pause(0.0001)
         fig.canvas.draw()
