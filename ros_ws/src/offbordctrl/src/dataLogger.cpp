@@ -21,9 +21,11 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+//#include <boost/thread/thread.hpp>
 
 using namespace std;
 
+bool stop = false;
 //Global Variable
 double xPose;
 double yPose;
@@ -104,9 +106,8 @@ void imu_cb(const sensor_msgs::Imu::ConstPtr & msg){
     /mavros/imu/data
 */
 
-int main(int argc, char **argv)
+void log_data(int argc, char **argv)
 {
-
     ros::init(argc, argv, "dataLogger_node");
     ros::NodeHandle nh;
 
@@ -125,7 +126,7 @@ int main(int argc, char **argv)
     long sec = long(secs);
 
     std::string time = std::to_string(sec);
-    std::string fileName = "/home/intel1/ros_repo/ros_ws/src/offbordctrl/flightData/flight_path_data" + time + ".csv";
+    std::string fileName = "./src/offbordctrl/flightData/flight_path_data" + time + ".csv";
 
     cout<<fileName<<endl;
     ros::Rate rate(60.0);
@@ -134,7 +135,7 @@ int main(int argc, char **argv)
     //Creating text file onto the Home Page
     ofstream file;
     file.open(fileName);
-    while(ros::ok())
+    while(ros::ok() && !stop)
     {
 
         uint64_t seconds =ros::Time::now().toNSec();
@@ -150,8 +151,27 @@ int main(int argc, char **argv)
         ros::spinOnce();
         rate.sleep();
     } // end while loop
-
     file.close();
+    cout << "stopping thread \n";
+    stop = false;
+}
+
+int main(int argc, char **argv)
+{
+    //log_data(argc, argv)
+    boost::thread t(log_data, argc, argv);
+    //t.start(); 
+    char ch='a';
+    while(ch != 's')
+    {   
+        ch = cin.get();
+    }
+    stop = true;
+    while(ch != 'q')
+    {   
+        ch = cin.get();
+    }
+    cout << "stopping \n";
 return 0;
 }
 

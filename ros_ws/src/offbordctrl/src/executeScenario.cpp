@@ -22,6 +22,8 @@
 #include <string>
 #include <fstream>
 #include <cstdio>
+#include <unistd.h>
+
 
 using namespace std;
 
@@ -61,7 +63,9 @@ void pose_cb(const geometry_msgs::PoseStamped::ConstPtr & msg){
 
 int main(int argc, char **argv)
 {
-
+    //char buff[100];
+    //getcwd(buff,100);
+    //cout << buff <<endl;
     ros::init(argc, argv, "executeScenario_node");
     ros::NodeHandle nh;
 
@@ -86,7 +90,7 @@ int main(int argc, char **argv)
 
 
 
-  ifstream inf("/home/mrinmoy/ros-intel-uav-rpeo/ros_ws/src/offbordctrl/src/scenario1.txt");
+  ifstream inf("./src/offbordctrl/src/scenario1.txt");
 	if (!inf)
     {
         // Print an error and exit
@@ -180,7 +184,7 @@ int main(int argc, char **argv)
     }
     
 	
-    int j = 0;
+    int j = 1;
     double previous_time = ros::Time::now().toSec();
     while(ros::ok())
     {
@@ -193,13 +197,14 @@ int main(int argc, char **argv)
         */
 
         double current_time = ros::Time::now().toSec();
-        
+        pose.pose.position.x = x[j];
+        pose.pose.position.y = y[j];
+        pose.pose.position.z = z[j];        
+
         if((/*(abs(x[j]-xPose) <= del && abs(y[j]-yPose) <= del && abs(z[j]-zPose) <= del)||*/(current_time-previous_time) > del_time))
         {
             j++;
-            pose.pose.position.x = x[j];
-            pose.pose.position.y = y[j];
-            pose.pose.position.z = z[j];
+            
             /*
             q_rot = tf::createQuaternionFromRPY(roll[j], pitch[j], yaw[j]);
             quaternionMsgToTF(pose.pose.orientation , q_orig);
