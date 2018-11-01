@@ -155,6 +155,9 @@ add_executable(dataLogger src/dataLogger.cpp)
 add_executable(dataLogger_vicon src/dataLogger_vicon.cpp)
 add_executable(executeScenario src/executeScenario.cpp)
 add_executable(circular_trajectory src/circular_trajectory.cpp)
+add_executable(set_home src/setHome.cpp)
+add_executable(position_controller src/position_controller.cpp)
+
 
 target_link_libraries(offbord_node ${catkin_LIBRARIES} -lpython2.7)
 target_link_libraries(setpoint_pub ${catkin_LIBRARIES})
@@ -169,6 +172,8 @@ target_link_libraries(dataLogger ${catkin_LIBRARIES})
 target_link_libraries(dataLogger_vicon ${catkin_LIBRARIES})
 target_link_libraries(executeScenario ${catkin_LIBRARIES})
 target_link_libraries(circular_trajectory ${catkin_LIBRARIES})
+target_link_libraries(set_home ${catkin_LIBRARIES})
+target_link_libraries(position_controller ${catkin_LIBRARIES})
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
