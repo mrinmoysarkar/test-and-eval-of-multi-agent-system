@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.1.0)
 project(offbordctrl)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -14,7 +14,9 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
 #  nav_msgs
+  #librealsense
 )
+find_package(octomap REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 #find_package(Boost REQUIRED COMPONENTS system)
@@ -106,7 +108,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+  INCLUDE_DIRS include
 #  LIBRARIES beginner_tutorials
   CATKIN_DEPENDS
   roscpp 
@@ -114,6 +116,7 @@ catkin_package(
   std_msgs
 #  nav_msgs
 #  DEPENDS system_lib
+  #librealsense
 )
 
 ###########
@@ -123,10 +126,10 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
-
+include_directories(${OCTOMAP_INCLUDE_DIRS})
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/beginner_tutorials.cpp
@@ -157,7 +160,9 @@ add_executable(executeScenario src/executeScenario.cpp)
 add_executable(circular_trajectory src/circular_trajectory.cpp)
 add_executable(set_home src/setHome.cpp)
 add_executable(position_controller src/position_controller.cpp)
-
+add_executable(depth2pointcloud src/rs-depth-to-pointcloud.cpp)
+add_executable(octree_simple_example src/octree_simple_example.cpp)
+add_executable(rs_camera2octmap src/rs_camera2octmap.cpp)
 
 target_link_libraries(offbord_node ${catkin_LIBRARIES} -lpython2.7)
 target_link_libraries(setpoint_pub ${catkin_LIBRARIES})
@@ -174,6 +179,10 @@ target_link_libraries(executeScenario ${catkin_LIBRARIES})
 target_link_libraries(circular_trajectory ${catkin_LIBRARIES})
 target_link_libraries(set_home ${catkin_LIBRARIES})
 target_link_libraries(position_controller ${catkin_LIBRARIES})
+target_link_libraries(depth2pointcloud ${catkin_LIBRARIES} -lrealsense2 -lglfw -lGL -lGLU)
+target_link_libraries(octree_simple_example ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES})
+target_link_libraries(rs_camera2octmap ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES} -lrealsense2 -lglfw -lGL -lGLU)
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
