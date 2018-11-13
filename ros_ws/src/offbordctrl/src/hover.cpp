@@ -40,6 +40,7 @@ int main(int argc, char **argv)
     cin >> curr_x;
     cout << curr_x << " curr_x" << endl;
 
+    
     cout << "input cur y: ";
     cin >> curr_y;
     cout << curr_y << " curr_y" << endl;
@@ -48,6 +49,9 @@ int main(int argc, char **argv)
     cin >> h;
     cout << h << " height in meter" << endl;
     
+    cout << "input alt z: ";
+    cin >> h;
+    cout << h << " curr_z" << endl;
 
     ros::init(argc, argv, "hover_node");
     ros::NodeHandle nh;
@@ -125,7 +129,7 @@ int main(int argc, char **argv)
     }
     double	previous_time = ros::Time::now().toSec();
    
-    while(true){
+    while(ros::ok()){
       pose.pose.position.x = curr_x;
       pose.pose.position.y = curr_y;
       pose.pose.position.z = h;
@@ -141,10 +145,31 @@ int main(int argc, char **argv)
     }
 
     ROS_INFO("tring to land");
-    while (!(land_client.call(land_cmd) &&
-            land_cmd.response.success)){
+    int count = 0;
+    pose.pose.position.x = 0;
+    pose.pose.position.y = 0;
+    pose.pose.position.z = 0;
+    while (!(land_client.call(land_cmd) && land_cmd.response.success) && count <= 15)
+    {
       //local_pos_pub.publish(pose);
       ROS_INFO("tring to land");
+      count++;
+      ros::spinOnce();
+      rate.sleep();
+    }
+    last_request = ros::Time::now();
+    arm_cmd.request.value = false;
+    while(ros::ok() && current_state.armed)
+    {
+      if( current_state.armed && (ros::Time::now() - last_request > ros::Duration(5.0)))
+      {
+        if( arming_client.call(arm_cmd) && arm_cmd.response.success)
+        {
+          ROS_INFO("Vehicle dis armed");
+          break;
+        }
+        last_request = ros::Time::now();
+      }
       ros::spinOnce();
       rate.sleep();
     }
