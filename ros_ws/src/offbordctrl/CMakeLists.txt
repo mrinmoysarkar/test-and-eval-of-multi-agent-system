@@ -163,6 +163,7 @@ add_executable(position_controller src/position_controller.cpp)
 add_executable(depth2pointcloud src/rs-depth-to-pointcloud.cpp)
 add_executable(octree_simple_example src/octree_simple_example.cpp)
 add_executable(rs_camera2octmap src/rs_camera2octmap.cpp)
+add_executable(rs_camera2octmapV2 src/rs_camera2octmapV2.cpp)
 
 target_link_libraries(offbord_node ${catkin_LIBRARIES} -lpython2.7)
 target_link_libraries(setpoint_pub ${catkin_LIBRARIES})
@@ -182,6 +183,7 @@ target_link_libraries(position_controller ${catkin_LIBRARIES})
 target_link_libraries(depth2pointcloud ${catkin_LIBRARIES} -lrealsense2 -lglfw -lGL -lGLU)
 target_link_libraries(octree_simple_example ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES})
 target_link_libraries(rs_camera2octmap ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES} -lrealsense2 -lglfw -lGL -lGLU)
+target_link_libraries(rs_camera2octmapV2 ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
