@@ -40,7 +40,7 @@
 <node pkg="offbordctrl" name="targetSearch" type="targetSearch.py" output="screen"> 
   ..
 </node>
-
+-->
 
 <node pkg="vicon_bridge" type="vicon_bridge" name="vicon" output="screen">
     <param name="stream_mode" value="ServerPush" type="str" />
@@ -50,6 +50,6 @@
     <remap from="/vicon/quad1/quad1" to="/mavros/mocap/tf"/>          
 </node>
  
--->
+
  
 </launch>

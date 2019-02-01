@@ -22,6 +22,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <std_msgs/Float32.h>
+#include <std_msgs/Float32MultiArray.h>
 
 
 using namespace std;
@@ -38,6 +40,20 @@ double vroll, vpitch, vyaw;
 ofstream file;
 
 double previous_time = 0.0;
+
+//publisher for data visualization
+ros::Publisher alt_pub;
+std_msgs::Float32 alt;
+ros::Publisher vx_pub;
+std_msgs::Float32 v_x;
+ros::Publisher vy_pub;
+std_msgs::Float32 v_y;
+ros::Publisher vz_pub;
+std_msgs::Float32 v_z;
+
+ros::Publisher state_pub;
+std_msgs::Float32MultiArray state_data;
+
 
 void vicon_cb(const geometry_msgs::TransformStamped::ConstPtr& msg){
     double current_time = msg->header.stamp.sec + (msg->header.stamp.nsec)*(10e-9);
@@ -65,7 +81,28 @@ void vicon_cb(const geometry_msgs::TransformStamped::ConstPtr& msg){
              << cur_x << ", " << cur_y << ", " << cur_z << ", "
              << cur_roll << ", " << cur_pitch << ", " << cur_yaw << ", "
              << vx << ", " << vy << ", " << vz << ", " 
-             << vroll << ", " << vpitch << ", "<< vyaw << endl;   
+             << vroll << ", " << vpitch << ", "<< vyaw << endl;
+
+        alt.data = cur_z;
+        v_x.data = vx;
+        v_y.data = vy;
+        v_z.data = vz;
+
+        alt_pub.publish(alt);
+        vx_pub.publish(v_x);
+        vy_pub.publish(v_y);
+        vz_pub.publish(v_z);
+
+        state_data.data.clear();
+        //state_data.layout.dim[0].size = 4;
+        state_data.data.push_back(cur_z);
+        state_data.data.push_back(vx);
+        state_data.data.push_back(vy);
+        state_data.data.push_back(vz);
+
+        state_pub.publish(state_data);
+
+
     }
 
     previous_time = current_time;
@@ -84,7 +121,15 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "vicon_dataLogger_node");
     ros::NodeHandle nh;
-    ros::Subscriber state_sub = nh.subscribe<geometry_msgs::TransformStamped>("/vicon/Drone1/Drone1", 100, vicon_cb);
+    ros::Subscriber state_sub = nh.subscribe<geometry_msgs::TransformStamped>("/vicon/quad1/quad1", 100, vicon_cb);
+
+    alt_pub = nh.advertise<std_msgs::Float32>("/viz/alt", 1000);
+    vx_pub = nh.advertise<std_msgs::Float32>("/viz/vx", 1000);
+    vy_pub = nh.advertise<std_msgs::Float32>("/viz/vy", 1000);
+    vz_pub = nh.advertise<std_msgs::Float32>("/viz/vz", 1000);
+
+    state_pub = nh.advertise<std_msgs::Float32MultiArray>("/ML_state/state", 1000);
+
 
     double secs =ros::Time::now().toSec();
     long sec = long(secs);
