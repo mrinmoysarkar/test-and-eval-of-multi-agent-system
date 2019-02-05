@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.1.0)
 project(offbordctrl)
-#cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -16,17 +15,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
 #  nav_msgs
   #librealsense
-#  PCL 1.2 REQUIRED
 )
 find_package(octomap REQUIRED)
-
-#link_directories(
-#    ${PCL_LIBRARY_DIRS}
-#)
-#add_definitions(
-#    ${PCL_DEFINITIONS}
-#)
-
 
 ## System dependencies are found with CMake's conventions
 #find_package(Boost REQUIRED COMPONENTS system)
@@ -120,16 +110,10 @@ find_package(octomap REQUIRED)
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES beginner_tutorials
-#    pcl_ros_filters
-#    pcl_ros_io
-#    pcl_ros_tf
   CATKIN_DEPENDS
   roscpp 
   rospy 
   std_msgs
-#   pcl_conversions
-#   pcl_msgs
-    
 #  nav_msgs
 #  DEPENDS system_lib
   #librealsense
@@ -144,8 +128,6 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-#  ${PCL_INCLUDE_DIRS}
-
 )
 include_directories(${OCTOMAP_INCLUDE_DIRS})
 ## Declare a C++ library
@@ -178,8 +160,6 @@ add_executable(executeScenario src/executeScenario.cpp)
 add_executable(circular_trajectory src/circular_trajectory.cpp)
 add_executable(set_home src/setHome.cpp)
 add_executable(position_controller src/position_controller.cpp)
-add_executable(quad_tf src/quad_tf.cpp)
-#add_executable(cameraTest src/cameraTest.cpp)
 add_executable(depth2pointcloud src/rs-depth-to-pointcloud.cpp)
 add_executable(octree_simple_example src/octree_simple_example.cpp)
 add_executable(rs_camera2octmap src/rs_camera2octmap.cpp)
@@ -198,9 +178,6 @@ target_link_libraries(dataLogger ${catkin_LIBRARIES})
 target_link_libraries(dataLogger_vicon ${catkin_LIBRARIES})
 target_link_libraries(executeScenario ${catkin_LIBRARIES})
 target_link_libraries(circular_trajectory ${catkin_LIBRARIES})
-target_link_libraries(quad_tf ${catkin_LIBRARIES})
-#target_link_libraries(cameraTest ${PCL_LIBRARIES})
-
 target_link_libraries(set_home ${catkin_LIBRARIES})
 target_link_libraries(position_controller ${catkin_LIBRARIES})
 target_link_libraries(depth2pointcloud ${catkin_LIBRARIES} -lrealsense2 -lglfw -lGL -lGLU)

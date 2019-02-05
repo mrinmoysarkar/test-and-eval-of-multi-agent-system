@@ -1,11 +1,17 @@
 <launch>
  
+<<<<<<< 9173c7bff9276fb7e9a2f1bc19893dde3ec9754e
 <!--arg name="fcu_url" default="serial:///dev/ttyUSB0:921600" /-->
 <!--arg name="fcu_url" default="tcp://127.0.0.1:5760" /-->
 
 <arg name="fcu_url" default="serial:///dev/ttyACM0:57600" />
 <!--arg name="fcu_url" default="serial:///dev/ttyUSB0:57600" /-->
 
+=======
+<!--arg name="fcu_url" default="serial:///dev/ttyACM0:57600" /-->
+<!--arg name="fcu_url" default="tcp://127.0.0.1:5760" /-->
+<arg name="fcu_url" default="/dev/ttyS1:921600" />
+>>>>>>> update 5 feb 2019 from custom drone
 <arg name="gcs_url" default="" />
 <arg name="tgt_system" default="1" />
 <arg name="tgt_component" default="1" />
@@ -40,21 +46,22 @@
 <node pkg="offbordctrl" name="targetSearch" type="targetSearch.py" output="screen"> 
   ..
 </node>
-
+-->
 
 <node pkg="vicon_bridge" type="vicon_bridge" name="vicon" output="screen">
     <param name="stream_mode" value="ServerPush" type="str" />
-<<<<<<< 9720cde6803f97a92456b6c91f0b86bd3a793495
     <param name="datastream_hostport" value="192.168.1.6:801" type="str" />
-=======
-    <!--param name="datastream_hostport" value="147.47.175.54:801" type="str" /-->
+<<<<<<< 9173c7bff9276fb7e9a2f1bc19893dde3ec9754e
     <param name="datastream_hostport" value="192.168.1.6:801" type="str" />
-	<!--param name="datastream_hostport" value="192.168.1.112:801" type="str" /-->
->>>>>>> changing ctrl_pos.launch and hover.cpp
     <param name="tf_ref_frame_id" value="/world" type="str" />
     <remap from="/vicon/quad1/quad1" to="/mavros/mocap/tf"/>          
+=======
+    <param name="tf_ref_frame_id" value="/world" type="str" />
+    <remap from="/vicon/quad1/quad1" to="/mavros/mocap/tf"/>
+	<!--remap from="/vicon/quad1/quad1" to="/mavros/mocap/pose"/-->          
+>>>>>>> update 5 feb 2019 from custom drone
 </node>
  
--->
+
  
 </launch>

@@ -143,7 +143,7 @@ int main(int argc, char **argv)
          break;
       }
     }
-
+/*
     ROS_INFO("tring to land");
     int count = 0;
     pose.pose.position.x = 0;
@@ -172,6 +172,21 @@ int main(int argc, char **argv)
       }
       ros::spinOnce();
       rate.sleep();
+    }
+*/
+    arm_cmd.request.value = false;
+    last_request = ros::Time::now();
+    while(ros::ok())
+    {
+        if( current_state.armed &&
+            (ros::Time::now() - last_request > ros::Duration(2.0))){
+            if( arming_client.call(arm_cmd) &&
+                arm_cmd.response.success){
+                ROS_INFO("Vehicle disarmed");
+		            break;
+            }
+            last_request = ros::Time::now();
+        }
     }
     return 0;
 }

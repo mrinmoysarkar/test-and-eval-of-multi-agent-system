@@ -1,8 +1,10 @@
 <launch>
  
 <!--arg name="fcu_url" default="serial:///dev/ttyUSB0:921600" /-->
+<!--arg name="fcu_url" default="serial:///dev/ttyACM0:57600" /-->
 <!--arg name="fcu_url" default="tcp://127.0.0.1:5760" /-->
 
+<arg name="fcu_url" default="/dev/ttyS1:921600" />
 <arg name="fcu_url" default="serial:///dev/ttyACM0:57600" />
 <!--arg name="fcu_url" default="serial:///dev/ttyUSB0:57600" /-->
 
@@ -48,6 +50,7 @@
     <param name="datastream_hostport" value="192.168.1.6:801" type="str" />
     <param name="tf_ref_frame_id" value="/world" type="str" />
     <remap from="/vicon/quad1/quad1" to="/mavros/mocap/tf"/>          
+	<!--remap from="/vicon/quad1/quad1" to="/mavros/mocap/pose"/-->          
 </node>
  
 
