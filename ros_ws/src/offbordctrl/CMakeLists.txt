@@ -14,6 +14,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+ # pcl_conversions
+ # pcl_msgs
 #  nav_msgs
   #librealsense
 #  PCL 1.2 REQUIRED
@@ -127,8 +129,8 @@ catkin_package(
   roscpp 
   rospy 
   std_msgs
-#   pcl_conversions
-#   pcl_msgs
+  #pcl_conversions
+  #pcl_msgs
     
 #  nav_msgs
 #  DEPENDS system_lib
@@ -179,11 +181,13 @@ add_executable(circular_trajectory src/circular_trajectory.cpp)
 add_executable(set_home src/setHome.cpp)
 add_executable(position_controller src/position_controller.cpp)
 add_executable(quad_tf src/quad_tf.cpp)
+add_executable(hover_and_fly src/hover_and_fly.cpp)
 #add_executable(cameraTest src/cameraTest.cpp)
-add_executable(depth2pointcloud src/rs-depth-to-pointcloud.cpp)
-add_executable(octree_simple_example src/octree_simple_example.cpp)
-add_executable(rs_camera2octmap src/rs_camera2octmap.cpp)
-add_executable(rs_camera2octmapV2 src/rs_camera2octmapV2.cpp)
+#add_executable(depth2pointcloud src/rs-depth-to-pointcloud.cpp)
+#add_executable(octree_simple_example src/octree_simple_example.cpp)
+#add_executable(rs_camera2octmap src/rs_camera2octmap.cpp)
+#add_executable(rs_camera2octmapV2 src/rs_camera2octmapV2.cpp)
+add_executable(friday_demo src/friday_demo.cpp)
 
 target_link_libraries(offbord_node ${catkin_LIBRARIES} -lpython2.7)
 target_link_libraries(setpoint_pub ${catkin_LIBRARIES})
@@ -200,13 +204,15 @@ target_link_libraries(executeScenario ${catkin_LIBRARIES})
 target_link_libraries(circular_trajectory ${catkin_LIBRARIES})
 target_link_libraries(quad_tf ${catkin_LIBRARIES})
 #target_link_libraries(cameraTest ${PCL_LIBRARIES})
+target_link_libraries(friday_demo ${catkin_LIBRARIES})
 
 target_link_libraries(set_home ${catkin_LIBRARIES})
 target_link_libraries(position_controller ${catkin_LIBRARIES})
-target_link_libraries(depth2pointcloud ${catkin_LIBRARIES} -lrealsense2 -lglfw -lGL -lGLU)
-target_link_libraries(octree_simple_example ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES})
-target_link_libraries(rs_camera2octmap ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES} -lrealsense2 -lglfw -lGL -lGLU)
-target_link_libraries(rs_camera2octmapV2 ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES})
+target_link_libraries(hover_and_fly ${catkin_LIBRARIES})
+#target_link_libraries(depth2pointcloud ${catkin_LIBRARIES} -lrealsense2 -lglfw -lGL -lGLU)
+#target_link_libraries(octree_simple_example ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES})
+#target_link_libraries(rs_camera2octmap ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES} -lrealsense2 -lglfw -lGL -lGLU)
+#target_link_libraries(rs_camera2octmapV2 ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES} -lrealsense2 -lglfw -lGL -lGLU)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

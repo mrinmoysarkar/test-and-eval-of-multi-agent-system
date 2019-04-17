@@ -14,8 +14,8 @@ bridge_ir_depth = CvBridge()
 
 def cameraImage_rgb_callback(data):
     cv_image = bridge_rgb.imgmsg_to_cv2(data, "bgr8")
-    flip_image=cv2.flip(cv_image, -1)
-    cv2.imshow("Image window rgb", flip_image)
+    #flip_image=cv2.flip(cv_image, -1)
+    cv2.imshow("Image window rgb", cv_image)
     cv2.waitKey(3)
     
 def cameraImage_ir_left_callback(data):

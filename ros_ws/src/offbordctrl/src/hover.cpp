@@ -34,24 +34,21 @@ int main(int argc, char **argv)
 {
     cout << "input hold_time: ";
     cin >> hold_time;
-    cout << hold_time << " seconds" << endl;
+    //cout << hold_time << " seconds" << endl;
 
     cout << "input cur x: ";
     cin >> curr_x;
-    cout << curr_x << " curr_x" << endl;
+    //cout << curr_x << " curr_x" << endl;
 
     
     cout << "input cur y: ";
     cin >> curr_y;
-    cout << curr_y << " curr_y" << endl;
+    //cout << curr_y << " curr_y" << endl;
 
     cout << "input altitude: ";
     cin >> h;
-    cout << h << " height in meter" << endl;
+    //cout << h << " height in meter" << endl;
     
-    cout << "input alt z: ";
-    cin >> h;
-    cout << h << " curr_z" << endl;
 
     ros::init(argc, argv, "hover_node");
     ros::NodeHandle nh;
@@ -143,7 +140,7 @@ int main(int argc, char **argv)
          break;
       }
     }
-/*
+
     ROS_INFO("tring to land");
     int count = 0;
     pose.pose.position.x = 0;
@@ -157,6 +154,9 @@ int main(int argc, char **argv)
       ros::spinOnce();
       rate.sleep();
     }
+
+
+/*
     last_request = ros::Time::now();
     arm_cmd.request.value = false;
     while(ros::ok() && current_state.armed)
@@ -174,9 +174,17 @@ int main(int argc, char **argv)
       rate.sleep();
     }
 */
+    for(int i=0;i<100;i++)
+    {
+      if(ros::ok())
+      {
+        ros::spinOnce();
+        rate.sleep();
+      }
+    }
     arm_cmd.request.value = false;
     last_request = ros::Time::now();
-    while(ros::ok())
+    while(ros::ok() && current_state.armed)
     {
         if( current_state.armed &&
             (ros::Time::now() - last_request > ros::Duration(2.0))){
