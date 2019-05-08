@@ -1,0 +1,39 @@
+Solo is a quad-rotor aerial vehicle powered by the 3DR Pixhawk 2 autopilot system and APM:Copter flight control
+software. Solo communicates with the controller and Solo app over the 3DR Link secure Wi-Fi connection.
+Autopilot: 3DR Pixhawk 2
+Flight code: ArduPilot Copter
+Control: 3DR Solo Controller
+Wireless communication: 3DR Link 1.0
+Frequency: 2.4 GHz
+Height: 10 in. (25 cm)
+Motor-to-motor dimension: 18 in. (26 cm)
+Propulsion: 880 KV motors, two clockwise rotating motors and
+ two counterclockwise rotating motors
+Propeller: 10 in. x 4.5 in. (25 cm x 11.4 cm)
+Weight with battery: 3.3 lbs. (1.5 kg)
+Controller battery life: 3 hours
+Extended controller battery life: 6 hours
+Controller battery: Li-ion 2600 mAh 7.2 Vdc (5200 mAh for extended battery)
+Power: Electric (rechargeable lithium polymer battery)
+Battery: Lithium polymer, 5200 mAh, 14.8 Vdc
+Battery weight: 1 lb. (.5 kg)
+Estimated flight time: 25 minutes*
+Maximum altitude: 328 ft. (100 m)
+Range: .5 miles** (.8 km)
+Payload capacity: 1.1 lbs. (500 g)
+Cruise speed: 5.7 mph (2.5 m/s)
+Maximum speed: 55 mph (25.5 m/s)
+Maximum climb rate: 11 mph (5.0 m/s)
+Maximum descent rate: 5.5 mph (2.5 m/s)
+Headwind limitation: 25 mph (11 m/s)
+Crosswind limitation: 25 mph (11 m/s)
+Camera: Streaming video compatible with GoPro® HERO 3, 3+ or 4
+ Full compatibility with GoPro® HERO 4
+Solo app compatibility: iOS 8.0 or later / Android 4.3 or later
+Operating temperature: 32° F - 113° F (0° C - 45° C)
+Operating relative humidity: 0-85% RH
+
+
+
+
+3DR IRIS+ (915): The 3DR IRIS+ is your aerial passport: All you need to get started shooting photos and video from incredible new perspectives. Powered by 3DR's world famous autopilot, IRIS is a robot that will automatically fly itself where you tell it to go, while keeping a camera steady with 2-axis gimbal stabilization. And it?s so smart that it's simple. Advanced 3PV Follow Me mode turns IRIS into your own hands-free flying camera crew, and tablet-based software makes flight planning exactly this easy: If you can draw it, you can fly it. The IRIS power system gets you 16 minutes of flight time fully loaded, and you?ll want to fill every second. Product Features: IRIS+ Hardware Set: Complete set of replacement hardware for IRIS. Pixhawk External LED and USB: This kit includes external LED and USB modules to connect to Pixhawk. Use the provided four-position DF13 cables and connect to the I2C splitter module to set up a bright, multicolor LED and convenient USB port for your vehicle. Safety switch for Pixhawk: This safety button replaces the unit included with the Pixhawk kit. The safety button provides an additional measure for helping you power your vehicle on and off safely. Required for Pixhawk. Android OTG Cable: Micro-USB to Android adapter. Use with a ground station radio to view data and control a vehicle in flight. Connect the blue end to the Android device and the black end to the radio. PPM Encoder: This Pixhawk-compatible PPM encoder allows you to connect your PWM-only RC equipment to Pixhawk. Smaller than our previous PPM, our encoder will enable you to reduce all your channels to a single wire, excluding ground and power wires. Includes a PPM Encoder module, 10-position input cable (7 cm), and three-position output cable (12 cm). Cable pack: Complete set of 10 replacement cables for IRIS. Product Specifications: * Motor to motor dimension: 550 mm * Height: 100 mm * Weight (with battery): 1282 g * Average flight time: 10-15 minutes (no gimbal), 7-8 minutes (with gimbal) * 425 g (.9 lb) payload capacity * Battery: 3-cell 11.1 V 3.5 Ah lithium polymer with XT-60 type connector. Weight: 262 grams * Propellers: (2) 10 x 4.7 normal-rotation, (2) 10 x 4.7 reverse-rotation * Motors: AC 2830, 850 kV * Radios available in 915mHz or 433mHz * Next-gen 32-bit Pixhawk autopilot system with Cortex M4 processor * uBlox GPS with integrated magnetometer
