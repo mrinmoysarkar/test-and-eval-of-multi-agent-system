@@ -89,7 +89,6 @@ def land(timeout):
 
 	return False
     
-    
 
 def set_mode(mode, timeout):
     loop_freq = 1  # Hz
@@ -120,10 +119,9 @@ def local_position_cb(msg):
 	global current_alt
 	current_alt = msg.pose.position.z
 
-
 if __name__ == '__main__':
 
-	rospy.init_node('vertical_transition_scenario', anonymous=True)
+	rospy.init_node('hover_and_land_scenario', anonymous=True)
 	rospy.Subscriber('/mavros/state', State, state_cb)
 	rospy.Subscriber('/mavros/local_position/pose',PoseStamped,local_position_cb)
 
@@ -145,142 +143,17 @@ if __name__ == '__main__':
 		    if (time.time()-init_time) > 5:
 		    	break
 # taking off vertically done
-##########################
-		x_values = np.linspace(0,1.5,50)
-		z_values = np.linspace(1.5,2,50)
-		for (x,z) in zip(x_values,z_values):
-			setpoint.pose.position.x = x
-			setpoint.pose.position.y = 0
-			setpoint.pose.position.z = z
-			setpointPub.publish(setpoint);
-			rate.sleep()
-
-		init_time = time.time()
-		while not rospy.is_shutdown():
-		    setpointPub.publish(setpoint);
-		    rate.sleep()
-		    if (time.time()-init_time) > 5:
-		    	break
-#############################
-# going to right with altitude gain done
-#############################
-		y_values = np.linspace(0,1.5,50)
-		for y in y_values:
-			setpoint.pose.position.x = 1.5
-			setpoint.pose.position.y = y
-			setpoint.pose.position.z = 2.0
-			setpointPub.publish(setpoint);
-			rate.sleep()
-
-		init_time = time.time()
-		while not rospy.is_shutdown():
-		    setpointPub.publish(setpoint);
-		    rate.sleep()
-		    if (time.time()-init_time) > 5:
-		    	break
-###############################
-# going forward with constant altitude done
-#############################
-		x_values = np.linspace(1.5,0,50)
-		for x in x_values:
-			setpoint.pose.position.x = x
-			setpoint.pose.position.y = 1.5
-			setpoint.pose.position.z = 2.0
-			setpointPub.publish(setpoint);
-			rate.sleep()
-
-		init_time = time.time()
-		while not rospy.is_shutdown():
-		    setpointPub.publish(setpoint);
-		    rate.sleep()
-		    if (time.time()-init_time) > 5:
-		    	break
-###############################
-# going left with constant altitude done
-##########################
-		y_values = np.linspace(1.5,3,50)
-		z_values = np.linspace(2,1.5,50)
-		for (y,z) in zip(y_values,z_values):
-			setpoint.pose.position.x = 0
-			setpoint.pose.position.y = y
-			setpoint.pose.position.z = z
-			setpointPub.publish(setpoint);
-			rate.sleep()
-
-		init_time = time.time()
-		while not rospy.is_shutdown():
-		    setpointPub.publish(setpoint);
-		    rate.sleep()
-		    if (time.time()-init_time) > 5:
-		    	break
-#############################
-# going forward with altitude lose done
-#############################
-		x_values = np.linspace(0,1.5,50)
-		for x in x_values:
-			setpoint.pose.position.x = x
-			setpoint.pose.position.y = 3.0
-			setpoint.pose.position.z = 1.5
-			setpointPub.publish(setpoint);
-			rate.sleep()
-
-		init_time = time.time()
-		while not rospy.is_shutdown():
-		    setpointPub.publish(setpoint);
-		    rate.sleep()
-		    if (time.time()-init_time) > 5:
-		    	break
-###############################
-# going right with constant altitude done
-##########################
-		x_values = np.linspace(1.5,0.5,50)
-		y_values = np.linspace(3,0.5,50)
-		for (x,y) in zip(x_values,y_values):
-			setpoint.pose.position.x = x
-			setpoint.pose.position.y = y
-			setpoint.pose.position.z = 1.5
-			setpointPub.publish(setpoint);
-			rate.sleep()
-
-		init_time = time.time()
-		while not rospy.is_shutdown():
-		    setpointPub.publish(setpoint);
-		    rate.sleep()
-		    if (time.time()-init_time) > 5:
-		    	break
-#############################
-# coming back diagonally with constant altitude done
-##########################
-		x_values = np.linspace(0.5,0,50)
-		y_values = np.linspace(0.5,0,50)
-		z_values = np.linspace(1.5,0.1,50)
-		for (x,y,z) in zip(x_values,y_values,z_values):
-			setpoint.pose.position.x = x
-			setpoint.pose.position.y = y
-			setpoint.pose.position.z = z
-			setpointPub.publish(setpoint)
-			rate.sleep()
-
-		init_time = time.time()
-		while not rospy.is_shutdown():
-		    setpointPub.publish(setpoint);
-		    rate.sleep()
-		    if (time.time()-init_time) > 5:
-		    	break
-#############################
-# landing with deviation
-
 		setpoint.pose.position.x = 0
 		setpoint.pose.position.y = 0
-		setpoint.pose.position.z = 0.05
-    	init_time = time.time()
-    	while not rospy.is_shutdown():
+		setpoint.pose.position.z = 0.5
+	
+		init_time = time.time()
+		while not rospy.is_shutdown():
 		    setpointPub.publish(setpoint);
 		    rate.sleep()
 		    if (time.time()-init_time) > 5:
-		    	land(5)
-				rospy.sleep(10)
-				set_arm(False, 5)
 		    	break
-
-	
+		# set_mode('AUTO.LAND', 5)
+		land(5)
+		rospy.sleep(10)
+		set_arm(False, 5)
