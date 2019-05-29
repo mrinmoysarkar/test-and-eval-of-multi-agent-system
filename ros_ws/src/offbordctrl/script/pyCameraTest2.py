@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import pcl
+#import pcl
 import rospy
 from std_msgs.msg import String
 import numpy as np

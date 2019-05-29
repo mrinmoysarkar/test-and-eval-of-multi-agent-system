@@ -127,8 +127,8 @@ if __name__ == '__main__':
 
 	setpointPub = rospy.Publisher('mavros/setpoint_position/local',PoseStamped,queue_size=100)
 	setpoint = PoseStamped()
-	setpoint.pose.position.x = 0
-	setpoint.pose.position.y = 0
+	setpoint.pose.position.x = 0.9
+	setpoint.pose.position.y = 1.7
 	setpoint.pose.position.z = 1.5
 
 	rate = rospy.Rate(20.0)
@@ -143,17 +143,17 @@ if __name__ == '__main__':
 		    if (time.time()-init_time) > 5:
 		    	break
 # taking off vertically done
-		setpoint.pose.position.x = 0
-		setpoint.pose.position.y = 0
-		setpoint.pose.position.z = 0.5
-	
-		init_time = time.time()
-		while not rospy.is_shutdown():
-		    setpointPub.publish(setpoint);
-		    rate.sleep()
-		    if (time.time()-init_time) > 5:
-		    	break
-		# set_mode('AUTO.LAND', 5)
+#		setpoint.pose.position.x = 0
+#		setpoint.pose.position.y = 0
+#		setpoint.pose.position.z = 0.5
+#	
+#		init_time = time.time()
+#		while not rospy.is_shutdown():
+#		    setpointPub.publish(setpoint);
+#		    rate.sleep()
+#		    if (time.time()-init_time) > 5:
+#		    	break
+#		# set_mode('AUTO.LAND', 5)
 		land(5)
 		rospy.sleep(10)
 		set_arm(False, 5)

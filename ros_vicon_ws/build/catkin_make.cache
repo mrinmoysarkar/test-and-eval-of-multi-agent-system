@@ -1,0 +1,2 @@
+offbordctrl:vicon_bridge
+-DCATKIN_DEVEL_PREFIX=/home/intel-custom/ros-intel-uav-rpeo/ros_vicon_ws/devel -DCMAKE_INSTALL_PREFIX=/home/intel-custom/ros-intel-uav-rpeo/ros_vicon_ws/install -G Unix Makefiles

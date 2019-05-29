@@ -1,0 +1,2 @@
+set(vicon_bridge_MESSAGE_FILES "/home/intel-custom/ros-intel-uav-rpeo/ros_vicon_ws/src/vicon_bridge/msg/Marker.msg;/home/intel-custom/ros-intel-uav-rpeo/ros_vicon_ws/src/vicon_bridge/msg/Markers.msg;/home/intel-custom/ros-intel-uav-rpeo/ros_vicon_ws/src/vicon_bridge/msg/TfDistortInfo.msg")
+set(vicon_bridge_SERVICE_FILES "/home/intel-custom/ros-intel-uav-rpeo/ros_vicon_ws/src/vicon_bridge/srv/viconCalibrateSegment.srv;/home/intel-custom/ros-intel-uav-rpeo/ros_vicon_ws/src/vicon_bridge/srv/viconGrabPose.srv")

@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/intel-custom/ros-intel-uav-rpeo/ros_vicon_ws/devel/setup.sh
