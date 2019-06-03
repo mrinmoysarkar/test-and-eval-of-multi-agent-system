@@ -165,7 +165,7 @@ include_directories(${OCTOMAP_INCLUDE_DIRS})
 ## The recommended prefix ensures that target names across packages don't collide
 #add_executable(${PROJECT_NAME}_node src/beginner_tutorials_node.cpp)
 
-add_executable(offbord_node src/offb_node.cpp)
+#add_executable(offbord_node src/offb_node.cpp)
 add_executable(setpoint_pub src/pub_setpoints.cpp)
 add_executable(pub_trajectory src/pub_trajectory.cpp)
 add_executable(hover src/hover.cpp)
@@ -190,7 +190,7 @@ add_executable(octree_simple_example src/octree_simple_example.cpp)
 add_executable(friday_demo src/friday_demo.cpp)
 add_executable(octomap-test src/octomap-test.cpp)
 
-target_link_libraries(offbord_node ${catkin_LIBRARIES} -lpython2.7)
+#target_link_libraries(offbord_node ${catkin_LIBRARIES} -lpython2.7)
 target_link_libraries(setpoint_pub ${catkin_LIBRARIES})
 target_link_libraries(pub_trajectory ${catkin_LIBRARIES})
 target_link_libraries(hover ${catkin_LIBRARIES})

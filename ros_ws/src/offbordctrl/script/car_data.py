@@ -13,7 +13,7 @@ from std_msgs.msg import Float32MultiArray
 
 
 
-X = np.zeros((4,2))
+X = np.zeros((8,2))
 
 drone1SetPointPub = None
 drone2SetPointPub = None
@@ -128,10 +128,10 @@ if __name__ == '__main__':
     rospy.Subscriber("/vicon/car2/car2", TransformStamped, car2_cb)
     rospy.Subscriber("/vicon/car3/car3", TransformStamped, car3_cb)
     rospy.Subscriber("/vicon/car4/car4", TransformStamped, car4_cb)
-    # rospy.Subscriber("/vicon/car5/car5", TransformStamped, car5_cb)
-    # rospy.Subscriber("/vicon/car6/car6", TransformStamped, car6_cb)
-    # rospy.Subscriber("/vicon/car7/car7", TransformStamped, car7_cb)
-    # rospy.Subscriber("/vicon/car8/car8", TransformStamped, car8_cb)
+    rospy.Subscriber("/vicon/car5/car5", TransformStamped, car5_cb)
+    rospy.Subscriber("/vicon/car6/car6", TransformStamped, car6_cb)
+    rospy.Subscriber("/vicon/car7/car7", TransformStamped, car7_cb)
+    rospy.Subscriber("/vicon/car8/car8", TransformStamped, car8_cb)
     # rospy.Subscriber("/vicon/car9/car9", TransformStamped, car9_cb)
     # rospy.Subscriber("/vicon/car10/car10", TransformStamped, car10_cb)
 

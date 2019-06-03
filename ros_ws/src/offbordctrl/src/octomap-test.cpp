@@ -4,10 +4,16 @@
 #include <string>
 #include <visualization_msgs/Marker.h>
 #include <cmath>
+#include <geometry_msgs/PoseStamped.h>
+#include <octomap_msgs/conversions.h>
 
 using namespace std;
+using namespace octomap;
+
+
 
 ros::Publisher marker_pub;
+double cur_x=0,cur_y=0,cur_z=0;
 
 void publishpath()
 {
@@ -84,11 +90,39 @@ void publishpath()
 }
 
 
+void print_query_info(point3d query, OcTreeNode* node) {
+  if (node != NULL) {
+    cout << "occupancy probability at " << query << ":\t " << node->getOccupancy() << endl;
+  }
+  else 
+    cout << "occupancy probability at " << query << ":\t is unknown" << endl;    
+}
 
-void binary_cb(const octomap_msgs::Octomap::ConstPtr& msg){
-    cout<<"binary";
+void current_location_cb(const geometry_msgs::PoseStamped::ConstPtr& msg)
+{
 
+    // cout << msg->pose.position.x << endl;
+    cur_x = msg->pose.position.x;
+    cur_y = msg->pose.position.y;
+    cur_z = msg->pose.position.z;
 
+}
+
+void binary_cb(const octomap_msgs::Octomap::ConstPtr& msg)
+{
+    cout<<"binary"<<endl;
+    AbstractOcTree* tree = octomap_msgs::msgToMap(*msg);
+    
+    OcTree octree* = dynamic_cast<OcTree*>(tree);
+    /*
+    if (octree)
+    { 
+        point3d query (0., 0., 0.);
+        OcTreeNode* result = octree->search (query);
+        print_query_info(query, result);
+        cout << "octree found \n";
+    }
+*/
 //      point3d origin(-1.5, -1.5, -0.5);
 //   point3d direction;
 //   point3d ray_end;
@@ -115,35 +149,21 @@ void binary_cb(const octomap_msgs::Octomap::ConstPtr& msg){
 //    cout<<"full";
 //}
 
-void loop(int argc, char **argv)
+
+
+int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "octomap_node");
+    cout << "print starting octomap test node \n";
+    ros::init(argc, argv, "octomap_test_node");
     ros::NodeHandle nh;
 
     marker_pub = nh.advertise<visualization_msgs::Marker>("/freepath", 10);
 
-    ros::Subscriber binary_sub = nh.subscribe<octomap_msgs::Octomap>
-        ("octomap_binary", 1000, binary_cb);
-    //ros::Subscriber full_sub = nh.subscriber<octomap_msgs::Octomap>
-        //("octomap_full", 1000,full_cb);
+    ros::Subscriber binary_sub = nh.subscribe<octomap_msgs::Octomap>("octomap_binary", 1000, binary_cb);
+    //ros::Subscriber full_sub = nh.subscriber<octomap_msgs::Octomap>("octomap_full", 1000,full_cb);
+    ros::Subscriber local_pos_sub = nh.subscribe<geometry_msgs::PoseStamped>("/mavros/local_position/pose", 10, current_location_cb);
 
-    // ros::spin();
-        
-
-    ros::Rate r(30);
-
-      
-    while (ros::ok())
-    {
-        publishpath();
-        r.sleep();
-    }
-
-}
-
-int main(int argc, char **argv)
-{
-    loop(argc,argv);
+    ros::spin();
     return 0;
 
 }
