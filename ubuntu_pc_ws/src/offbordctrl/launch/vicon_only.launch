@@ -1,0 +1,13 @@
+<launch>
+
+<node pkg="vicon_bridge" type="vicon_bridge" name="vicon" output="screen">
+    <param name="stream_mode" value="ServerPush" type="str" />
+    <param name="datastream_hostport" value="192.168.1.12:801" type="str" />
+    <param name="tf_ref_frame_id" value="/world" type="str" />  
+    <remap from="/vicon/custom2/custom2" to="/custom2/mavros/mocap/tf"/>
+    <remap from="/vicon/custom1/custom1" to="/custom1/mavros/mocap/tf"/>      
+</node>
+  
+<!--node name="car_data" pkg="offbordctrl" type="car_data.py" output="screen" respawn="true" /-->
+<!--node name="vis_cluster" pkg="offbordctrl" type="vis_cluster.py" output="screen" respawn="true" /-->
+</launch>
