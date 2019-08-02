@@ -1,0 +1,6 @@
+<launch>
+ 
+    <include file="$(find offbordctrl)/launch/start_mapping.launch"/>
+    <include file="$(find offbordctrl)/launch/ctrl_position.launch"/>
+ 
+</launch>
