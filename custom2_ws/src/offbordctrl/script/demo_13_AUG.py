@@ -11,7 +11,7 @@ import time
 import os
 import sys
 from mavros_msgs.msg import State
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, TransformStamped
 from mavros_msgs.srv import CommandBool, ParamGet, SetMode, CommandTOL
 from math import radians, degrees, pi, cos, sin
 from geometry_msgs.msg import TransformStamped
@@ -30,6 +30,7 @@ cury = 0
 setpointPub = None 
 stopThread = False
 setpoint = None
+x,y=0.93,1.67
 
 
 def state_cb(msg):
@@ -155,22 +156,46 @@ def home_cb(msg):
     hx = min(max(0.2,hx),1.8)
     hy = min(max(-2.0,hy),6.0)
 
+def jackle1_cb(msg):
+    global x, y
+    x = msg.transform.translation.x
+    y = msg.transform.translation.y
+    x = min(max(0.05,x),1.75)
+    y = min(max(0.5,y),9)
+
 def sendTargetPos():
-    global setpointPub, stopThread, setpoint
+    global setpointPub, stopThread, setpoint, x, y, curx, cury
     setpoint.pose.position.x = 0.93
     setpoint.pose.position.y = 1.67
     setpoint.pose.position.z = 2.0
     rate = rospy.Rate(20.0)
+    counter = 0
+    prex,prey=x,y
+    new_counter = 0
     while not rospy.is_shutdown():
+        d = ((x-curx)**2+(y-cury)**2)**0.5
+        d1 = ((x-prex)**2+(y-prey)**2)**0.5
+        if d < 0.15 and d1 < 0.1:
+            new_counter += 1
+        else:
+            new_counter = 0
+        if counter > 140:
+            setpoint.pose.position.x = x
+            setpoint.pose.position.y = y
         setpointPub.publish(setpoint)
+        prex,prey=x,y
         rate.sleep()
+        counter += 1
+        # print(new_counter,'\t', d, '\t', d1)
+        if new_counter >= 250:
+            stopThread = True
         if stopThread:
             try:
                 land(5)
             except Exception as e:
                 print(e)
-            print('landed not disarm yet')
-            rospy.sleep(3.5)
+            #print('landed not disarm yet')
+            rospy.sleep(3)
             try:
                 set_arm(False, 5)
             except Exception as e:
@@ -184,6 +209,7 @@ if __name__ == '__main__':
     rospy.Subscriber('/custom2/mavros/state', State, state_cb)
     rospy.Subscriber('/custom2/mavros/local_position/pose',PoseStamped,local_position_cb)
     rospy.Subscriber('/vicon/home/home',TransformStamped,home_cb)
+    rospy.Subscriber("/vicon/jackal1/jackal1", TransformStamped, jackle1_cb)
 
     setpointPub = rospy.Publisher('/custom2/mavros/setpoint_position/local',PoseStamped,queue_size=100)
     setpoint = PoseStamped()
@@ -195,12 +221,6 @@ if __name__ == '__main__':
     setpoint.pose.orientation.y = q[1]
     setpoint.pose.orientation.z = q[2]
     setpoint.pose.orientation.w = q[3]
-
-    # setvelPub = rospy.Publisher('/custom2/mavros/setpoint_velocity/cmd_vel_unstamped',Twist,queue_size=100)
-    # setvel = Twist()
-    # setvel.linear.x=0
-    # setvel.linear.y=0
-    # setvel.linear.z=-0.2
 
     rate = rospy.Rate(20.0)
     for i in range(100):
