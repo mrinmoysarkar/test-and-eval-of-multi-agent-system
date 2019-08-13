@@ -10,7 +10,7 @@ import threading
 import numpy as np
 from geometry_msgs.msg import TransformStamped
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
-from math import degrees
+from math import degrees, atan2, sqrt
 
 
 stopThread = False
@@ -66,7 +66,7 @@ def move(pub,x,y,z):
 
 
 def rotate(pub,deg,leftorright):
-    global yaw
+    global yaw, stopThread
     twist = Twist()
     speed = 0.3  
     twist.linear.x = 0
@@ -81,14 +81,14 @@ def rotate(pub,deg,leftorright):
     last_yaw = yaw
     rate = rospy.Rate(10.0)
     move(pub,0,0,0)
-    while abs(yaw-last_yaw) < deg:
+    while abs(yaw-last_yaw) < deg and not stopThread:
         pub.publish(twist)
         rate.sleep()
     move(pub,0,0,0) 
     
 
 def rotateZero(pub):
-    global yaw
+    global yaw, stopThread
     rate = rospy.Rate(10.0)
     twist = Twist()
     speed = 0.3  
@@ -104,13 +104,13 @@ def rotateZero(pub):
     
     
     move(pub,0,0,0)
-    while abs(yaw) > 2:
+    while abs(yaw) > 2 and not stopThread:
         pub.publish(twist)
         rate.sleep()
     move(pub,0,0,0)
 
 def rotateabsoluteAngle(pub,ang):
-    global yaw
+    global yaw, stopThread
     rate = rospy.Rate(10.0)
     twist = Twist()
     speed = 0.3  
@@ -143,10 +143,44 @@ def rotateabsoluteAngle(pub,ang):
     move(pub,0,0,0)
     # print(ang)
     # print(yaw)
-    while abs(ang-yaw) > 2:
+    while abs(ang-yaw) > 2 and not stopThread:
         pub.publish(twist)
         rate.sleep()
     move(pub,0,0,0) 
+
+def goto_2dLocation(pub,x,y):
+    global X, yaw, stopThread
+    #calculate desired angle
+    dy = y-X[0,1]
+    dx = x-X[0,0]
+    dang = degrees(atan2(dy,dx))
+    rotateabsoluteAngle(pub,dang)
+    d = sqrt(dy**2+dx**2)
+
+    rate = rospy.Rate(10.0)
+    twist = Twist()
+    speed = 0.3  
+    twist.linear.x = 0.3
+    twist.linear.y = 0
+    twist.linear.z = 0
+    twist.angular.x = 0 
+    twist.angular.y = 0
+    twist.angular.z = 0
+    kp_ang = 0.05
+    kp_dis = 0.1
+    counter = 0
+    while d > 0.15 and counter<100 and not stopThread:
+        dy = y-X[0,1]
+        dx = x-X[0,0]
+        d = sqrt(dy**2+dx**2)
+        twist.linear.x = max(min(kp_dis*d, 0.7),0.2)
+        twist.angular.z = min(kp_ang*(dang-yaw), 0.3)
+        pub.publish(twist)
+        # print(twist.angular.z)
+        # print("d:",d)
+        rate.sleep()
+        counter += 1
+    move(pub,0,0,0)
     
 
 def loop():
@@ -161,49 +195,62 @@ def loop():
 
     rate = rospy.Rate(10.0)
     rotateZero(pub)
-    while not rospy.is_shutdown() and not stopThread:
-        while X[0,0] < x_max:
-            move(pub,1,0,0)
-            rate.sleep()
-        move(pub,0,0,0)
-        rospy.sleep(1)
+    rospy.sleep(1)
+    goto_2dLocation(pub,1.8,1.86)
+    rospy.sleep(1)
+    goto_2dLocation(pub,1.8,4.0)
+    rospy.sleep(1)
+    goto_2dLocation(pub,0,4.0)
+    rospy.sleep(1)
+    goto_2dLocation(pub,0,1.86)
+    rospy.sleep(1)
+    rotateZero(pub)
+    rospy.sleep(1)
+    goto_2dLocation(pub,0.7,1.86)
+    rospy.sleep(1)
+    # while not rospy.is_shutdown() and not stopThread:
+    #     while X[0,0] < x_max:
+    #         move(pub,1,0,0)
+    #         rate.sleep()
+    #     move(pub,0,0,0)
+    #     rospy.sleep(1)
 
-        rotateabsoluteAngle(pub,90)
-        rospy.sleep(1)
+    #     rotateabsoluteAngle(pub,90)
+    #     rospy.sleep(1)
 
-        start_x = X[0,0]
-        stary_y = X[0,1]
-        while abs(X[0,1]-stary_y) < 2:
-            move(pub,1,0,0)
-            rate.sleep()
-        move(pub,0,0,0)
-        rospy.sleep(1)
+    #     start_x = X[0,0]
+    #     stary_y = X[0,1]
+    #     while abs(X[0,1]-stary_y) < 2:
+    #         move(pub,1,0,0)
+    #         rate.sleep()
+    #     move(pub,0,0,0)
+    #     rospy.sleep(1)
 
-        rotateabsoluteAngle(pub,180)
-        rospy.sleep(1)
+    #     rotateabsoluteAngle(pub,180)
+    #     rospy.sleep(1)
         
-        while X[0,0] > x_min:
-            move(pub,1,0,0)
-            rate.sleep()
-        move(pub,0,0,0)
-        rospy.sleep(1)
+    #     while X[0,0] > x_min:
+    #         move(pub,1,0,0)
+    #         rate.sleep()
+    #     move(pub,0,0,0)
+    #     rospy.sleep(1)
 
-        rotateabsoluteAngle(pub,-90)
-        rospy.sleep(1)
+    #     rotateabsoluteAngle(pub,-90)
+    #     rospy.sleep(1)
 
-        start_x = X[0,0]
-        stary_y = X[0,1]
+    #     start_x = X[0,0]
+    #     stary_y = X[0,1]
 
-        while abs(X[0,1]-stary_y) < 2:
-            move(pub,1,0,0)
-            rate.sleep()
-        move(pub,0,0,0)
-        rospy.sleep(1)
+    #     while abs(X[0,1]-stary_y) < 2:
+    #         move(pub,1,0,0)
+    #         rate.sleep()
+    #     move(pub,0,0,0)
+    #     rospy.sleep(1)
 
-        rotateabsoluteAngle(pub,0)
-        rospy.sleep(1)
+    #     rotateabsoluteAngle(pub,0)
+    #     rospy.sleep(1)
 
-        rospy.sleep(10)
+    #     rospy.sleep(10)
 
     move(pub,0,0,0)    
     print("stopping the loop")
@@ -230,6 +277,8 @@ if __name__ == '__main__':
             if cmd=='s':
                 stopThread = True
             elif cmd=='exit':
+                stopThread = True
+                rospy.sleep(5)
                 break
 
     except rospy.ROSInterruptException:

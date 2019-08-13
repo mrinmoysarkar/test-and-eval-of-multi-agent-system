@@ -244,7 +244,7 @@ def checkCollision():
     dx = X[0,0]-X[1,0]
     dy = X[0,1]-X[1,1]
     d= sqrt(dx**2+dy**2)
-    if d < 1.5:
+    if d < 2.0:
         if X[0,1] > X[1,1]:
             goto_2dLocation(pub, X[0,0], X[0,1]+(y_max-X[0,1])/2)
         else:
