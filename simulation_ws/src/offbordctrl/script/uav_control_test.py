@@ -8,7 +8,7 @@ import threading
 from uav_control import uavControl
 
 if __name__ == '__main__':
-    noofUav = 2
+    noofUav = 1
     rospy.init_node('hover_and_land_scenario_uav', anonymous=True)
     uavs = []
     for i in range(noofUav):

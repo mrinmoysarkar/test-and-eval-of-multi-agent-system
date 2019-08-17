@@ -187,13 +187,36 @@ class uavControl():
             while self.getDistance(x,y,z)>0.1:
                 self.setpointPub.publish(setpoint)
                 rate.sleep()
+            n=50
             
+            x_trajectory = np.linspace(x,x+d,n)
+            y_trajectory = np.ones(n)*y
+            z_trajectory = np.linspace(z,z+d,n)
+            for j in range(n):
+                setpoint.pose.position.x = x_trajectory[j]
+                setpoint.pose.position.y = y_trajectory[j]
+                setpoint.pose.position.z = z_trajectory[j]
+                self.setpointPub.publish(setpoint)
+                rate.sleep()
+
             x,y,z=x+d,y,z+d
             setpoint.pose.position.x = x
             setpoint.pose.position.y = y
             setpoint.pose.position.z = z
+
+
             #gain altitude
             while self.getDistance(x,y,z)>0.1:
+                self.setpointPub.publish(setpoint)
+                rate.sleep()
+
+            x_trajectory = np.ones(n)*x
+            y_trajectory = np.linspace(y,y+d,n)
+            z_trajectory = np.ones(n)*z
+            for j in range(n):
+                setpoint.pose.position.x = x_trajectory[j]
+                setpoint.pose.position.y = y_trajectory[j]
+                setpoint.pose.position.z = z_trajectory[j]
                 self.setpointPub.publish(setpoint)
                 rate.sleep()
             
@@ -206,12 +229,32 @@ class uavControl():
                 self.setpointPub.publish(setpoint)
                 rate.sleep()
 
+            x_trajectory = np.linspace(x,x-d,n)
+            y_trajectory = np.ones(n)*y 
+            z_trajectory = np.ones(n)*z
+            for j in range(n):
+                setpoint.pose.position.x = x_trajectory[j]
+                setpoint.pose.position.y = y_trajectory[j]
+                setpoint.pose.position.z = z_trajectory[j]
+                self.setpointPub.publish(setpoint)
+                rate.sleep()
+
             x,y,z=x-d,y,z
             setpoint.pose.position.x = x
             setpoint.pose.position.y = y
             setpoint.pose.position.z = z
             #same altitude
             while self.getDistance(x,y,z)>0.1:
+                self.setpointPub.publish(setpoint)
+                rate.sleep()
+
+            x_trajectory = np.ones(n)*x
+            y_trajectory = np.linspace(y,y+d,n)
+            z_trajectory = np.linspace(z,z-d,n)
+            for j in range(n):
+                setpoint.pose.position.x = x_trajectory[j]
+                setpoint.pose.position.y = y_trajectory[j]
+                setpoint.pose.position.z = z_trajectory[j]
                 self.setpointPub.publish(setpoint)
                 rate.sleep()
 
@@ -224,6 +267,17 @@ class uavControl():
                 self.setpointPub.publish(setpoint)
                 rate.sleep()
 
+
+            x_trajectory = np.linspace(x,x+d,n)
+            y_trajectory = np.ones(n)*y
+            z_trajectory = np.ones(n)*z
+            for j in range(n):
+                setpoint.pose.position.x = x_trajectory[j]
+                setpoint.pose.position.y = y_trajectory[j]
+                setpoint.pose.position.z = z_trajectory[j]
+                self.setpointPub.publish(setpoint)
+                rate.sleep()
+
             x,y,z=x+d,y,z
             setpoint.pose.position.x = x
             setpoint.pose.position.y = y
@@ -233,12 +287,34 @@ class uavControl():
                 self.setpointPub.publish(setpoint)
                 rate.sleep()
 
+
+            x_trajectory = np.linspace(x,x-d+deld,n)
+            y_trajectory = np.linspace(y,y-2*d+deld,n)
+            z_trajectory = np.ones(n)*z
+            for j in range(n):
+                setpoint.pose.position.x = x_trajectory[j]
+                setpoint.pose.position.y = y_trajectory[j]
+                setpoint.pose.position.z = z_trajectory[j]
+                self.setpointPub.publish(setpoint)
+                rate.sleep()
+
             x,y,z=x-d+deld,y-2*d+deld,z
             setpoint.pose.position.x = x
             setpoint.pose.position.y = y
             setpoint.pose.position.z = z
             #same altitude
             while self.getDistance(x,y,z)>0.1:
+                self.setpointPub.publish(setpoint)
+                rate.sleep()
+
+
+            x_trajectory = np.linspace(x,x-deld,n)
+            y_trajectory = np.linspace(y,y-deld,n)
+            z_trajectory = np.ones(n)*0.1
+            for j in range(n):
+                setpoint.pose.position.x = x_trajectory[j]
+                setpoint.pose.position.y = y_trajectory[j]
+                setpoint.pose.position.z = z_trajectory[j]
                 self.setpointPub.publish(setpoint)
                 rate.sleep()
 
