@@ -163,10 +163,43 @@ class uavControl():
         dz = self.currentPosition.position.z-z
         return (dx**2+dy**2+dz**2)**0.5
 
+
+    def publishSetPoints(self,startX,startY,startZ,endX,endY,endZ):
+        rate = rospy.Rate(20.0)
+        q = self.getquaternion(0, 0, 0)
+        setpoint = PoseStamped()
+        setpoint.pose.position.x = startX
+        setpoint.pose.position.y = startY
+        setpoint.pose.position.z = startZ
+        setpoint.pose.orientation.x = q[0]
+        setpoint.pose.orientation.y = q[1]
+        setpoint.pose.orientation.z = q[2]
+        setpoint.pose.orientation.w = q[3]
+        n = 50
+        x_trajectory = np.linspace(startX, endX, n)
+        y_trajectory = np.linspace(startY, endY, n)
+        z_trajectory = np.linspace(startZ, endZ, n)
+        for j in range(n):
+            setpoint.pose.position.x = x_trajectory[j]
+            setpoint.pose.position.y = y_trajectory[j]
+            setpoint.pose.position.z = z_trajectory[j]
+            self.setpointPub.publish(setpoint)
+            rate.sleep()
+
+        setpoint.pose.position.x = endX
+        setpoint.pose.position.y = endY
+        setpoint.pose.position.z = endZ
+
+        # gain altitude
+        while self.getDistance(endX, endY, endZ) > 0.1:
+            self.setpointPub.publish(setpoint)
+            rate.sleep()
+
+
     def executeVerticalScenario(self):
-        d=1
-        deld=0.5
-        x,y,z=self.currentPosition.position.x,self.currentPosition.position.y,2.0
+        d = 3.0
+        deld = 0.5
+        x,y,z=self.currentPosition.position.x,self.currentPosition.position.y,5.0
         rate = rospy.Rate(20.0)
         q = self.getquaternion(0,0,0)
         setpoint = PoseStamped()
@@ -187,145 +220,21 @@ class uavControl():
             while self.getDistance(x,y,z)>0.1:
                 self.setpointPub.publish(setpoint)
                 rate.sleep()
-            n=50
-            
-            x_trajectory = np.linspace(x,x+d,n)
-            y_trajectory = np.ones(n)*y
-            z_trajectory = np.linspace(z,z+d,n)
-            for j in range(n):
-                setpoint.pose.position.x = x_trajectory[j]
-                setpoint.pose.position.y = y_trajectory[j]
-                setpoint.pose.position.z = z_trajectory[j]
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
 
-            x,y,z=x+d,y,z+d
-            setpoint.pose.position.x = x
-            setpoint.pose.position.y = y
-            setpoint.pose.position.z = z
-
-
-            #gain altitude
-            while self.getDistance(x,y,z)>0.1:
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
-
-            x_trajectory = np.ones(n)*x
-            y_trajectory = np.linspace(y,y+d,n)
-            z_trajectory = np.ones(n)*z
-            for j in range(n):
-                setpoint.pose.position.x = x_trajectory[j]
-                setpoint.pose.position.y = y_trajectory[j]
-                setpoint.pose.position.z = z_trajectory[j]
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
-            
-            x,y,z=x,y+d,z
-            setpoint.pose.position.x = x
-            setpoint.pose.position.y = y
-            setpoint.pose.position.z = z
-            #same altitude
-            while self.getDistance(x,y,z)>0.1:
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
-
-            x_trajectory = np.linspace(x,x-d,n)
-            y_trajectory = np.ones(n)*y 
-            z_trajectory = np.ones(n)*z
-            for j in range(n):
-                setpoint.pose.position.x = x_trajectory[j]
-                setpoint.pose.position.y = y_trajectory[j]
-                setpoint.pose.position.z = z_trajectory[j]
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
-
-            x,y,z=x-d,y,z
-            setpoint.pose.position.x = x
-            setpoint.pose.position.y = y
-            setpoint.pose.position.z = z
-            #same altitude
-            while self.getDistance(x,y,z)>0.1:
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
-
-            x_trajectory = np.ones(n)*x
-            y_trajectory = np.linspace(y,y+d,n)
-            z_trajectory = np.linspace(z,z-d,n)
-            for j in range(n):
-                setpoint.pose.position.x = x_trajectory[j]
-                setpoint.pose.position.y = y_trajectory[j]
-                setpoint.pose.position.z = z_trajectory[j]
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
-
-            x,y,z=x,y+d,z-d
-            setpoint.pose.position.x = x
-            setpoint.pose.position.y = y
-            setpoint.pose.position.z = z
-            #loose altitude
-            while self.getDistance(x,y,z)>0.1:
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
-
-
-            x_trajectory = np.linspace(x,x+d,n)
-            y_trajectory = np.ones(n)*y
-            z_trajectory = np.ones(n)*z
-            for j in range(n):
-                setpoint.pose.position.x = x_trajectory[j]
-                setpoint.pose.position.y = y_trajectory[j]
-                setpoint.pose.position.z = z_trajectory[j]
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
-
-            x,y,z=x+d,y,z
-            setpoint.pose.position.x = x
-            setpoint.pose.position.y = y
-            setpoint.pose.position.z = z
-            #same altitude
-            while self.getDistance(x,y,z)>0.1:
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
-
-
-            x_trajectory = np.linspace(x,x-d+deld,n)
-            y_trajectory = np.linspace(y,y-2*d+deld,n)
-            z_trajectory = np.ones(n)*z
-            for j in range(n):
-                setpoint.pose.position.x = x_trajectory[j]
-                setpoint.pose.position.y = y_trajectory[j]
-                setpoint.pose.position.z = z_trajectory[j]
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
-
-            x,y,z=x-d+deld,y-2*d+deld,z
-            setpoint.pose.position.x = x
-            setpoint.pose.position.y = y
-            setpoint.pose.position.z = z
-            #same altitude
-            while self.getDistance(x,y,z)>0.1:
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
-
-
-            x_trajectory = np.linspace(x,x-deld,n)
-            y_trajectory = np.linspace(y,y-deld,n)
-            z_trajectory = np.ones(n)*0.1
-            for j in range(n):
-                setpoint.pose.position.x = x_trajectory[j]
-                setpoint.pose.position.y = y_trajectory[j]
-                setpoint.pose.position.z = z_trajectory[j]
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
-
-            x,y,z=x-deld,y-deld,0.1
-            setpoint.pose.position.x = x
-            setpoint.pose.position.y = y
-            setpoint.pose.position.z = z
-            #land
-            while self.getDistance(x,y,z)>0.1:
-                self.setpointPub.publish(setpoint)
-                rate.sleep()
+            self.publishSetPoints(x,y,z,x+d,y,z+d)
+            x, y, z = x + d, y, z + d
+            self.publishSetPoints(x, y, z, x, y + d, z)
+            x, y, z = x, y + d, z
+            self.publishSetPoints(x, y, z, x - d, y, z)
+            x, y, z = x - d, y, z
+            self.publishSetPoints(x, y, z, x, y + d, z - d)
+            x, y, z = x, y + d, z - d
+            self.publishSetPoints(x, y, z, x + d, y, z)
+            x, y, z = x + d, y, z
+            self.publishSetPoints(x, y, z, x - d + deld, y - 2 * d + deld, z)
+            x, y, z = x - d + deld, y - 2 * d + deld, z
+            self.publishSetPoints(x, y, z, x - deld, y - deld, 0.1)
+            x, y, z = x - deld, y - deld, 0.1
 
             self.land(5)
             rospy.sleep(10)

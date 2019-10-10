@@ -25,7 +25,7 @@ if __name__ == '__main__':
             elif cmd=='q':
                 for i in range(noofUav):
                     uavs[i].stopThread = True
-                rospy.sleep(20)
+                rospy.sleep(2)
                 break
         except Exception as e:
             pass

@@ -8,6 +8,7 @@ import threading
 import pandas as pd
 import numpy as np
 import os
+from datetime import datetime
 
 
 class datalogger():
@@ -65,7 +66,7 @@ class datalogger():
 
         d = {'x':x, 'y':y, 'z':z,'roll':roll,'pitch':pitch,'yaw':yaw,'x_v':x_v,'y_v':y_v,'z_v':z_v,'roll_v':roll_v,'pitch_v':pitch_v,'yaw_v':yaw_v}
         df = pd.DataFrame(data=d)
-        fileName = "~/ros-intel-uav-rpeo/simulation_ws/src/offbordctrl/flightData/flight_path_data_uav" + str(self.uavno) + ".csv"
+        fileName = "~/ros-intel-uav-rpeo/simulation_ws/src/offbordctrl/flightData/flight_path_data_uav" + str(self.uavno) + "_" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".csv"
         df.to_csv(fileName,index=False)
         self.stopThread = False
 
