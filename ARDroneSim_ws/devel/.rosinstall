@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/inteldrone/ros-intel-uav-rpeo/ARDroneSim_ws/devel/setup.sh

@@ -1,0 +1,8 @@
+prefix=/home/inteldrone/ros-intel-uav-rpeo/ARDroneSim_ws/install
+
+Name: cvg_sim_gazebo
+Description: Description of cvg_sim_gazebo
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/inteldrone/ros-intel-uav-rpeo/ARDroneSim_ws/install/lib 
+Requires: 

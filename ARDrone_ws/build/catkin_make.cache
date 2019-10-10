@@ -1,0 +1,2 @@
+ardrone_autonomy
+-DCATKIN_DEVEL_PREFIX=/home/inteldrone/ros-intel-uav-rpeo/ARDrone_ws/devel -DCMAKE_INSTALL_PREFIX=/home/inteldrone/ros-intel-uav-rpeo/ARDrone_ws/install -G Unix Makefiles

@@ -1,0 +1,8 @@
+prefix=/home/inteldrone/ros-intel-uav-rpeo/ARDroneSim_ws/devel
+
+Name: LandOnUGV
+Description: Description of LandOnUGV
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/inteldrone/ros-intel-uav-rpeo/ARDroneSim_ws/devel/lib 
+Requires: 
