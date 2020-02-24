@@ -29,6 +29,7 @@ class datalogger():
     def loop(self):
 
         rate = rospy.Rate(60.0)
+        t=[]
         x=[]
         y=[]
         z=[]
@@ -44,6 +45,7 @@ class datalogger():
 
         while not self.stopThread and not rospy.is_shutdown():
             if self.currentPosition and self.currentVelocity:
+                t.append(time.time())
                 x.append(self.currentPosition.position.x)
                 y.append(self.currentPosition.position.y)
                 z.append(self.currentPosition.position.z)
@@ -64,7 +66,7 @@ class datalogger():
 
             rate.sleep()
 
-        d = {'x':x, 'y':y, 'z':z,'roll':roll,'pitch':pitch,'yaw':yaw,'x_v':x_v,'y_v':y_v,'z_v':z_v,'roll_v':roll_v,'pitch_v':pitch_v,'yaw_v':yaw_v}
+        d = {'time':t,'x':x, 'y':y, 'z':z,'roll':roll,'pitch':pitch,'yaw':yaw,'x_v':x_v,'y_v':y_v,'z_v':z_v,'roll_v':roll_v,'pitch_v':pitch_v,'yaw_v':yaw_v}
         df = pd.DataFrame(data=d)
         fileName = "~/ros-intel-uav-rpeo/simulation_ws/src/offbordctrl/flightData/flight_path_data_uav" + str(self.uavno) + "_" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".csv"
         df.to_csv(fileName,index=False)

@@ -43,9 +43,9 @@ def onclick(event):
 
 if __name__=="__main__":
 
-    threading.Thread(target=getInput).start()
+    # threading.Thread(target=getInput).start()
 
-    fileNmae = "../flightData/flight_path_data_uav0_20190905-174326"
+    fileNmae = "../flightData/flight_path_data_uav1_20191015-174728"
     extension = ".csv"
 
     data = pd.read_csv(fileNmae+extension,index_col=None)
@@ -66,6 +66,6 @@ if __name__=="__main__":
     ax.plot(np.arange(len(z_v)), z_v, 'o',label="z_v")
     ax.plot(np.arange(len(z)), z, 'o',label="z")
     plt.legend()
-    cid = fig.canvas.mpl_connect('button_press_event', onclick)
+    # cid = fig.canvas.mpl_connect('button_press_event', onclick)
     plt.show()
-    fig.canvas.mpl_disconnect(cid)
+    # fig.canvas.mpl_disconnect(cid)
