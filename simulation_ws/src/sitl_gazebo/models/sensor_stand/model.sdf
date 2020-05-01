@@ -1,0 +1,92 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="sensor_stand">
+        <static>true</static>
+
+        <link name="left_stand">
+          <visual name="visual">
+            <geometry>
+              <box>
+                <size>100 .2 .1</size>
+              </box>
+            </geometry>
+
+            <material>
+                <script>
+                  <uri>file://media/materials/scripts/gazebo.material</uri>
+                  <name>Gazebo/Red</name>
+                </script>
+            </material>
+
+          </visual>
+          <pose>0 -50 50 1.57 1.57</pose>
+        </link>
+
+        <link name="right_stand">
+          <visual name="visual">
+            <geometry>
+              <box>
+                <size>100 .2 .1</size>
+              </box>
+            </geometry>
+
+            <material>
+                <script>
+                  <uri>file://media/materials/scripts/gazebo.material</uri>
+                  <name>Gazebo/Red</name>
+                </script>
+            </material>
+
+          </visual>
+          <pose>0 50 50 0 1.57 1.57</pose>
+        </link>
+
+        <link name="up_stand">
+          <visual name="visual">
+            <geometry>
+              <box>
+                <size>100 .2 .1</size>
+              </box>
+            </geometry>
+
+            <material>
+                <script>
+                  <uri>file://media/materials/scripts/gazebo.material</uri>
+                  <name>Gazebo/Red</name>
+                </script>
+            </material>
+
+          </visual>
+          <pose>0 0 100 0 0 1.57</pose>
+        </link>
+        
+      <joint type="fixed" name="left_up_joint">
+        <child>up_stand</child>
+        <parent>left_stand</parent>
+      </joint>
+
+      <joint type="fixed" name="right_up_joint">
+        <child>up_stand</child>
+        <parent>right_stand</parent>
+      </joint>
+
+    <include>
+      <uri>model://r200</uri>
+      <pose frame=''>0 0 99.95 0 1.57 0</pose>
+    </include>
+
+    <joint name="intel_camera_joint" type="revolute">
+      <child>r200::link</child>
+      <parent>up_stand</parent>
+        <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+        </limit>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+
+</model>
+</sdf>

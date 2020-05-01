@@ -1,0 +1,121 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="custom_fense">
+    <static>true</static>
+
+    <link name="custom_fense">
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>100 .2 .1</size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Yellow</name>
+          </script>
+        </material>
+
+      </visual>
+      <pose>0 -50 0 0 0 0</pose>
+    </link>
+        
+    <link name="my_box_2">
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>100 .2 .1</size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Yellow</name>
+          </script>
+        </material>
+
+      </visual>
+      <pose>0 0 0 0 0 0</pose>
+    </link>
+        
+    <link name="my_box_3">
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>100 .2 .1</size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Yellow</name>
+          </script>
+        </material>
+
+      </visual>
+      <pose>0 50 0 0 0 0</pose>
+    </link>
+
+    <link name="my_box_4">
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>100 .2 .1</size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Yellow</name>
+          </script>
+        </material>
+
+      </visual>
+      <pose>0 0 0 0 0 1.57</pose>
+    </link>
+        
+    <link name="my_box_5">
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>100 .2 .1</size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Yellow</name>
+          </script>
+        </material>
+
+      </visual>
+      <pose>50 0 0 0 0 1.57</pose>
+    </link>
+        
+    <link name="my_box_6">
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>100 .2 .1</size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Yellow</name>
+          </script>
+        </material>
+
+      </visual>
+      <pose>-50 0 0 0 0 1.57</pose>
+    </link>
+
+</model>
+</sdf>

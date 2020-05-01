@@ -113,7 +113,7 @@ void binary_cb(const octomap_msgs::Octomap::ConstPtr& msg)
     cout<<"binary"<<endl;
     AbstractOcTree* tree = octomap_msgs::msgToMap(*msg);
     
-    //OcTree octree* = dynamic_cast<OcTree*>(tree);
+    //OcTree* octree = dynamic_cast<OcTree*>(tree);
     /*
     if (octree)
     { 

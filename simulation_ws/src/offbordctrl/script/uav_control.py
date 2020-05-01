@@ -11,7 +11,7 @@ import time
 import os
 import sys
 from mavros_msgs.msg import State, ParamValue
-from geometry_msgs.msg import PoseStamped, Point, Vector3, TwistStamped
+from geometry_msgs.msg import PoseStamped, Point, Vector3, TwistStamped, TransformStamped
 from std_msgs.msg import Header, ColorRGBA, String
 from mavros_msgs.srv import CommandBool, ParamGet, SetMode, CommandTOL, ParamSet
 from math import radians, sin, cos
@@ -19,10 +19,12 @@ import time
 import threading
 from visualization_msgs.msg import Marker
 from nav_msgs.msg import Path
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, PointCloud2
 from cv_bridge import CvBridge, CvBridgeError
 import matplotlib.pyplot as plt
-
+from astar import astar
+import pandas as pd
+import tf
 
 
 class uavControl():
@@ -39,15 +41,56 @@ class uavControl():
         self.path = Path()
         self.bridge_rgb = CvBridge()
         self.count = 0
+        self.map = None
         self.targetfound = False
+        self.br = tf.TransformBroadcaster()
+        self.currentVel = [0,0,0,0]
         self.setpoint = [1,1,1]
-        rospy.Subscriber('/uav'+str(self.uavno)+'/mavros/state', State, self.state_cb)
-        rospy.Subscriber('/uav'+str(self.uavno)+'/mavros/local_position/pose', PoseStamped, self.local_position_cb)
-        rospy.Subscriber('/uav'+str(self.uavno)+'/r200_ir/image_raw', Image, self.image_data_cb)
+        
         self.setpointPub = rospy.Publisher('/uav'+str(self.uavno)+'/mavros/setpoint_position/local', PoseStamped, queue_size=100)
         self.setpointVelPub = rospy.Publisher('/uav'+str(self.uavno)+'/mavros/setpoint_velocity/cmd_vel', TwistStamped, queue_size=100)
         # self.marker_publisher = rospy.Publisher('/uav'+str(self.uavno)+'/visualization_marker', Marker, queue_size=5)
-        # self.path_pub = rospy.Publisher('/uav'+str(self.uavno)+'/path', Path, queue_size=10)
+        self.path_pub = rospy.Publisher('/uav'+str(self.uavno)+'/path', Path, queue_size=10)
+        self.pointcloud_pub = rospy.Publisher('/uav'+str(self.uavno)+'/point_cloud', PointCloud2, queue_size=10)
+
+        rospy.Subscriber('/uav'+str(self.uavno)+'/mavros/state', State, self.state_cb)
+        rospy.Subscriber('/uav'+str(self.uavno)+'/mavros/local_position/pose', PoseStamped, self.local_position_cb)
+        rospy.Subscriber('/uav'+str(self.uavno)+'/r200_ir/image_raw', Image, self.image_data_cb)
+        rospy.Subscriber('/map',Image, self.map_cb)
+        rospy.Subscriber('/uav'+str(self.uavno)+'/r200_ir/points', PointCloud2, self.pointcloud_cb)
+
+    def pointcloud_cb(self, msg):
+        # print(msg.header)
+        # msg.header.frame_id = 'uav' + str(self.uavno) +'_camera_frame'
+
+        tf_data = TransformStamped()
+        tf_data.header.seq = msg.header.seq
+        tf_data.header.stamp = msg.header.stamp
+        tf_data.header.frame_id = 'uav' + str(self.uavno)
+        tf_data.child_frame_id = msg.header.frame_id #'uav' + str(self.uavno) +'_camera_frame'
+        tf_data.transform.translation.x = 0.1
+        tf_data.transform.translation.y = 0
+        tf_data.transform.translation.z = 0
+        tf_data.transform.rotation.x = -0.5
+        tf_data.transform.rotation.y = 0.5
+        tf_data.transform.rotation.z = -0.5
+        tf_data.transform.rotation.w = 0.5
+
+        # tf_data = TransformStamped()
+        # tf_data.header = msg.header
+        # tf_data.header.frame_id = 'world'
+        # tf_data.child_frame_id = 'uav' + str(self.uavno) +'_camera_frame'
+        # tf_data.transform.translation.x = self.currentPosition.position.x+0.1
+        # tf_data.transform.translation.y = self.currentPosition.position.y
+        # tf_data.transform.translation.z = self.currentPosition.position.z
+        # tf_data.transform.rotation = self.currentPosition.orientation
+
+        if not self.stopThread:
+            self.br.sendTransformMessage(tf_data)
+            # self.pointcloud_pub.publish(msg)
+
+    def map_cb(self, msg):
+        self.map = self.bridge_rgb.imgmsg_to_cv2(msg, msg.encoding)
 
     def image_data_cb(self, msg):
         self.currentImage = self.bridge_rgb.imgmsg_to_cv2(msg, msg.encoding)
@@ -185,9 +228,21 @@ class uavControl():
     	self.currentPosition = msg.pose
         # to visualize in rviz
          
-        # self.path.header = msg.header
-        # self.path.poses.append(msg)
-        # self.path_pub.publish(self.path)
+        self.path.header = msg.header
+        self.path.poses.append(msg)
+        
+
+        tf_data = TransformStamped()
+        tf_data.header = msg.header
+        tf_data.header.frame_id = 'world'
+        tf_data.child_frame_id = 'uav' + str(self.uavno)
+        tf_data.transform.translation.x = msg.pose.position.x
+        tf_data.transform.translation.y = msg.pose.position.y
+        tf_data.transform.translation.z = msg.pose.position.z
+        tf_data.transform.rotation = msg.pose.orientation
+        if not self.stopThread:
+            self.path_pub.publish(self.path)
+            self.br.sendTransformMessage(tf_data)
         
         # marker = Marker(
         #             type=Marker.SPHERE,
@@ -543,8 +598,11 @@ class uavControl():
     def go(self,direction):
         self.direction = direction
 
+    def set_velocity(self,vel):
+        self.currentVel = vel
+
     def control_loop(self):
-        target_vel = 0.5
+        target_vel = 3
         rate = rospy.Rate(20.0)
         setpoint = TwistStamped()
         setpoint.header.stamp = rospy.Time.now()
@@ -555,67 +613,67 @@ class uavControl():
         setpoint.twist.angular.y = 0
         setpoint.twist.angular.z = 0
         
+        # start = (50, 60)
+        # end = (10, 75)
+        # path = astar(self.map, start, end)
+        # # print(path)
+        # for p in path:
+        #     self.map[p] = 255
+        #     if self.map[p] == 1:
+        #         print('collision')
+        # self.map[self.map==1] = 255
+        # plt.imshow(self.map, cmap='gray')
+        # plt.show()
+
         while not self.stopThread:
             if self.takeoff_flag:
                 self.takeoff_flag = False
-                for i in range(100):
-                    self.setpointVelPub.publish(setpoint)
-                    rate.sleep()
+                if self.takeoff_state():
+                    # self.hover_state()
+                    # self.land_state()
+                    # self.search_state()
 
-                if self.set_mode('OFFBOARD', 5) and self.set_arm(True, 5):
-                    #takeoff
-                    while not self.stopThread:
-                        if self.currentPosition.position.z < 5:
-                            setpoint.twist.linear.z = 0.5
-                        else:
-                            setpoint.twist.linear.z = 0.0
-                            break
+                    # for p in path:
+                    #     x = p[0]-50
+                    #     y = p[1]-50
+                    #     self.position_ctl_loop(x,y,4)
+                    # print('path accomplished')
 
-                        self.setpointVelPub.publish(setpoint)
-                        rate.sleep()
-
-                    setpoint.twist.linear.z = 0
                     while not self.land_flag:
                         # if self.targetfound:
                         #     self.survey_state(self.currentPosition.position.x,self.currentPosition.position.y,3)
-                        if self.direction == 0:
-                            setpoint.twist.linear.x = 0
-                            setpoint.twist.linear.y = 0
-                            setpoint.twist.linear.z = 0
-                        elif self.direction == 1:
-                            setpoint.twist.linear.x = target_vel
-                            # self.position_ctl_loop(-3,-3,5)
-                            # self.survey_state(-3,-3,3)
-                        elif self.direction == -1:
-                            setpoint.twist.linear.x = -target_vel
-                        elif self.direction == 2:
-                            setpoint.twist.linear.y = target_vel
-                        elif self.direction == -2:
-                            setpoint.twist.linear.y = -target_vel
-                        elif self.direction == 3:
-                            setpoint.twist.linear.z = target_vel
-                        elif self.direction == -3:
-                            setpoint.twist.linear.z = -target_vel
-
+                        # if self.direction == 0:
+                        #     setpoint.twist.linear.x = 0
+                        #     setpoint.twist.linear.y = 0
+                        #     setpoint.twist.linear.z = 0
+                        # elif self.direction == 1:
+                        #     setpoint.twist.linear.x = target_vel
+                        # elif self.direction == -1:
+                        #     setpoint.twist.linear.x = -target_vel
+                        # elif self.direction == 2:
+                        #     setpoint.twist.linear.y = target_vel
+                        # elif self.direction == -2:
+                        #     setpoint.twist.linear.y = -target_vel
+                        # elif self.direction == 3:
+                        #     setpoint.twist.linear.z = target_vel
+                        # elif self.direction == -3:
+                        #     setpoint.twist.linear.z = -target_vel
+                        setpoint.twist.linear.x = self.currentVel[0]*target_vel
+                        setpoint.twist.linear.y = self.currentVel[1]*target_vel
+                        setpoint.twist.linear.z = self.currentVel[2]*target_vel
+                        setpoint.twist.angular.z = self.currentVel[3]*0.5
                         self.setpointVelPub.publish(setpoint)
                         rate.sleep()
                     
-                    setpoint.twist.linear.z = -0.5
-                    while self.land_flag:
-                        if self.currentPosition.position.z < 0.1:
-                            break
-                        self.setpointVelPub.publish(setpoint)
-                        rate.sleep()
-                    self.land_flag = False
-                    self.set_mode('MANUAL', 5)
-                    rospy.sleep(5)
-                    self.set_arm(False, 5)
+                    if self.land_flag:
+                        self.land_flag = False
+                        self.land_state()
 
     def position_ctl_loop(self,target_x,target_y,target_z=None):
         if None is target_z:
             target_z = self.currentPosition.position.z 
 
-        kp,ki,kd = 0.5,0.01,0.1
+        kp,ki,kd = 1.5,0.01,0.1
         err_x, err_y, err_z = 0,0,0
         prev_err_x, prev_err_y, prev_err_z = 0,0,0
         del_err_x, del_err_y, del_err_z = 0,0,0
@@ -667,10 +725,10 @@ class uavControl():
             
             if err_d < 0.2 or time.time() - t1 > 5:
                 break
-        setpoint.twist.linear.x = 0
-        setpoint.twist.linear.y = 0
-        setpoint.twist.linear.z = 0
-        self.setpointVelPub.publish(setpoint)
+        # setpoint.twist.linear.x = 0
+        # setpoint.twist.linear.y = 0
+        # setpoint.twist.linear.z = 0
+        # self.setpointVelPub.publish(setpoint)
         # print(err_d)
 
         # plt.plot(ex,label='err_x')
@@ -689,6 +747,98 @@ class uavControl():
         for _ in range(n_times):
             for x,y in zip(x_data,y_data):
                 self.position_ctl_loop(x,y)
+
+    def takeoff_state(self):
+        rate = rospy.Rate(20.0)
+        setpoint = TwistStamped()
+        setpoint.header.stamp = rospy.Time.now()
+        setpoint.twist.linear.x = 0
+        setpoint.twist.linear.y = 0
+        setpoint.twist.linear.z = 0.5
+        setpoint.twist.angular.x = 0
+        setpoint.twist.angular.y = 0
+        setpoint.twist.angular.z = 0
+        for i in range(100):
+            self.setpointVelPub.publish(setpoint)
+            rate.sleep()
+
+        if self.set_mode('OFFBOARD', 5) and self.set_arm(True, 5):
+            #takeoff
+            while not self.stopThread:
+                if self.currentPosition.position.z < 5:
+                    setpoint.twist.linear.z = 0.5
+                else:
+                    setpoint.twist.linear.z = 0.0
+                    break
+
+                self.setpointVelPub.publish(setpoint)
+                rate.sleep()
+
+            setpoint.twist.linear.z = 0
+            self.setpointVelPub.publish(setpoint)
+            return True
+        return False
+
+    def hover_state(self):
+        x = self.currentPosition.position.x
+        y = self.currentPosition.position.y
+        z = self.currentPosition.position.z
+        t1 = time.time()
+        while time.time()-t1 < 20:
+            self.position_ctl_loop(x,y,z)
+
+    def land_state(self):
+        rate = rospy.Rate(20.0)
+        setpoint = TwistStamped()
+        setpoint.header.stamp = rospy.Time.now()
+        setpoint.twist.linear.x = 0
+        setpoint.twist.linear.y = 0
+        setpoint.twist.linear.z = -0.5
+        setpoint.twist.angular.x = 0
+        setpoint.twist.angular.y = 0
+        setpoint.twist.angular.z = 0
+        while not self.stopThread:
+            if self.currentPosition.position.z < 0.1:
+                break
+            self.setpointVelPub.publish(setpoint)
+            rate.sleep()
+        self.set_mode('MANUAL', 5)
+        rospy.sleep(5)
+        self.set_arm(False, 5)
+
+    def search_state(self):
+        dirpath = os.getcwd()
+        path = dirpath+'/ros-intel-uav-rpeo/simulation_ws/src/offbordctrl/script/search_boundary.csv'
+        boundary = pd.read_csv(path)
+        boundary = boundary[boundary['uav_no']==self.uavno]
+        x1 = boundary['x1'].values
+        y1 = boundary['y1'].values
+        x2 = boundary['x2'].values
+        y2 = boundary['y2'].values
+        x1 = x1[0]
+        y1 = y1[0]
+        x2 = x2[0]
+        y2 = y2[0]
+        delta = 5
+        d = 0
+        while not self.stopThread:
+            for y in range(y1,y2,delta):
+                startx = x1+50
+                starty = y+50
+                endx = x1+x2-1+50
+                endy = y+50
+
+                start = (startx, starty)
+                end = (endx, endy)
+                path = astar(self.map, start, end)
+                x1 = x1+x2-1
+                x2 = -x2
+                for p in path:
+                    x = p[0]-50
+                    y = p[1]-50
+                    self.position_ctl_loop(x,y,5)
+
+
 
     def object_detection(self):
         rate = rospy.Rate(20.0)
