@@ -57,7 +57,7 @@ class uavControl():
         rospy.Subscriber('/uav'+str(self.uavno)+'/mavros/local_position/pose', PoseStamped, self.local_position_cb)
         rospy.Subscriber('/uav'+str(self.uavno)+'/r200_ir/image_raw', Image, self.image_data_cb)
         rospy.Subscriber('/map',Image, self.map_cb)
-        rospy.Subscriber('/uav'+str(self.uavno)+'/r200_ir/points', PointCloud2, self.pointcloud_cb)
+        # rospy.Subscriber('/uav'+str(self.uavno)+'/r200_ir/points', PointCloud2, self.pointcloud_cb)
 
     def pointcloud_cb(self, msg):
         # print(msg.header)
@@ -232,17 +232,17 @@ class uavControl():
         self.path.poses.append(msg)
         
 
-        tf_data = TransformStamped()
-        tf_data.header = msg.header
-        tf_data.header.frame_id = 'world'
-        tf_data.child_frame_id = 'uav' + str(self.uavno)
-        tf_data.transform.translation.x = msg.pose.position.x
-        tf_data.transform.translation.y = msg.pose.position.y
-        tf_data.transform.translation.z = msg.pose.position.z
-        tf_data.transform.rotation = msg.pose.orientation
-        if not self.stopThread:
-            self.path_pub.publish(self.path)
-            self.br.sendTransformMessage(tf_data)
+        # tf_data = TransformStamped()
+        # tf_data.header = msg.header
+        # tf_data.header.frame_id = 'world'
+        # tf_data.child_frame_id = 'uav' + str(self.uavno)
+        # tf_data.transform.translation.x = msg.pose.position.x
+        # tf_data.transform.translation.y = msg.pose.position.y
+        # tf_data.transform.translation.z = msg.pose.position.z
+        # tf_data.transform.rotation = msg.pose.orientation
+        # if not self.stopThread:
+        #     self.path_pub.publish(self.path)
+        #     self.br.sendTransformMessage(tf_data)
         
         # marker = Marker(
         #             type=Marker.SPHERE,

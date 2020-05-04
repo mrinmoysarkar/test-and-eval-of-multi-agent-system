@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: sitl_gazebo_uav1
+    relative_path: models/rotors_description/urdf/iris_base.xacro
+    xacro_args: rotors_description_dir:=/home/ariac/Desktop/ariac/ros-intel-uav-rpeo/simulation_ws/src/sitl_gazebo_uav1/models/rotors_description visual_material:=green
+  SRDF:
+    relative_path: config/iris1.srdf
+  CONFIG:
+    author_name: mrinmoy
+    author_email: mrinmoy.pol@gmail.com
+    generated_timestamp: 1588532283

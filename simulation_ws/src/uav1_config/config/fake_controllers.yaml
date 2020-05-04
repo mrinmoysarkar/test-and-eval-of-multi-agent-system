@@ -1,0 +1,4 @@
+controller_list:
+  - name: fake_uav1_group_controller
+    joints:
+      - uav1_virtual_joint

@@ -1,0 +1,1 @@
+xacro --inorder iris.xacro rotors_description_dir:=/home/ariac/Desktop/ariac/ros-intel-uav-rpeo/simulation_ws/src/sitl_gazebo_uav0/models/rotors_description visual_material:=green
