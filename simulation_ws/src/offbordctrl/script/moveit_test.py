@@ -22,6 +22,7 @@ if __name__ == '__main__':
     start_state = robot.get_current_state()
     goal_state = robot.get_current_state()
 
+    print(start_state)
     goal_state.multi_dof_joint_state.transforms[0].translation.x = -10.0
     goal_state.multi_dof_joint_state.transforms[0].translation.y = 10.0
     goal_state.multi_dof_joint_state.transforms[0].translation.z = 5.0

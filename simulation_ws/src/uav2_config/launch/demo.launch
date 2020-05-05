@@ -30,16 +30,18 @@
   <!--
     <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 map uav2_base_link" />
     -->
+<!--
+  <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_21" args="0 0 0 0 0 0 uav2_base_link uav2_base_link_inertia" />
 
-    <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_21" args="0 0 0 0 0 0 uav2_base_link uav2_base_link_inertia" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_22" args="0.13 -0.22 0.023 0 0 0 uav2_base_link_inertia uav2_rotor_0" />
 
-   <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_22" args="0.13 -0.22 0.023 0 0 0 uav2_base_link_inertia uav2_rotor_0" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_23" args="-0.13 0.2 0.023 0 0 0 uav2_base_link_inertia uav2_rotor_1" />
 
-   <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_23" args="-0.13 0.2 0.023 0 0 0 uav2_base_link_inertia uav2_rotor_1" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_24" args="0.13 0.22 0.023 0 0 0 uav2_base_link_inertia uav2_rotor_2" />
 
-   <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_24" args="0.13 0.22 0.023 0 0 0 uav2_base_link_inertia uav2_rotor_2" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_25" args="-0.13 -0.2 0.023 0 0 0 uav2_base_link_inertia uav2_rotor_3" />
 
-   <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_25" args="-0.13 -0.2 0.023 0 0 0 uav2_base_link_inertia uav2_rotor_3" />
+  -->
 
   <!-- We do not have a robot connected, so publish fake joint states -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
@@ -48,7 +50,9 @@
   </node>
 
   <!-- Given the published joint states, publish tf for the robot links -->
+  <!--
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+  -->
 
   <!-- Run the main MoveIt! executable without trajectory execution (we do not have controllers configured by default) -->
   <include file="$(find uav2_config)/launch/move_group.launch">
