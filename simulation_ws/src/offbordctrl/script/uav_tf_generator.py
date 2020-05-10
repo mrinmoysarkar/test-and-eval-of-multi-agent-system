@@ -159,12 +159,14 @@ if __name__ == '__main__':
         pcl_publisher.append(rospy.Publisher('/uav'+str(i)+'/points', PointCloud2,queue_size=10))
 
     # rospy.spin()
-    while rosgraph.is_master_online():
-        if not update_data:
-            publish_data()
-            update_data = True
-        rospy.sleep(1)
-
+    try:
+        while rosgraph.is_master_online():
+            if not update_data:
+                publish_data()
+                update_data = True
+            rospy.sleep(1)
+    except Exception as e:
+        print(e)
 
 
   

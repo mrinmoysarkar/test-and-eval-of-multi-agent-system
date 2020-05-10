@@ -9,7 +9,10 @@
  
   <node pkg="offbordctrl" name="uav_tf_generator" type="uav_tf_generator.py" output="screen"> 
   </node>
-  
+
+  <node pkg="offbordctrl" name="save_data" type="save_data.py" output="screen"> 
+  </node>
+
 <!--
   <node pkg="offbordctrl" name="uav_control_pad" type="uav_control_pad.py" output="screen"> 
   </node>

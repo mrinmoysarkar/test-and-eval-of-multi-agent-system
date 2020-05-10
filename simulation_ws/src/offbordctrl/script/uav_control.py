@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 from astar import astar
 import pandas as pd
 import tf
+import rosgraph
 
 
 class uavControl():
@@ -46,17 +47,20 @@ class uavControl():
         self.br = tf.TransformBroadcaster()
         self.currentVel = [0,0,0,0]
         self.setpoint = [1,1,1]
+        self.targetPos = PoseStamped()
         
         self.setpointPub = rospy.Publisher('/uav'+str(self.uavno)+'/mavros/setpoint_position/local', PoseStamped, queue_size=100)
         self.setpointVelPub = rospy.Publisher('/uav'+str(self.uavno)+'/mavros/setpoint_velocity/cmd_vel', TwistStamped, queue_size=100)
         # self.marker_publisher = rospy.Publisher('/uav'+str(self.uavno)+'/visualization_marker', Marker, queue_size=5)
         self.path_pub = rospy.Publisher('/uav'+str(self.uavno)+'/path', Path, queue_size=10)
         self.pointcloud_pub = rospy.Publisher('/uav'+str(self.uavno)+'/point_cloud', PointCloud2, queue_size=10)
+        self.dataLabel_pub =  rospy.Publisher('/uav'+str(self.uavno)+'/data_label', String, queue_size=10)
+
 
         rospy.Subscriber('/uav'+str(self.uavno)+'/mavros/state', State, self.state_cb)
         rospy.Subscriber('/uav'+str(self.uavno)+'/mavros/local_position/pose', PoseStamped, self.local_position_cb)
-        rospy.Subscriber('/uav'+str(self.uavno)+'/r200_ir/image_raw', Image, self.image_data_cb)
-        rospy.Subscriber('/map',Image, self.map_cb)
+        # rospy.Subscriber('/uav'+str(self.uavno)+'/r200_ir/image_raw', Image, self.image_data_cb)
+        # rospy.Subscriber('/map',Image, self.map_cb)
         # rospy.Subscriber('/uav'+str(self.uavno)+'/r200_ir/points', PointCloud2, self.pointcloud_cb)
 
     def pointcloud_cb(self, msg):
@@ -209,10 +213,10 @@ class uavControl():
                     # res = mode_set(base_mode,mode)  # 0 is custom mode
                     res = mode_set(custom_mode=mode)  # 0 is custom mode
                     if not res.mode_sent:
-                        print(res)
+                        # print(res)
                         rospy.logerr("failed to send mode command")
                     else:
-                        print(res)
+                        # print(res)
                     	return True
                 except rospy.ServiceException as e:
                     rospy.logerr(e)
@@ -275,11 +279,22 @@ class uavControl():
         
         return q
 
-    def getDistance(self,x,y,z):
-        dx = self.currentPosition.position.x-x
-        dy = self.currentPosition.position.y-y
-        dz = self.currentPosition.position.z-z
-        return (dx**2+dy**2+dz**2)**0.5
+    def getDistance(self, x=None, y=None, z=None, pos=None):
+        if x is not None and y is not None and z is not None:
+            dx = self.currentPosition.position.x-x
+            dy = self.currentPosition.position.y-y
+            dz = self.currentPosition.position.z-z
+            return (dx**2+dy**2+dz**2)**0.5
+        elif pos is not None:
+            dx = self.currentPosition.position.x-pos.position.x
+            dy = self.currentPosition.position.y-pos.position.y
+            dz = self.currentPosition.position.z-pos.position.z
+            return (dx**2+dy**2+dz**2)**0.5
+        else:
+            dx = self.currentPosition.position.x-self.targetPos.pose.position.x
+            dy = self.currentPosition.position.y-self.targetPos.pose.position.y
+            dz = self.currentPosition.position.z-self.targetPos.pose.position.z
+            return (dx**2+dy**2+dz**2)**0.5
 
     def publishSetPoints(self,startX,startY,startZ,endX,endY,endZ):
         rate = rospy.Rate(20.0)
@@ -544,6 +559,51 @@ class uavControl():
             self.land(5)
             rospy.sleep(10)
             self.set_arm(False, 5)
+
+    def pos_ctl_loop(self):
+        rate = rospy.Rate(20.0)
+        while rosgraph.is_master_online() and not self.stopThread:
+            self.setpointPub.publish(self.targetPos)
+            rate.sleep()
+
+    def planning_loop(self):
+        self.dataLabel_pub.publish('Hold')
+        rate = rospy.Rate(10.0)
+        q = self.getquaternion(0,0,0)
+        
+        self.targetPos.pose.position.x = self.currentPosition.position.x
+        self.targetPos.pose.position.y = self.currentPosition.position.y
+        self.targetPos.pose.position.z = 1.5
+        self.targetPos.pose.orientation.x = q[0]
+        self.targetPos.pose.orientation.y = q[1]
+        self.targetPos.pose.orientation.z = q[2]
+        self.targetPos.pose.orientation.w = q[3]
+
+        threading.Thread(target=self.pos_ctl_loop).start()
+
+        if self.set_mode('OFFBOARD', 5) and self.set_arm(True, 5):
+            # mode takeoff
+            self.dataLabel_pub.publish('Takeoff')
+            while self.getDistance() > 0.15:
+                rate.sleep()
+            # mode hover
+            self.dataLabel_pub.publish('Hover')
+            rospy.sleep(30)
+            # land mode
+            self.dataLabel_pub.publish('Land') 
+            self.land(5)
+            while self.current_state.armed:
+                # print(self.current_state)
+                rate.sleep()
+
+            self.dataLabel_pub.publish('Hold')  
+            # for i in range(10):
+            #     rate.sleep()
+
+            # self.set_arm(False, 1)
+            print("landed safely :).")
+            self.stopThread = True
+            rate.sleep()
 
     def loop(self):
         rospy.sleep(5)
@@ -837,8 +897,6 @@ class uavControl():
                     x = p[0]-50
                     y = p[1]-50
                     self.position_ctl_loop(x,y,5)
-
-
 
     def object_detection(self):
         rate = rospy.Rate(20.0)

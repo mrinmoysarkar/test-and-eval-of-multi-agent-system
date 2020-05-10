@@ -21,6 +21,7 @@ from nav_msgs.msg import Path, OccupancyGrid
 from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import Float32MultiArray
 import queue as Q
+import rosgraph
 
 class Node(object):
     def __init__(self, parent, cost, pos):
@@ -38,7 +39,7 @@ class Node(object):
         return 'cost:'+str(self.cost)+', (x,y)=('+str(self.pos[0])+','+str(self.pos[1])+')'
 
 
-noofUav = 4
+noofUav = 1
 current_uav = 0
 uavs = []
 bridge_rgb = CvBridge()
@@ -380,12 +381,12 @@ if __name__ == '__main__':
     rospy.init_node('controller_test_uav', anonymous=True)
     #rospy.Subscriber('/joy', Joy, joy_controll_cb)
     #rospy.Subscriber('/keyboard_data', Float32MultiArray, keyboard_controll_cb)
-    rospy.Subscriber('/uav_control_pad_data',Float32MultiArray, uav_controll_pad_cb)
+    # rospy.Subscriber('/uav_control_pad_data',Float32MultiArray, uav_controll_pad_cb)
     # rospy.Subscriber('/sensor_stand/r200_ir/image_raw', Image, map_image_cb)
     #rospy.Subscriber('/octomap_binary', Octomap, octomap_cb)
-    rospy.Subscriber('/projected_map',OccupancyGrid, map_2D_cb)
-    path_pub = rospy.Publisher('/path_from_map_cpp', Path, queue_size=10)
-    path_cpp = Path()
+    # rospy.Subscriber('/projected_map',OccupancyGrid, map_2D_cb)
+    # path_pub = rospy.Publisher('/path_from_map_cpp', Path, queue_size=10)
+    # path_cpp = Path()
 
 
     #map_pub = rospy.Publisher('/map', Image, queue_size=10)
@@ -393,52 +394,54 @@ if __name__ == '__main__':
     for i in range(noofUav):
         uavs.append(uavControl(i))
         rospy.sleep(5)
-        threading.Thread(target=uavs[i].control_loop).start()
+        threading.Thread(target=uavs[i].planning_loop).start()
+        # threading.Thread(target=uavs[i].control_loop).start()
         # threading.Thread(target=uavs[i].object_detection).start()
     # uavs[0].set_param(param_id='NAV_RCL_ACT', param_val=0, timeout=5) 
     # uavs[0].set_param(param_id='COM_OBL_RC_ACT', param_val=2, timeout=5)
     # uavs[0].get_param(param_id='COM_OBL_RC_ACT', timeout=5)
 
-    
-    while not rospy.is_shutdown():
-        try:
-            # uavNo = raw_input('input uav no 0 to '+str(noofUav-1)+': ')
-            # uavNo = 0 #int(uavNo)
-            cmd = raw_input("command: \"x\" for exit the main loop: ")
-            if cmd=='x':
-                for i in range(noofUav):
-                    uavs[i].stopThread = True
-                rospy.sleep(10)
-                break
-            elif cmd=='m':
-                if map_msg is not None:
-                    path = find_path(map_msg)
-                    if path is not None:
-                        path_cpp.header = map_msg.header
-                        for p in path:
-                            x = PoseStamped()
-                            x.header = map_msg.header
-                            x.pose.position.x = p[0]
-                            x.pose.position.y = p[1]
-                            x.pose.position.z = 5#p[2]
-                            path_cpp.poses.append(x)
+    rospy.spin()
+    # while rosgraph.is_master_online():
+    #     try:
+    #         rospy.sleep(5)
+    #     #     # uavNo = raw_input('input uav no 0 to '+str(noofUav-1)+': ')
+    #     #     # uavNo = 0 #int(uavNo)
+    #     #     cmd = raw_input("command: \"x\" for exit the main loop: ")
+    #     #     if cmd=='x':
+    #     #         for i in range(noofUav):
+    #     #             uavs[i].stopThread = True
+    #     #         rospy.sleep(10)
+    #     #         break
+    #     #     elif cmd=='m':
+    #     #         if map_msg is not None:
+    #     #             path = find_path(map_msg)
+    #     #             if path is not None:
+    #     #                 path_cpp.header = map_msg.header
+    #     #                 for p in path:
+    #     #                     x = PoseStamped()
+    #     #                     x.header = map_msg.header
+    #     #                     x.pose.position.x = p[0]
+    #     #                     x.pose.position.y = p[1]
+    #     #                     x.pose.position.z = 5#p[2]
+    #     #                     path_cpp.poses.append(x)
                             
-                        path_pub.publish(path_cpp)
+    #     #                 path_pub.publish(path_cpp)
  
                 
-                # path = get_path(map_msg.header.seq,
-                # map_msg.header.stamp.secs, 
-                # map_msg.header.stamp.nsecs, 
-                # map_msg.header.frame_id,
-                # map_msg.binary, 
-                # map_msg.id, 
-                # map_msg.resolution,
-                # map_msg.data,
-                # (0.0,0.0,0.0),
-                # (15.0,0.0,5.0))
-                # print("from Python: ", path)
+    #             # path = get_path(map_msg.header.seq,
+    #             # map_msg.header.stamp.secs, 
+    #             # map_msg.header.stamp.nsecs, 
+    #             # map_msg.header.frame_id,
+    #             # map_msg.binary, 
+    #             # map_msg.id, 
+    #             # map_msg.resolution,
+    #             # map_msg.data,
+    #             # (0.0,0.0,0.0),
+    #             # (15.0,0.0,5.0))
+    #             # print("from Python: ", path)
                     
                 
 
-        except Exception as e:
-            print(e)
+    #     except Exception as e:
+    #         print(e)
