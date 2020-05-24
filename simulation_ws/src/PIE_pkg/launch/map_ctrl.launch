@@ -1,0 +1,6 @@
+<launch>
+ 
+    <include file="$(find PIE_pkg)/launch/start_mapping.launch"/>
+    <include file="$(find PIE_pkg)/launch/ctrl_position.launch"/>
+ 
+</launch>
