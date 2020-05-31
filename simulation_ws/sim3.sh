@@ -1,1 +1,1 @@
-roslaunch ./src/PIE_pkg/launch/ctrl_position_sim.launch
+roslaunch ./src/pie/launch/ctrl_position_sim.launch
