@@ -266,7 +266,7 @@ class uavControl():
         # tf_data.transform.translation.z = msg.pose.position.z
         # tf_data.transform.rotation = msg.pose.orientation
         # if not self.stopThread:
-        self.path_pub.publish(self.path)
+        # self.path_pub.publish(self.path)
         #     self.br.sendTransformMessage(tf_data)
         
         # marker = Marker(
@@ -629,7 +629,7 @@ class uavControl():
                 for x in reversed(x_coordinate):
                     waypoints.append((x[0],y[0]))
 
-        print(waypoints)
+        # print(waypoints)
         # print(self.get_waypoints_in_circle(0,0,1,10))
 
         self.dataLabel_pub.publish('Hold')
@@ -676,8 +676,11 @@ class uavControl():
             # mode search
             ctn = 0
 
+            ignore_ptns = 1
+            ignore_counter = 0
+
             for wp in waypoints:
-                self.dataLabel_pub.publish('Search')
+                self.path_pub.publish(self.path)
                 ctn += 1
                 start_state = self.robot.get_current_state()
                 start_state.multi_dof_joint_state.transforms[0].translation.x = previous_target_x #self.currentPosition.position.x
@@ -698,19 +701,22 @@ class uavControl():
                 self.move_group.set_start_state(start_state)
                 self.move_group.set_joint_value_target(goal_state)
                 plan = self.move_group.plan()
-                
-                ignore_ptns = 1
-                ignore_counter = 0
-                for ptn in plan.multi_dof_joint_trajectory.points:
-                    print("{:.2f},{:.2f}".format(ptn.transforms[0].translation.x,ptn.transforms[0].translation.y))
+                if ignore_counter >= ignore_ptns:
+                    ignore_ptns = 1
+                    ignore_counter = 0
 
-                print("*******************************")
+                # for ptn in plan.multi_dof_joint_trajectory.points:
+                #     print("{:.2f},{:.2f}".format(ptn.transforms[0].translation.x,ptn.transforms[0].translation.y))
+
+                # print("*******************************")
                 for ptn in plan.multi_dof_joint_trajectory.points:
+                    self.dataLabel_pub.publish('Search')
                     if ignore_counter < ignore_ptns:
                         ignore_counter += 1
                         continue
-                    if abs(self.currentPosition.position.x-17)<5 and abs(self.currentPosition.position.y-3.75)<9.75 and abs(self.currentPosition.position.z-5)<9:
-                        self.dataLabel_pub.publish('Obstacleavoid')
+                    # print(self.currentPosition)
+                    # if abs(self.currentPosition.position.x-17)<5 and abs(self.currentPosition.position.y-3.75)<9.75 and abs(self.currentPosition.position.z-5)<9:
+                    #     self.dataLabel_pub.publish('Obstacleavoid')
                     # print("{:.2f},{:.2f}".format(ptn.transforms[0].translation.x,ptn.transforms[0].translation.y))
                     self.targetPos.pose.position.x = ptn.transforms[0].translation.x
                     self.targetPos.pose.position.y = ptn.transforms[0].translation.y
@@ -723,7 +729,6 @@ class uavControl():
                     t1 = time.time()
                     while self.getDistance() > 0.4 and (time.time()-t1 < 3):
                         rate.sleep()
-                        ######################
                         if self.targetfound: 
                             # print("new ball found 0")
                             dx = self.currentPosition.position.x - previous_ball_target_x
@@ -732,7 +737,7 @@ class uavControl():
                             # print(del_d)
                             self.targetfound = False
                             if del_d > 10 or (previous_ball_target_x==0 and previous_ball_target_y == 0):
-                                ignore_ptns = 7
+                                ignore_ptns = 10
                                 ignore_counter = 0
                                 dx = wp[0] - previous_target_x
                                 dy = wp[1] - previous_target_y
@@ -762,50 +767,13 @@ class uavControl():
                                     while self.getDistance() > 0.4 and (time.time()-t1 < 3):
                                         rate.sleep()
                                 break
-                        ######################
+                        
                 
                 previous_target_x = wp[0]
                 previous_target_y = wp[1]
 
                 # rospy.sleep(10) 
                 # print("*****************************") 
-
-                 
-            #     self.dataLabel_pub.publish('Search')
-            #     self.targetPos.pose.position.x = wp[0]
-            #     self.targetPos.pose.position.y = wp[1]
-            #     self.targetPos.pose.position.z = 3
-            #     self.targetPos.pose.orientation.x = q[0]
-            #     self.targetPos.pose.orientation.y = q[1]
-            #     self.targetPos.pose.orientation.z = q[2]
-            #     self.targetPos.pose.orientation.w = q[3]
-            #     while self.getDistance() > 0.4:
-            #         rate.sleep()
-                    # if self.targetfound: #ctn != 0 and ctn%10==0:
-                    #     dx = self.currentPosition.position.x - previous_target_x
-                    #     dy = self.currentPosition.position.y - previous_target_y
-                    #     del_d =  (dx**2 + dy**2)**0.5
-                    #     # print(del_d)
-                    #     if del_d > 10 or (previous_target_x==0 and previous_target_y == 0):
-                    #         previous_target_x = self.currentPosition.position.x
-                    #         previous_target_y = self.currentPosition.position.y
-                    #         self.dataLabel_pub.publish('Loiter')
-                    #         wps = self.get_waypoints_in_circle(self.currentPosition.position.x,
-                    #                                            self.currentPosition.position.y,
-                    #                                            3,
-                    #                                            10)
-                    #         for wp1 in wps:
-                    #             self.targetPos.pose.position.x = wp1[0]
-                    #             self.targetPos.pose.position.y = wp1[1]
-                    #             self.targetPos.pose.position.z = 3
-                    #             self.targetPos.pose.orientation.x = q[0]
-                    #             self.targetPos.pose.orientation.y = q[1]
-                    #             self.targetPos.pose.orientation.z = q[2]
-                    #             self.targetPos.pose.orientation.w = q[3]
-                    #             while self.getDistance() > 0.4:
-                    #                 rate.sleep()
-
-                    #     self.targetfound = False
 
             # mode land
             self.dataLabel_pub.publish('Land') 

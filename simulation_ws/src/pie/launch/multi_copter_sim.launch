@@ -10,7 +10,7 @@
     <node pkg="pie" name="uav_tf_generator" type="uav_tf_generator.py" output="screen"> 
     </node>
 
-
+<!--
     <arg name="path" default="/home/ariac/ros-intel-uav-rpeo/simulation_ws/src/maps/testmap2.bt"/>
     <node pkg="octomap_server" type="octomap_server_node" name="octomap_server" output="screen" args="$(arg path)">
     </node>
@@ -19,6 +19,7 @@
     <node pkg="pie" name="map_loader_uav0" type="octomap_loader.py" output="screen" clear_params="true">
         <param name="uav_num" value="0" />
     </node>
+-->
 
 <!--
     <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
@@ -28,6 +29,7 @@
         <remap from="cloud_in" to="/uav0/points" />
     </node>
 -->
+
 <!--
     <node pkg="joy" type="joy_node" name="joy_node">
         <param name="joy_node/dev" type="string" value="/dev/input/js0" />
