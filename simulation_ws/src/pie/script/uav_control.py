@@ -705,18 +705,18 @@ class uavControl():
                     ignore_ptns = 1
                     ignore_counter = 0
 
-                # for ptn in plan.multi_dof_joint_trajectory.points:
-                #     print("{:.2f},{:.2f}".format(ptn.transforms[0].translation.x,ptn.transforms[0].translation.y))
+                for ptn in plan.multi_dof_joint_trajectory.points:
+                    print("{:.2f},{:.2f}".format(ptn.transforms[0].translation.x,ptn.transforms[0].translation.y))
 
-                # print("*******************************")
+                print("*******************************")
                 for ptn in plan.multi_dof_joint_trajectory.points:
                     self.dataLabel_pub.publish('Search')
                     if ignore_counter < ignore_ptns:
                         ignore_counter += 1
                         continue
                     # print(self.currentPosition)
-                    # if abs(self.currentPosition.position.x-17)<5 and abs(self.currentPosition.position.y-3.75)<9.75 and abs(self.currentPosition.position.z-5)<9:
-                    #     self.dataLabel_pub.publish('Obstacleavoid')
+                    if abs(self.currentPosition.position.x-17)<5 and abs(self.currentPosition.position.y-3.75)<9.75 and abs(self.currentPosition.position.z-5)<9:
+                        self.dataLabel_pub.publish('Obstacleavoid')
                     # print("{:.2f},{:.2f}".format(ptn.transforms[0].translation.x,ptn.transforms[0].translation.y))
                     self.targetPos.pose.position.x = ptn.transforms[0].translation.x
                     self.targetPos.pose.position.y = ptn.transforms[0].translation.y
