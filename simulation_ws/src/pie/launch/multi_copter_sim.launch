@@ -11,7 +11,7 @@
     </node>
 
 
-    <arg name="path" default="/home/ariac/ros-intel-uav-rpeo/simulation_ws/src/maps/testmap2.bt"/>
+    <arg name="path" default="$(env CATKIN_WORKSPACE_DIR)/src/maps/testmap2.bt"/>
     <node pkg="octomap_server" type="octomap_server_node" name="octomap_server" output="screen" args="$(arg path)">
     </node>
 

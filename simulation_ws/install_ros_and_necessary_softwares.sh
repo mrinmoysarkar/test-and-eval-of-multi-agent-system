@@ -78,6 +78,7 @@ sudo apt install ros-melodic-mavros ros-melodic-mavros-extras -y
 sudo apt install ros-melodic-octomap -y
 sudo apt install ros-melodic-octomap-mapping -y
 sudo apt install ros-melodic-moveit -y
+sudo apt install xmlstarlet -y
 
 # ## Create catkin workspace
 # mkdir -p ~/catkin_ws/src
@@ -154,9 +155,13 @@ else echo "export MESH_WORKSPACE_PATH=$PWD/src/Firmware/Tools/sitl_gazebo/models
 if grep -Fxq "export PX4_FIRMWARE_HOME=$PWD/src/Firmware/" ~/.bashrc; then echo PX4_FIRMWARE_HOME already in .bashrc; 
 else echo "export PX4_FIRMWARE_HOME=$PWD/src/Firmware/" >> ~/.bashrc; fi
 
+if grep -Fxq "export CATKIN_WORKSPACE_DIR=$PWD" ~/.bashrc; then echo CATKIN_WORKSPACE_DIR already in .bashrc; 
+else echo "export CATKIN_WORKSPACE_DIR=$PWD" >> ~/.bashrc; fi
+
 export MESH_WORKSPACE_PATH=$PWD/src/Firmware/Tools/sitl_gazebo/models/
 export PX4_FIRMWARE_HOME=$PWD/src/Firmware/
+export CATKIN_WORKSPACE_DIR=$PWD
 
 bashsource="source ~/.bashrc"
-# source ~/.bashrc
+source ~/.bashrc
 eval $bashsource
