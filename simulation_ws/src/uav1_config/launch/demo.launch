@@ -27,11 +27,11 @@
   </include>
 
   <!-- If needed, broadcast static tf for robot root -->
-  <!--
+<!--
     <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 map uav1_base_link" />
-    -->
+-->
 
-    <!--
+<!--
     <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_11" args="0 0 0 0 0 0 uav1_base_link uav1_base_link_inertia" />
 
    <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_12" args="0.13 -0.22 0.023 0 0 0 uav1_base_link_inertia uav1_rotor_0" />
@@ -66,7 +66,7 @@
   </include>
 
   <!-- Run Rviz and load the default config to see the state of the move_group node -->
-  <!--
+<!--
   <include file="$(find uav1_config)/launch/moveit_rviz.launch">
     <arg name="rviz_config" value="$(find uav1_config)/launch/moveit.rviz"/>
     <arg name="debug" value="$(arg debug)"/>

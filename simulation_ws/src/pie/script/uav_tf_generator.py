@@ -6,12 +6,11 @@ from sensor_msgs.msg import PointCloud2, JointState
 from geometry_msgs.msg import PoseStamped, TransformStamped
 import rosgraph
 
-no_of_uavs = 4
-pos_buffer = {}
-pcl_buffer = {}
-counter = [0]*no_of_uavs
+pos_buffer = None
+pcl_buffer = None
 
-update_data = True
+
+update_data = 0
 
 def jointstates_cb(msg, uavno):
     # publish_data(stamp=msg.header.stamp)
@@ -19,128 +18,102 @@ def jointstates_cb(msg, uavno):
 
 def local_position_cb(msg, uavno):
     global pos_buffer, update_data
-    if update_data:
-        pos_buffer[uavno] = msg
+    if update_data == 0:
+        pos_buffer = msg
+        update_data += 1
     
 
 def pointcloud_cb(msg, uavno):
-    global pcl_buffer, counter, no_of_uavs, update_data
-    if update_data:
-        pcl_buffer[uavno] = msg
-        counter[uavno] = 1
-    if sum(counter) == no_of_uavs:
-        update_data = False
-        counter = [0]*no_of_uavs
+    global pcl_buffer, update_data
+    if update_data == 1:
+        pcl_buffer = msg
+        update_data += 1
 
-    #print(msg.header)
-    # tf_data = TransformStamped()
-    # tf_data.header.seq = msg.header.seq
-    # tf_data.header.stamp = msg.header.stamp
-    # tf_data.header.frame_id = 'uav' + str(uavno)+'_base_link'
-    # tf_data.child_frame_id = msg.header.frame_id #'uav' + str(self.uavno) +'_camera_frame'
-    # tf_data.transform.translation.x = 0.1
-    # tf_data.transform.translation.y = 0
-    # tf_data.transform.translation.z = 0
-    # tf_data.transform.rotation.x = -0.5
-    # tf_data.transform.rotation.y = 0.5
-    # tf_data.transform.rotation.z = -0.5
-    # tf_data.transform.rotation.w = 0.5
-    # br.sendTransformMessage(tf_data)
-    # # print(uavno, msg.header.stamp)
-    # if uavno in pos_buffer:
-    #     tf_data.header.frame_id = 'map'
-    #     tf_data.child_frame_id = 'uav' + str(uavno)+'_base_link'
-    #     tf_data.transform.translation.x = pos_buffer[uavno].pose.position.x
-    #     tf_data.transform.translation.y = pos_buffer[uavno].pose.position.y
-    #     tf_data.transform.translation.z = pos_buffer[uavno].pose.position.z
-    #     tf_data.transform.rotation = pos_buffer[uavno].pose.orientation
-    #     br.sendTransformMessage(tf_data)
 
-def publish_data(stamp=None):
-    global br, pos_buffer, pcl_buffer, pcl_publisher, no_of_uavs
+def publish_data(uav_num, stamp=None):
+    global br, pos_buffer, pcl_buffer, pcl_publisher
     if stamp is None:
         stamp = rospy.Time(0)#.now()
     tf_data = TransformStamped()
-    for i in range(no_of_uavs):
-        if i in pos_buffer and i in pcl_buffer:
-            pcl_buffer[i].header.stamp = stamp
-            tf_data.header.seq = pcl_buffer[i].header.seq
-            tf_data.header.stamp = pcl_buffer[i].header.stamp
-            tf_data.header.frame_id = 'uav' + str(i)+'_base_link'
-            tf_data.child_frame_id = pcl_buffer[i].header.frame_id 
-            tf_data.transform.translation.x = 0.1
-            tf_data.transform.translation.y = 0
-            tf_data.transform.translation.z = 0
-            tf_data.transform.rotation.x = -0.5
-            tf_data.transform.rotation.y = 0.5
-            tf_data.transform.rotation.z = -0.5
-            tf_data.transform.rotation.w = 0.5
-            br.sendTransformMessage(tf_data)
+    
+    pcl_buffer.header.stamp = stamp
+    tf_data.header.seq = pcl_buffer.header.seq
+    tf_data.header.stamp = pcl_buffer.header.stamp
+    tf_data.header.frame_id = 'uav' + str(uav_num)+'_base_link'
+    tf_data.child_frame_id = pcl_buffer.header.frame_id 
+    tf_data.transform.translation.x = 0.1
+    tf_data.transform.translation.y = 0
+    tf_data.transform.translation.z = 0
+    tf_data.transform.rotation.x = -0.5
+    tf_data.transform.rotation.y = 0.5
+    tf_data.transform.rotation.z = -0.5
+    tf_data.transform.rotation.w = 0.5
+    br.sendTransformMessage(tf_data)
             
-            tf_data.header.frame_id = 'map'
-            tf_data.child_frame_id = 'uav' + str(i)+'_base_link'
-            tf_data.transform.translation.x = pos_buffer[i].pose.position.x
-            tf_data.transform.translation.y = pos_buffer[i].pose.position.y
-            tf_data.transform.translation.z = pos_buffer[i].pose.position.z
-            tf_data.transform.rotation = pos_buffer[i].pose.orientation
-            br.sendTransformMessage(tf_data)
+    tf_data.header.frame_id = 'map'
+    tf_data.child_frame_id = 'uav' + str(uav_num)+'_base_link'
+    tf_data.transform.translation.x = pos_buffer.pose.position.x
+    tf_data.transform.translation.y = pos_buffer.pose.position.y
+    tf_data.transform.translation.z = pos_buffer.pose.position.z
+    tf_data.transform.rotation = pos_buffer.pose.orientation
+    br.sendTransformMessage(tf_data)
 
-            tf_data.header.frame_id = 'uav' + str(i)+'_base_link'
-            tf_data.child_frame_id = 'uav'+str(i)+'_base_link_inertia'
-            tf_data.transform.translation.x = 0
-            tf_data.transform.translation.y = 0
-            tf_data.transform.translation.z = 0
-            tf_data.transform.rotation.x = 0
-            tf_data.transform.rotation.y = 0
-            tf_data.transform.rotation.z = 0
-            tf_data.transform.rotation.w = 1
-            br.sendTransformMessage(tf_data)
+    tf_data.header.frame_id = 'uav' + str(uav_num)+'_base_link'
+    tf_data.child_frame_id = 'uav'+str(uav_num)+'_base_link_inertia'
+    tf_data.transform.translation.x = 0
+    tf_data.transform.translation.y = 0
+    tf_data.transform.translation.z = 0
+    tf_data.transform.rotation.x = 0
+    tf_data.transform.rotation.y = 0
+    tf_data.transform.rotation.z = 0
+    tf_data.transform.rotation.w = 1
+    br.sendTransformMessage(tf_data)
 
-            tf_data.header.frame_id = 'uav'+str(i)+'_base_link_inertia'
-            tf_data.child_frame_id = 'uav'+str(i)+'_rotor_0'
-            tf_data.transform.translation.x = 0.13
-            tf_data.transform.translation.y = -0.22
-            tf_data.transform.translation.z = 0.023
-            tf_data.transform.rotation.x = 0
-            tf_data.transform.rotation.y = 0
-            tf_data.transform.rotation.z = 0
-            tf_data.transform.rotation.w = 1
-            br.sendTransformMessage(tf_data)
+    tf_data.header.frame_id = 'uav'+str(uav_num)+'_base_link_inertia'
+    tf_data.child_frame_id = 'uav'+str(uav_num)+'_rotor_0'
+    tf_data.transform.translation.x = 0.13
+    tf_data.transform.translation.y = -0.22
+    tf_data.transform.translation.z = 0.023
+    tf_data.transform.rotation.x = 0
+    tf_data.transform.rotation.y = 0
+    tf_data.transform.rotation.z = 0
+    tf_data.transform.rotation.w = 1
+    br.sendTransformMessage(tf_data)
 
-            tf_data.header.frame_id = 'uav'+str(i)+'_base_link_inertia'
-            tf_data.child_frame_id = 'uav'+str(i)+'_rotor_1'
-            tf_data.transform.translation.x = -0.13
-            tf_data.transform.translation.y = 0.2
-            tf_data.transform.translation.z = 0.023
-            tf_data.transform.rotation.x = 0
-            tf_data.transform.rotation.y = 0
-            tf_data.transform.rotation.z = 0
-            tf_data.transform.rotation.w = 1
-            br.sendTransformMessage(tf_data)
+    tf_data.header.frame_id = 'uav'+str(uav_num)+'_base_link_inertia'
+    tf_data.child_frame_id = 'uav'+str(uav_num)+'_rotor_1'
+    tf_data.transform.translation.x = -0.13
+    tf_data.transform.translation.y = 0.2
+    tf_data.transform.translation.z = 0.023
+    tf_data.transform.rotation.x = 0
+    tf_data.transform.rotation.y = 0
+    tf_data.transform.rotation.z = 0
+    tf_data.transform.rotation.w = 1
+    br.sendTransformMessage(tf_data)
 
-            tf_data.header.frame_id = 'uav'+str(i)+'_base_link_inertia'
-            tf_data.child_frame_id = 'uav'+str(i)+'_rotor_2'
-            tf_data.transform.translation.x = 0.13
-            tf_data.transform.translation.y = 0.22
-            tf_data.transform.translation.z = 0.023
-            tf_data.transform.rotation.x = 0
-            tf_data.transform.rotation.y = 0
-            tf_data.transform.rotation.z = 0
-            tf_data.transform.rotation.w = 1
-            br.sendTransformMessage(tf_data)
+    tf_data.header.frame_id = 'uav'+str(uav_num)+'_base_link_inertia'
+    tf_data.child_frame_id = 'uav'+str(uav_num)+'_rotor_2'
+    tf_data.transform.translation.x = 0.13
+    tf_data.transform.translation.y = 0.22
+    tf_data.transform.translation.z = 0.023
+    tf_data.transform.rotation.x = 0
+    tf_data.transform.rotation.y = 0
+    tf_data.transform.rotation.z = 0
+    tf_data.transform.rotation.w = 1
+    br.sendTransformMessage(tf_data)
 
-            tf_data.header.frame_id = 'uav'+str(i)+'_base_link_inertia'
-            tf_data.child_frame_id = 'uav'+str(i)+'_rotor_3'
-            tf_data.transform.translation.x = -0.13
-            tf_data.transform.translation.y = -0.2
-            tf_data.transform.translation.z = 0.023
-            tf_data.transform.rotation.x = 0
-            tf_data.transform.rotation.y = 0
-            tf_data.transform.rotation.z = 0
-            tf_data.transform.rotation.w = 1
-            br.sendTransformMessage(tf_data)
+    tf_data.header.frame_id = 'uav'+str(uav_num)+'_base_link_inertia'
+    tf_data.child_frame_id = 'uav'+str(uav_num)+'_rotor_3'
+    tf_data.transform.translation.x = -0.13
+    tf_data.transform.translation.y = -0.2
+    tf_data.transform.translation.z = 0.023
+    tf_data.transform.rotation.x = 0
+    tf_data.transform.rotation.y = 0
+    tf_data.transform.rotation.z = 0
+    tf_data.transform.rotation.w = 1
+    br.sendTransformMessage(tf_data)
 
-            pcl_publisher[i].publish(pcl_buffer[i])
+    pcl_publisher.publish(pcl_buffer)
 
 
 
@@ -151,19 +124,19 @@ def publish_data(stamp=None):
 if __name__ == '__main__':
     rospy.init_node('uav_tf_generator', anonymous=True)
     br = tf.TransformBroadcaster(queue_size=100)
-    pcl_publisher = []
-    for i in range(no_of_uavs):
-        rospy.Subscriber('/uav'+str(i)+'/mavros/local_position/pose', PoseStamped, callback=local_position_cb, callback_args=i)
-        rospy.Subscriber('/uav'+str(i)+'/r200_ir/points', PointCloud2, callback=pointcloud_cb, callback_args=i)
-        # rospy.Subscriber('/uav'+str(i)+'/joint_states', JointState, callback=jointstates_cb, callback_args=i)
-        pcl_publisher.append(rospy.Publisher('/uav'+str(i)+'/points', PointCloud2,queue_size=10))
+    uav_num = rospy.get_param('~uav_num')
+    
+    rospy.Subscriber('/uav'+str(uav_num)+'/mavros/local_position/pose', PoseStamped, callback=local_position_cb, callback_args=uav_num)
+    rospy.Subscriber('/uav'+str(uav_num)+'/r200_ir/points', PointCloud2, callback=pointcloud_cb, callback_args=uav_num)
+    # rospy.Subscriber('/uav'+str(i)+'/joint_states', JointState, callback=jointstates_cb, callback_args=i)
+    pcl_publisher = rospy.Publisher('/uav'+str(uav_num)+'/points', PointCloud2, queue_size=10)
 
     # rospy.spin()
     try:
         while rosgraph.is_master_online():
-            if not update_data:
-                publish_data()
-                update_data = True
+            if update_data == 2:
+                publish_data(uav_num)
+                update_data = 0
             rospy.sleep(1)
     except Exception as e:
         print(e)

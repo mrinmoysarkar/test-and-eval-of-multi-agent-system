@@ -7,10 +7,23 @@
     </include>
 
 
-    <node pkg="pie" name="uav_tf_generator" type="uav_tf_generator.py" output="screen"> 
+    <node pkg="pie" name="uav_tf_generator0" type="uav_tf_generator.py" output="screen"> 
+        <param name="uav_num" value="0" />
     </node>
 
+    <node pkg="pie" name="uav_tf_generator1" type="uav_tf_generator.py" output="screen"> 
+        <param name="uav_num" value="1" />
+    </node>
 
+    <node pkg="pie" name="uav_tf_generator2" type="uav_tf_generator.py" output="screen"> 
+        <param name="uav_num" value="2" />
+    </node>
+
+    <node pkg="pie" name="uav_tf_generator3" type="uav_tf_generator.py" output="screen"> 
+        <param name="uav_num" value="3" />
+    </node>
+
+<!-- 
     <arg name="path" default="$(env CATKIN_WORKSPACE_DIR)/src/maps/testmap2.bt"/>
     <node pkg="octomap_server" type="octomap_server_node" name="octomap_server" output="screen" args="$(arg path)">
     </node>
@@ -20,6 +33,18 @@
         <param name="uav_num" value="0" />
     </node>
 
+    <node pkg="pie" name="map_loader_uav1" type="octomap_loader.py" output="screen" clear_params="true">
+        <param name="uav_num" value="1" />
+    </node>
+
+    <node pkg="pie" name="map_loader_uav2" type="octomap_loader.py" output="screen" clear_params="true">
+        <param name="uav_num" value="2" />
+    </node>
+
+    <node pkg="pie" name="map_loader_uav3" type="octomap_loader.py" output="screen" clear_params="true">
+        <param name="uav_num" value="3" />
+    </node>
+-->
 
 <!--
     <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
@@ -47,18 +72,36 @@
         <param name="uav_num" value="0" />
     </node>
 
+    <node name="targetPosPub_uav1" pkg="pie" type="targetPosPublisher.py" output="screen" clear_params="true">
+        <param name="uav_num" value="1" />
+    </node>
+
+    <node name="targetPosPub_uav2" pkg="pie" type="targetPosPublisher.py" output="screen" clear_params="true">
+        <param name="uav_num" value="2" />
+    </node>
+
+    <node name="targetPosPub_uav3" pkg="pie" type="targetPosPublisher.py" output="screen" clear_params="true">
+        <param name="uav_num" value="3" />
+    </node>
+
 
 
 
     <node pkg="pie" name="save_data_uav0" type="save_data.py" output="screen" clear_params="true">
         <param name="uav_num" value="0" />
+        <param name="data_log_path" value="/media/ariac/DATAPART1/mrinmoys-document/test-and-eval-of-multi-agent-system/simulation_ws/src/pie/flightData/"/>
     </node>
 
 
 <!--
+
+
+
+
     <node pkg="pie" name="uav_control_pad" type="uav_control_pad.py" output="screen"> 
     </node>
 -->
+    
 
 
     <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_71" args="0 0 0 0 0 0 map base_link" />

@@ -14,8 +14,9 @@ import rosgraph
 
 
 class datalogger():
-    def __init__(self,uavno):
+    def __init__(self,uavno,data_log_path):
         self.uavno = uavno
+        self.data_log_path = data_log_path
         rospy.Subscriber('/uav'+str(self.uavno)+'/mavros/local_position/pose', PoseStamped, self.local_position_cb)
         rospy.Subscriber('/uav'+str(self.uavno)+'/mavros/local_position/velocity_local', TwistStamped, self.local_velocity_cb)
         rospy.Subscriber('/uav'+str(self.uavno)+'/data_label', String, self.label_cb)
@@ -52,6 +53,8 @@ class datalogger():
         label = []
         try:
             while rosgraph.is_master_online():
+                if self.currentLabel == 'Finished':
+                    break
                 if self.currentPosition and self.currentVelocity:
                     t.append(time.time())
                     x.append(self.currentPosition.position.x)
@@ -83,7 +86,7 @@ class datalogger():
              'roll_v':roll_v,'pitch_v':pitch_v,'yaw_v':yaw_v,
              'label':label}
         df = pd.DataFrame(data=d)
-        fileName = "~/ros-intel-uav-rpeo/simulation_ws/src/pie/flightData/flight_path_data_uav" + str(self.uavno) + "_" + datetime.now().strftime("%Y%m%d-%H%M%S") + "_labeled.csv"
+        fileName = self.data_log_path + "flight_path_data_uav" + str(self.uavno) + "_" + datetime.now().strftime("%Y%m%d-%H%M%S") + "_labeled.csv"
         df.to_csv(fileName,index=False)
 
         self.stopThread = False
@@ -96,7 +99,8 @@ if __name__ == '__main__':
     # noofUav = 4
     rospy.init_node('data_logger_uav', anonymous=True)
     uav_num = rospy.get_param('~uav_num')
-    dlogger = datalogger(uav_num)
+    data_log_path = rospy.get_param('~data_log_path')
+    dlogger = datalogger(uav_num,data_log_path)
     dlogger.loop()
 
     # uavs = []

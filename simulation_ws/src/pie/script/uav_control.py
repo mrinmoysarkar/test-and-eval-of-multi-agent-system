@@ -30,12 +30,14 @@ import moveit_commander
 
 
 class uavControl():
-    def __init__(self, uav_num):
+    def __init__(self, uav_num, env_path="",scenario_num=0):
+        self.uav_num = uav_num
+        self.env_path = env_path
+        self.scenario_num = scenario_num
         self.current_state = None
         self.setpointPub = None
         self.stopThread = False
         self.direction = 0
-        self.uav_num = uav_num
         self.currentPosition = Pose()
         self.currentImage = None
         self.takeoff_flag = False
@@ -56,7 +58,7 @@ class uavControl():
         self.scene = moveit_commander.PlanningSceneInterface(ns=ns)
         self.group_name = ns+"_group"
         self.move_group = moveit_commander.MoveGroupCommander(self.group_name,robot_description="/"+ns+"/robot_description",ns=ns)
-        self.move_group.set_workspace([-5,-5,0,55,55,50]) #[minX, minY, minZ, maxX, maxY, maxZ] 
+        self.move_group.set_workspace([-55,-55,0,55,55,20]) #[minX, minY, minZ, maxX, maxY, maxZ] 
         self.move_group.set_planner_id("RRTConnect")
         self.move_group.set_num_planning_attempts(10)
 
@@ -280,7 +282,7 @@ class uavControl():
         # self.count += 1
         # self.marker_publisher.publish(marker) 
 
-    def getquaternion(self, roll, pitch, yaw):
+    def getquaternion(self, roll, pitch, yaw): # argument in degree
         # return tf.transformations.quaternion_from_euler(roll, pitch, yaw)
         roll = radians(roll)
         pitch = radians(pitch)
@@ -595,7 +597,8 @@ class uavControl():
         # theta = np.linspace(0,np.pi*2,2*np.pi//np.radians(dtheta))
         x = xc+r*np.cos(theta)
         y = yc+r*np.sin(theta)
-        return zip(x,y)
+        z = np.linspace(3,4,len(theta))
+        return zip(x,y,z)
 
     def pos_ctl_loop(self):
         rate = rospy.Rate(20.0)
@@ -604,7 +607,7 @@ class uavControl():
             rate.sleep()
 
     def planning_loop(self, scenario_num=0):
-        scenario_file = '~/ros-intel-uav-rpeo/simulation_ws/src/pie/script/scenario_' + str(scenario_num) + '_uav_' + str(self.uav_num) + '.csv'
+        scenario_file = self.env_path + 'scenario_' + str(self.scenario_num) + '_uav_' + str(self.uav_num) + '.csv'
         scenario_df =  pd.read_csv(scenario_file)
         # print(scenario_df.head())
         x0 = scenario_df['x0'].values
@@ -634,7 +637,17 @@ class uavControl():
 
         self.dataLabel_pub.publish('Hold')
         rate = rospy.Rate(10.0)
+        q = [0,0,0,1]
         q = self.getquaternion(0,0,0)
+
+        # if self.uav_num==0:
+        #     q = self.getquaternion(0,0,0)
+        # elif self.uav_num==1:
+        #     q = self.getquaternion(0,0,-90)
+        # elif self.uav_num==2:
+        #     q = self.getquaternion(0,0,90)
+        # elif self.uav_num==3:
+        #     q = self.getquaternion(0,0,180)
         
         self.targetPos.pose.position.x = self.currentPosition.position.x
         self.targetPos.pose.position.y = self.currentPosition.position.y
@@ -673,107 +686,117 @@ class uavControl():
             # mode hover
             self.dataLabel_pub.publish('Hover')
             rospy.sleep(30)
-            # mode search
-            ctn = 0
 
-            ignore_ptns = 1
-            ignore_counter = 0
+            if self.scenario_num != 1:
+                # mode search
+                ctn = 0
 
-            for wp in waypoints:
-                self.path_pub.publish(self.path)
-                ctn += 1
-                start_state = self.robot.get_current_state()
-                start_state.multi_dof_joint_state.transforms[0].translation.x = previous_target_x #self.currentPosition.position.x
-                start_state.multi_dof_joint_state.transforms[0].translation.y = previous_target_y #self.currentPosition.position.y
-                goal_state.multi_dof_joint_state.transforms[0].translation.x = wp[0]
-                goal_state.multi_dof_joint_state.transforms[0].translation.y = wp[1]
-                
-                if previous_target_x<wp[0]:
-                    self.move_group.set_workspace([previous_target_x-5,previous_target_y-5,0,wp[0]+5,wp[1]+15,20])
-                else:
-                    self.move_group.set_workspace([wp[0]-5, previous_target_y-5, 0, previous_target_x+5,wp[1]+15,20])
+                ignore_ptns = 1
+                ignore_counter = 0
+
+                for wp in waypoints:
+                    # if ctn==5:
+                    #     break
+                    self.path_pub.publish(self.path)
+                    ctn += 1
+                    start_state = self.robot.get_current_state()
+                    start_state.multi_dof_joint_state.transforms[0].translation.x = previous_target_x #self.currentPosition.position.x
+                    start_state.multi_dof_joint_state.transforms[0].translation.y = previous_target_y #self.currentPosition.position.y
+                    goal_state.multi_dof_joint_state.transforms[0].translation.x = wp[0]
+                    goal_state.multi_dof_joint_state.transforms[0].translation.y = wp[1]
+
+                    self.move_group.set_workspace([min(previous_target_x+5, previous_target_x-5, wp[0]+5, wp[0]-5),
+                                                   min(previous_target_y+15, previous_target_y-15, wp[1]+15, wp[1]-15),
+                                                   0,
+                                                   max(previous_target_x+5, previous_target_x-5, wp[0]+5, wp[0]-5), 
+                                                   max(previous_target_y+15, previous_target_y-15, wp[1]+15, wp[1]-15),
+                                                   20])
+                    
+
+                    self.move_group.clear_pose_targets()
+                    self.move_group.set_start_state(start_state)
+                    self.move_group.set_joint_value_target(goal_state)
+                    # t1 = time.time()
+                    plan = self.move_group.plan()
+                    # rospy.sleep(10)
+                    # print('planning time: '+str(time.time()-t1)+'s')
+                    if ignore_counter >= ignore_ptns:
+                        ignore_ptns = 1
+                        ignore_counter = 0
+
+                    # for ptn in plan.multi_dof_joint_trajectory.points:
+                    #     print("{:.2f},{:.2f}".format(ptn.transforms[0].translation.x,ptn.transforms[0].translation.y))
+
+                    # print("*******************************")
+                    for ptn in plan.multi_dof_joint_trajectory.points:
+                        self.dataLabel_pub.publish('Search')
+                        if ignore_counter < ignore_ptns:
+                            ignore_counter += 1
+                            continue
+                        # print(self.currentPosition)
+                        # if self.scenario_num == 4 or self.scenario_num == 5:
+                        #     if abs(self.currentPosition.position.x-17)<5 and abs(self.currentPosition.position.y-0)<5 and abs(self.currentPosition.position.z-5)<9:
+                        #         self.dataLabel_pub.publish('Obstacleavoid')
+                        # print("{:.2f},{:.2f}".format(ptn.transforms[0].translation.x,ptn.transforms[0].translation.y))
+                        self.targetPos.pose.position.x = ptn.transforms[0].translation.x
+                        self.targetPos.pose.position.y = ptn.transforms[0].translation.y
+                        self.targetPos.pose.position.z = 3.0
+                        self.targetPos.pose.orientation.x = q[0]
+                        self.targetPos.pose.orientation.y = q[1]
+                        self.targetPos.pose.orientation.z = q[2]
+                        self.targetPos.pose.orientation.w = q[3]
+                        self.setpointPub.publish(self.targetPos)
+                        t1 = time.time()
+                        while self.getDistance() > 0.4 and (time.time()-t1 < .7):
+                            rate.sleep()
+                            if self.targetfound: 
+                                # print("new ball found 0")
+                                dx = self.currentPosition.position.x - previous_ball_target_x
+                                dy = self.currentPosition.position.y - previous_ball_target_y
+                                del_d =  (dx**2 + dy**2)**0.5
+                                # print(del_d)
+                                self.targetfound = False
+                                if del_d > 10 or (previous_ball_target_x==0 and previous_ball_target_y == 0):
+                                    ignore_ptns = 10
+                                    ignore_counter = 0
+                                    dx = wp[0] - previous_target_x
+                                    dy = wp[1] - previous_target_y
+                                    start_ang = int(np.degrees(np.arctan2(dy,dx)) + 360) % 360
+                                    # print("new ball found 1")
+                                    # print(start_ang)
+                                    rospy.sleep(1)
+                                    # print("circle center at {:.2f}, {:.2f}".format(self.currentPosition.position.x, self.currentPosition.position.y))
+                                    previous_ball_target_x = self.currentPosition.position.x
+                                    previous_ball_target_y = self.currentPosition.position.y
+                                    self.dataLabel_pub.publish('Loiter')
+
+                                    wps = self.get_waypoints_in_circle(self.currentPosition.position.x,
+                                                                       self.currentPosition.position.y,
+                                                                       3,
+                                                                       10,
+                                                                       start_ang)
+                                    for wp1 in wps:
+                                        self.targetPos.pose.position.x = wp1[0]
+                                        self.targetPos.pose.position.y = wp1[1]
+                                        self.targetPos.pose.position.z = wp1[2]#3
+                                        self.targetPos.pose.orientation.x = q[0]
+                                        self.targetPos.pose.orientation.y = q[1]
+                                        self.targetPos.pose.orientation.z = q[2]
+                                        self.targetPos.pose.orientation.w = q[3]
+                                        self.setpointPub.publish(self.targetPos)
+                                        t1 = time.time()
+                                        while self.getDistance() > 0.4 and (time.time()-t1 < 3):
+                                            rate.sleep()
+                                    break
+                            
+                    
+                    previous_target_x = wp[0]
+                    previous_target_y = wp[1]
+
+                    # rospy.sleep(10) 
+                    # print("*****************************") 
 
 
-                # print("{:.2f},{:.2f}--->{:.2f},{:.2f}".format(start_state.multi_dof_joint_state.transforms[0].translation.x, start_state.multi_dof_joint_state.transforms[0].translation.y, goal_state.multi_dof_joint_state.transforms[0].translation.x, goal_state.multi_dof_joint_state.transforms[0].translation.y))
-
-                
-                self.move_group.clear_pose_targets()
-                self.move_group.set_start_state(start_state)
-                self.move_group.set_joint_value_target(goal_state)
-                plan = self.move_group.plan()
-                if ignore_counter >= ignore_ptns:
-                    ignore_ptns = 1
-                    ignore_counter = 0
-
-                for ptn in plan.multi_dof_joint_trajectory.points:
-                    print("{:.2f},{:.2f}".format(ptn.transforms[0].translation.x,ptn.transforms[0].translation.y))
-
-                print("*******************************")
-                for ptn in plan.multi_dof_joint_trajectory.points:
-                    self.dataLabel_pub.publish('Search')
-                    if ignore_counter < ignore_ptns:
-                        ignore_counter += 1
-                        continue
-                    # print(self.currentPosition)
-                    if abs(self.currentPosition.position.x-17)<5 and abs(self.currentPosition.position.y-3.75)<9.75 and abs(self.currentPosition.position.z-5)<9:
-                        self.dataLabel_pub.publish('Obstacleavoid')
-                    # print("{:.2f},{:.2f}".format(ptn.transforms[0].translation.x,ptn.transforms[0].translation.y))
-                    self.targetPos.pose.position.x = ptn.transforms[0].translation.x
-                    self.targetPos.pose.position.y = ptn.transforms[0].translation.y
-                    self.targetPos.pose.position.z = 3.0
-                    self.targetPos.pose.orientation.x = q[0]
-                    self.targetPos.pose.orientation.y = q[1]
-                    self.targetPos.pose.orientation.z = q[2]
-                    self.targetPos.pose.orientation.w = q[3]
-                    self.setpointPub.publish(self.targetPos)
-                    t1 = time.time()
-                    while self.getDistance() > 0.4 and (time.time()-t1 < 3):
-                        rate.sleep()
-                        if self.targetfound: 
-                            # print("new ball found 0")
-                            dx = self.currentPosition.position.x - previous_ball_target_x
-                            dy = self.currentPosition.position.y - previous_ball_target_y
-                            del_d =  (dx**2 + dy**2)**0.5
-                            # print(del_d)
-                            self.targetfound = False
-                            if del_d > 10 or (previous_ball_target_x==0 and previous_ball_target_y == 0):
-                                ignore_ptns = 10
-                                ignore_counter = 0
-                                dx = wp[0] - previous_target_x
-                                dy = wp[1] - previous_target_y
-                                start_ang = int(np.degrees(np.arctan2(dy,dx)) + 360) % 360
-                                print("new ball found 1")
-                                print(start_ang)
-                                rospy.sleep(1)
-                                print("circle center at {:.2f}, {:.2f}".format(self.currentPosition.position.x, self.currentPosition.position.y))
-                                previous_ball_target_x = self.currentPosition.position.x
-                                previous_ball_target_y = self.currentPosition.position.y
-                                self.dataLabel_pub.publish('Loiter')
-                                wps = self.get_waypoints_in_circle(self.currentPosition.position.x,
-                                                                   self.currentPosition.position.y,
-                                                                   3,
-                                                                   10,
-                                                                   start_ang)
-                                for wp1 in wps:
-                                    self.targetPos.pose.position.x = wp1[0]
-                                    self.targetPos.pose.position.y = wp1[1]
-                                    self.targetPos.pose.position.z = 3
-                                    self.targetPos.pose.orientation.x = q[0]
-                                    self.targetPos.pose.orientation.y = q[1]
-                                    self.targetPos.pose.orientation.z = q[2]
-                                    self.targetPos.pose.orientation.w = q[3]
-                                    self.setpointPub.publish(self.targetPos)
-                                    t1 = time.time()
-                                    while self.getDistance() > 0.4 and (time.time()-t1 < 3):
-                                        rate.sleep()
-                                break
-                        
-                
-                previous_target_x = wp[0]
-                previous_target_y = wp[1]
-
-                # rospy.sleep(10) 
-                # print("*****************************") 
 
             # mode land
             self.dataLabel_pub.publish('Land') 
@@ -790,6 +813,9 @@ class uavControl():
             print("landed safely :).")
             self.stopThread = True
             rate.sleep()
+            rospy.sleep(10)
+            self.dataLabel_pub.publish('Finished')
+            rospy.sleep(5)
 
     def loop(self):
         rospy.sleep(5)

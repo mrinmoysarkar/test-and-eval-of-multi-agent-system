@@ -3,8 +3,9 @@
   <!-- This file makes it easy to include the settings for sensor managers -->
 
   <!-- Params for 3D sensors config -->
+  <!--
   <rosparam command="load" file="$(find uav3_config)/config/sensors_3d.yaml" />
-
+  -->
   <!-- Params for the octomap monitor -->
   <param name="octomap_frame" type="string" value="map" /> 
   <param name="octomap_resolution" type="double" value="0.025" />
