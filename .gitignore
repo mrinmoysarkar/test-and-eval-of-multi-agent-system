@@ -7,3 +7,4 @@ simulation_ws/src/Firmware/*
 simulation_ws/src/pie/script/models/*
 *.DS_store
 *.zip
+*.csv
